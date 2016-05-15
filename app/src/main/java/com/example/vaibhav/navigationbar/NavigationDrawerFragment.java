@@ -21,9 +21,10 @@ import android.support.v7.widget.Toolbar;
 public class NavigationDrawerFragment extends Fragment {
 
     public static final String PREF_FILE_NAME ="testpref";
+    public static final String KEY_USER_LEARNED_DRAWER ="usser_learned_drawer";
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
-
+    private View containerView;
     private boolean mUserLearnedDrawer;
     private boolean mFromSavedInstanceState;
 
@@ -33,6 +34,15 @@ public class NavigationDrawerFragment extends Fragment {
 
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mUserLearnedDrawer = Boolean.valueOf(readFromPreferences(getActivity(),KEY_USER_LEARNED_DRAWER,"false"));
+        if(savedInstanceState != null){
+            mFromSavedInstanceState =true;
+        }
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -40,19 +50,35 @@ public class NavigationDrawerFragment extends Fragment {
     }
 
 
-    public void setUp(DrawerLayout drawerLayout,Toolbar toolbar) {
+    public void setUp(int fragmentId,DrawerLayout drawerLayout,Toolbar toolbar) {
+        containerView = getActivity().findViewById(fragmentId);
         mDrawerLayout = drawerLayout;
         mDrawerToggle = new ActionBarDrawerToggle(getActivity(),drawerLayout,toolbar,R.string.drawer_open,R.string.drawer_close){
 
             public void onDrawerOpened(View drawerView){
                 super.onDrawerOpened(drawerView);
+                if(!mUserLearnedDrawer){
+                    mUserLearnedDrawer = true;
+                    saveToPreferences(getActivity(),KEY_USER_LEARNED_DRAWER,mUserLearnedDrawer+"");
+                }
+                getActivity().invalidateOptionsMenu();
             }
 
             public void onDrawerClosed(View drawerView){
                 super.onDrawerClosed(drawerView);
+                getActivity().invalidateOptionsMenu();
             }
         };
+        if(!mUserLearnedDrawer && !mFromSavedInstanceState){
+            mDrawerLayout.openDrawer(containerView);
+        }
         mDrawerLayout.setDrawerListener(mDrawerToggle);
+        mDrawerLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                mDrawerToggle.syncState();
+            }
+        });
     }
     public static void saveToPreferences(Context context,String preferenceName,String preferenceValue){
         SharedPreferences sharedPreferences = context.getSharedPreferences(PREF_FILE_NAME,Context.MODE_PRIVATE);

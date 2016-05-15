@@ -18,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         NavigationDrawerFragment drawerfragment =  (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
-        drawerfragment.setUp((DrawerLayout) findViewById(R.id.drawer_layout),toolbar);
+        drawerfragment.setUp(R.id.fragment_navigation_drawer,(DrawerLayout) findViewById(R.id.drawer_layout),toolbar);
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
