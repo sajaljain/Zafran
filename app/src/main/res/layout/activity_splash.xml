@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/launcher"
 
-    tools:context="com.monkporter.zafran.zafranmain.Splash">
+    tools:context="com.monkporter.zafran.activity.Splash">
 
 
     <ProgressBar

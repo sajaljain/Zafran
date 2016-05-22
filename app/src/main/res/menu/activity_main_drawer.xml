@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/nav_place"
+        android:icon="@drawable/ic_place"
+        app:actionLayout="@layout/place_edit"
+        android:title="Sector 62, Noida" />
+
+    <item
+        android:title="My Information">
+        <menu>
+        <item
+            android:id="@+id/nav_account"
+            android:icon="@drawable/ic_account"
+            android:title="Login" />
+        <item
+            android:id="@+id/nav_address"
+            android:icon="@drawable/ic_personal_address"
+            android:title="My Address"
+            android:enabled="false"
+            />
+        <item
+            android:id="@+id/nav_pre_order"
+            android:icon="@drawable/ic_restore"
+            android:title="My Orders"
+            android:enabled="false"
+            />
+        <item
+            android:id="@+id/nav_notification"
+            android:icon="@drawable/ic_notifications_black"
+            app:actionLayout="@layout/show_count"
+            android:title="Notification Center"
+            />
+        </menu>
+    </item>
+
+    <item android:title="Others">
+        <menu>
+            <item
+                android:id="@+id/nav_help"
+                android:icon="@drawable/ic_help"
+
+                android:title="Help &amp; Support" />
+
+            <item
+                android:id="@+id/nav_rate"
+                android:icon="@drawable/ic_star"
+                android:title="Rate Us" />
+            <item
+                android:id="@+id/nav_share"
+                android:icon="@drawable/ic_share"
+                android:title="Share" />
+            <item
+                android:id="@+id/nav_about"
+                android:icon="@drawable/ic_about"
+                android:title="About Us" />
+        </menu>
+    </item>
+
+
+
+</menu>
