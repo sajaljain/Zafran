@@ -4,6 +4,8 @@
 
     <!-- Make request to server -->
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- if you want to load images from a file OR from the internet (allow files from the internet to be cached into local storage.) -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:name=".Zafran"
