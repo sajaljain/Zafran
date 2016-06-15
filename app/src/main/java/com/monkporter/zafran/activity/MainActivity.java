@@ -1,10 +1,14 @@
 package com.monkporter.zafran.activity;
 
+import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.MenuItemCompat;
-import android.support.v4.view.PointerIconCompat;
+
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
@@ -52,32 +56,27 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setupToolbar();
         initNavigationDrawer();
+        setupToolbar();
         initSlider();
 
         recyclerView = (RecyclerView)findViewById(R.id.products);
         recyclerView.setHasFixedSize(true);
-
         staggeredGridLayoutManager = new StaggeredGridLayoutManager(2, 1);
         recyclerView.setLayoutManager(staggeredGridLayoutManager);
-
         List<Products> productsList = getListItemData();
-
         ProductsAdapter productsAdapter = new ProductsAdapter(MainActivity.this, productsList);
         recyclerView.setAdapter(productsAdapter);
     }
-
     private void initSlider() {
         sliderShow = (SliderLayout) findViewById(R.id.slider);
         HashMap<String,Integer> file_maps = new HashMap<String, Integer>();
-        file_maps.put("The Developer",R.drawable.slider1);
+
         file_maps.put("The Social Entrepreneur",R.drawable.slider2);
         file_maps.put("The Big Boss",R.drawable.slider3);
         file_maps.put("The Innovator", R.drawable.slider4);
-
         for(String name : file_maps.keySet()){
-            TextSliderView textSliderView = new TextSliderView(this);
+            textSliderView = new TextSliderView(this);
             // initialize a SliderLayout
             textSliderView
                     .description(name)
@@ -86,14 +85,41 @@ public class MainActivity extends AppCompatActivity
 
             sliderShow.addSlider(textSliderView);
         }
-
-
     }
 
     private void setupToolbar() {
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
 
+        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        final ActionBar ab = getSupportActionBar();
+
+        ab.setHomeAsUpIndicator(R.drawable.ic_menu);
+        ab.setTitle("");
+
+        ab.setDisplayHomeAsUpEnabled(true);
+
+        final CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
+        AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.appBarLayout);
+        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            boolean isShow = false;
+            int scrollRange = -1;
+
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                if (scrollRange == -1) {
+                    scrollRange = appBarLayout.getTotalScrollRange();
+                }
+                if (scrollRange + verticalOffset == 0) {
+                    collapsingToolbarLayout.setTitle("Zafran");
+                    isShow = true;
+                } else if(isShow) {
+                    collapsingToolbarLayout.setTitle("");
+                    isShow = false;
+                }
+            }
+        });
+
 
     }
 
@@ -101,50 +127,34 @@ public class MainActivity extends AppCompatActivity
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         navigationView = (NavigationView) findViewById(R.id.nav_view);
 
-        setupActionBarDrawerToogle();
         if (navigationView != null) {
             setupDrawerContent(navigationView);
         }
     }
-    private void setupActionBarDrawerToogle() {
-        toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close){
-                /**
-                 * Called when a drawer has settled in a completely closed state.
-                 */
-                public void onDrawerClosed(View view) {
-                //Snackbar.make(view, R.string.navigation_drawer_close, Snackbar.LENGTH_SHORT).show();
-            }
 
-                /**
-                 * Called when a drawer has settled in a completely open state.
-                 */
-            public void onDrawerOpened(View drawerView) {
-                //Snackbar.make(drawerView, R.string.navigation_drawer_open, Snackbar.LENGTH_SHORT).show();
-            }
-        };
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
-    }
+
 
 
     public void setupDrawerContent(NavigationView upDrawerContent) {
-        Menu menu = navigationView.getMenu();
-        //If user not logged in
+   /*     Menu menu = navigationView.getMenu();
+        //If user not l
+        Log.i("Sajal","I am here");
         if(false) {
 
             menu.findItem(R.id.nav_account).setVisible(true);
             menu.findItem(R.id.nav_logout).setVisible(false);
 
-        }
+        }*/
         //else logged in
-        else
+
+    /*    else
         {
-            menu.findItem(R.id.nav_account).setVisible(false);
-            menu.findItem(R.id.nav_logout).setVisible(true);
-            menu.findItem(R.id.nav_address).setEnabled(true);
-            menu.findItem(R.id.nav_pre_order).setEnabled(true);
-        }
+        Log.i("Sajal","I Logged in user");
+        menu.findItem(R.id.nav_account).setVisible(false);
+        menu.findItem(R.id.nav_logout).setVisible(true);
+        menu.findItem(R.id.nav_address).setEnabled(true);
+        menu.findItem(R.id.nav_pre_order).setEnabled(true);
+        }*/
         navigationView.setNavigationItemSelectedListener(this);
     }
 
@@ -168,18 +178,18 @@ public class MainActivity extends AppCompatActivity
 
 
         int id = item.getItemId();
-        if (id == R.id.nav_account) {
+        /*if (id == R.id.nav_account) {
             Toast.makeText(this,"Login",Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_notification) {
-            /*Toast.makeText(this,"Notification",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,"Notification",Toast.LENGTH_SHORT).show();
             TextView txt = (TextView) findViewById(R.id.counter);
             txt.setText("2");*/
 
             /*if (navigationView != null) {
                 setupDrawerContent(nainitvigationView);
             }
-*/
-        }
+
+        }*/
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -196,12 +206,50 @@ public class MainActivity extends AppCompatActivity
         List<Products> listViewItems = new ArrayList<Products>();
         listViewItems.add(new Products("Assam Tea","Some Description", R.drawable.assam));
         listViewItems.add(new Products("Cardamom Tea","Some Description", R.drawable.cardamom_tea));
+
         listViewItems.add(new Products("Masala Chai","Some Description", R.drawable.masala));
         listViewItems.add(new Products("Ginger Tea","Some Description", R.drawable.ginger));
-
+        listViewItems.add(new Products("Assam Tea","Some Description", R.drawable.assam));
+        listViewItems.add(new Products("Cardamom Tea","Some Description", R.drawable.cardamom_tea));
 
         return listViewItems;
     }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_notification) {
+            Toast.makeText(this,"No notifications ",Toast.LENGTH_SHORT).show();
+        }
+
+        switch (id){
+            case android.R.
+id.home:
+                if (drawer.isDrawerOpen(GravityCompat.START)){
+                    drawer.closeDrawer(GravityCompat.START);
+                } else {
+                    drawer.openDrawer(GravityCompat.START);
+                }
+
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
 
 
 }

@@ -5,23 +5,30 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+
     tools:context="com.monkporter.zafran.activity.MainActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:id="@+id/appBarLayout"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
         <!--Here we will put ActionBar-->
 
         <include
-            android:id="@+id/toolbar"
+
             layout="@layout/toolbar_main_layout"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark" />
+            android:theme="@style/AppTheme" />
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_main" />
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/products"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
 
 </android.support.design.widget.CoordinatorLayout>

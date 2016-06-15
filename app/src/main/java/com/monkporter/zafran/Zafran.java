@@ -12,6 +12,7 @@ public class Zafran extends Application {
     public void onCreate() {
         super.onCreate();
 
+
     }
 
     public static synchronized Zafran getInstance() {
