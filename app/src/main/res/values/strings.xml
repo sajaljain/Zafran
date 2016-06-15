@@ -17,4 +17,5 @@
     <string name="clear">\"\"</string>
     <string name="user_name">Tushar Joshi</string>
     <string name="user_email">tushar.joshi@zafran.com</string>
+    <string name="action_settings">Settings</string>
 </resources>
