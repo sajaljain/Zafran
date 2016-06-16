@@ -71,7 +71,7 @@ public class ItemListAdapter  extends RecyclerView.Adapter<ItemListAdapter.MyVie
 
                 SpannableStringBuilder builder = new SpannableStringBuilder();
                 builder.append(" ");
-                ImageSpan i = new ImageSpan(inflator.getContext(), R.drawable.ic_add_shopping_cart_black_18dp);
+                ImageSpan i = new ImageSpan(inflator.getContext(), R.drawable.ic_add_shopping_cart);
                 builder.setSpan(i,0,builder.length(), 0);
                 builder.append(" Rs "+current.price);
                 Snackbar snackbar = Snackbar.make(holder.itemView, builder, Snackbar.LENGTH_LONG).setAction("Retry", new View.OnClickListener() {
@@ -96,7 +96,7 @@ public class ItemListAdapter  extends RecyclerView.Adapter<ItemListAdapter.MyVie
 
                 SpannableStringBuilder builder = new SpannableStringBuilder();
                 builder.append(" ");
-                ImageSpan i = new ImageSpan(inflator.getContext(), R.drawable.ic_add_shopping_cart_black_18dp);
+                ImageSpan i = new ImageSpan(inflator.getContext(), R.drawable.ic_add_shopping_cart);
                 builder.setSpan(i,0,builder.length(), 0);
                 builder.append(" Rs "+current.price);
                 Snackbar snackbar = Snackbar.make(holder.itemView, builder, Snackbar.LENGTH_LONG).setAction("Retry", new View.OnClickListener() {
@@ -123,7 +123,7 @@ public class ItemListAdapter  extends RecyclerView.Adapter<ItemListAdapter.MyVie
 
                 SpannableStringBuilder builder = new SpannableStringBuilder();
                 builder.append(" ");
-                ImageSpan i = new ImageSpan(inflator.getContext(), R.drawable.ic_add_shopping_cart_black_18dp);
+                ImageSpan i = new ImageSpan(inflator.getContext(), R.drawable.ic_add_shopping_cart);
                 builder.setSpan(i,0,builder.length(), 0);
                 builder.append(" Rs "+current.price);
                 Snackbar snackbar = Snackbar.make(holder.itemView, builder, Snackbar.LENGTH_LONG).setAction("Retry", new View.OnClickListener() {
