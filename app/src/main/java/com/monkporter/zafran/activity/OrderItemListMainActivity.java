@@ -4,6 +4,8 @@ package com.monkporter.zafran.activity;
  * Created by Vaibhav on 6/15/2016.
  */
 
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -11,6 +13,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.SpannableStringBuilder;
+import android.text.style.ImageSpan;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,6 +29,7 @@ import java.util.List;
 public class OrderItemListMainActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private ItemListAdapter adapter;
+    int product_set;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +38,23 @@ public class OrderItemListMainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+
+        SharedPreferences sharedPreferences = OrderItemListMainActivity.this.getSharedPreferences(getString(R.string.PREF_FILE),MODE_PRIVATE);
+        product_set = sharedPreferences.getInt(getString(R.string.PRODUCT_SET),0);
+        SpannableStringBuilder builder = new SpannableStringBuilder();
+        builder.append(" ");
+        ImageSpan i = new ImageSpan(OrderItemListMainActivity.this, R.drawable.ic_add_shopping_cart_black_18dp);
+        builder.setSpan(i,0,builder.length(), 0);
+        builder.append(" Rs "+product_set*10);
+        Snackbar snackbar = Snackbar.make(recyclerView, builder, Snackbar.LENGTH_INDEFINITE).setAction("Retry", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            }
+        });
+        View sbView = snackbar.getView();
+        sbView.setBackgroundColor(Color.RED);
+        snackbar.show();
+
         recyclerView.setNestedScrollingEnabled(false);
         adapter = new ItemListAdapter(OrderItemListMainActivity.this,getData());
         recyclerView.setAdapter(adapter);

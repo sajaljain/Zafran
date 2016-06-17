@@ -18,7 +18,6 @@ public class Splash extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         final Intent intent = new Intent(this,MainActivity.class);
-
         pb = (ProgressBar) findViewById(R.id.progressBar);
         new Thread(new Runnable() {
             @Override

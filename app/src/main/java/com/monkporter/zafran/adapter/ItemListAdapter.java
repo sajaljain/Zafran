@@ -11,6 +11,7 @@ package com.monkporter.zafran.adapter;
 
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
@@ -37,10 +38,17 @@ import java.util.List;
 public class ItemListAdapter  extends RecyclerView.Adapter<ItemListAdapter.MyViewHolder>  {
     List<OrderItem> itemList = Collections.emptyList();
     private LayoutInflater inflator;
-    private int pos = 0;
-    public ItemListAdapter(Context context, List<OrderItem> itemList){
+    int pos;
+    int product_set;
+    Context context;
+    SharedPreferences sharedPreferences;
+    public ItemListAdapter(Context contexti, List<OrderItem> itemList){
         this.itemList = itemList;
+        context = contexti;
         inflator = LayoutInflater.from(context);
+        sharedPreferences = context.getSharedPreferences(context.getString(R.string.PREF_FILE),context.MODE_PRIVATE);
+        pos = sharedPreferences.getInt(context.getString(R.string.SET_POSITION),-1);
+        product_set = sharedPreferences.getInt(context.getString(R.string.PRODUCT_SET),0);
     }
 
     @Override
@@ -56,42 +64,60 @@ public class ItemListAdapter  extends RecyclerView.Adapter<ItemListAdapter.MyVie
         holder.listTitle.setText("Rs "+current.price);
         holder.listDetail.setText("Set of "+current.setOFCups);
         holder.listImage.setImageResource(current.photo);
-        holder.listButton.setText("ADD");
-        holder.listButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                pos = position;
-                holder.listButton.setVisibility(View.GONE);
-                holder.incre.setText("+");
-                holder.incre.setVisibility(View.VISIBLE);
-                holder.decre.setText("-");
-                holder.decre.setVisibility(View.VISIBLE);
-                holder.quantity.setText(""+current.setOFCups);
-                holder.quantity.setVisibility(View.VISIBLE);
+        if(pos != -1 && pos == position){
+            current.setOFCups = product_set;
+            holder.listButton.setText("ADD");
+            holder.listButton.setVisibility(View.GONE);
+            holder.incre.setText("+");
+            holder.incre.setVisibility(View.VISIBLE);
+            holder.decre.setText("-");
+            holder.decre.setVisibility(View.VISIBLE);
+            holder.quantity.setText(""+product_set);
+            holder.quantity.setVisibility(View.VISIBLE);
+        }else {
+            holder.listButton.setText("ADD");
+            holder.listButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    pos = position;
+                    holder.listButton.setVisibility(View.GONE);
+                    holder.incre.setText("+");
+                    holder.incre.setVisibility(View.VISIBLE);
+                    holder.decre.setText("-");
+                    holder.decre.setVisibility(View.VISIBLE);
+                    holder.quantity.setText("" + current.setOFCups);
+                    holder.quantity.setVisibility(View.VISIBLE);
 
-                SpannableStringBuilder builder = new SpannableStringBuilder();
-                builder.append(" ");
-                ImageSpan i = new ImageSpan(inflator.getContext(), R.drawable.ic_add_shopping_cart);
-                builder.setSpan(i,0,builder.length(), 0);
-                builder.append(" Rs "+current.price);
-                Snackbar snackbar = Snackbar.make(holder.itemView, builder, Snackbar.LENGTH_LONG).setAction("Retry", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                    }
-                });
-                View sbView = snackbar.getView();
-                sbView.setBackgroundColor(Color.RED);
-                snackbar.show();
+                    SpannableStringBuilder builder = new SpannableStringBuilder();
+                    builder.append(" ");
+                    ImageSpan i = new ImageSpan(inflator.getContext(), R.drawable.ic_add_shopping_cart);
+                    builder.setSpan(i, 0, builder.length(), 0);
+                    builder.append(" Rs " + current.price);
+                    Snackbar snackbar = Snackbar.make(holder.itemView, builder, Snackbar.LENGTH_LONG).setAction("Retry", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                        }
+                    });
+                    View sbView = snackbar.getView();
+                    sbView.setBackgroundColor(Color.RED);
+                    snackbar.show();
 
 
-            }
-        });
+                }
+            });
+        }
         holder.incre.setOnClickListener(new View.OnClickListener(){
 
             @Override
             public void onClick(View v) {
                 current.setOFCups += 1;
-                current.price += 10;
+                product_set = current.setOFCups;
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putInt(context.getString(R.string.PRODUCT_SET),product_set);
+                pos = position;
+                editor.putInt(context.getString(R.string.SET_POSITION),pos);
+                editor.commit();
+                current.price = 10*current.setOFCups;
                 holder.quantity.setText(""+current.setOFCups);
 
                 SpannableStringBuilder builder = new SpannableStringBuilder();
@@ -117,7 +143,13 @@ public class ItemListAdapter  extends RecyclerView.Adapter<ItemListAdapter.MyVie
             public void onClick(View v) {
                 if(current.setOFCups > 0) {
                     current.setOFCups -= 1;
-                    current.price -= 10;
+                    product_set = current.setOFCups;
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putInt(context.getString(R.string.PRODUCT_SET),product_set);
+                    pos = position;
+                    editor.putInt(context.getString(R.string.SET_POSITION),pos);
+                    editor.commit();
+                    current.price = 10*current.setOFCups;
                 }
                 holder.quantity.setText(""+current.setOFCups);
 
