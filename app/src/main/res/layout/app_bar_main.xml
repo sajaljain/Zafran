@@ -1,25 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-
-    tools:context="com.monkporter.zafran.activity.MainActivity">
+    android:layout_height="match_parent">
 
     <android.support.design.widget.AppBarLayout
+        android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/appBarLayout"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        >
 
         <!--Here we will put ActionBar-->
 
-        <include
-
-            layout="@layout/toolbar_main_layout"
-            android:theme="@style/AppTheme" />
+        <include layout="@layout/toolbar_main_layout" />
 
     </android.support.design.widget.AppBarLayout>
 
@@ -27,7 +23,7 @@
         android:id="@+id/products"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fitsSystemWindows="true"
+
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
 

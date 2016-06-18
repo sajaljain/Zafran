@@ -15,7 +15,7 @@
 
     <dimen name="userPhoto_layout_width">64dp</dimen>
     <dimen name="userPhoto_layout_height">64dp</dimen>
-    <dimen name="userPhoto_layout_marginTop">20dp</dimen>
+    <dimen name="userPhoto_layout_marginTop">30dp</dimen>
     <dimen name="userPhoto_layout_marginLeft">16dp</dimen>
 
     <dimen name="userData_layout_height">56dp</dimen>
