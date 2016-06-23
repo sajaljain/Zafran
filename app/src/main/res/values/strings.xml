@@ -21,6 +21,7 @@
     <string name="PREF_FILE">APP_PREF_FILE</string>
     <string name="SET_POSITION">POSITION</string>
     <string name="PRODUCT_SET">SET</string>
+    <string name="LOGIN">USER_LOGIN</string>
     <string name="title_activity_scrolling">ScrollingActivity</string>
     <string name="large_text">
         "Material is the metaphor.\n\n"

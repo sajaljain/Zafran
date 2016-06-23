@@ -10,10 +10,11 @@
 
     <item android:title="My Information">
         <menu>
-         <!--   <item
+            <item
                 android:id="@+id/nav_account"
                 android:icon="@drawable/ic_account"
-                android:title="Login" />-->
+                android:title="Login"
+                android:visible="true"/>
             <item
                 android:id="@+id/nav_address"
 
@@ -54,6 +55,7 @@
                 android:id="@+id/nav_logout"
                 android:icon="@drawable/ic_account"
                 android:title="Logout"
+
 
                 />
         </menu>

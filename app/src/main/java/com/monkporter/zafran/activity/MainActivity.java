@@ -1,5 +1,6 @@
 package com.monkporter.zafran.activity;
 
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
@@ -52,6 +53,7 @@ public class MainActivity extends AppCompatActivity
     HashMap<String,String> url_maps ;
     private StaggeredGridLayoutManager staggeredGridLayoutManager;
     private RecyclerView recyclerView;
+    private boolean login;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,6 +61,8 @@ public class MainActivity extends AppCompatActivity
         initNavigationDrawer();
         setupToolbar();
         initSlider();
+
+
 
         recyclerView = (RecyclerView)findViewById(R.id.products);
         recyclerView.setHasFixedSize(true);
@@ -136,25 +140,24 @@ public class MainActivity extends AppCompatActivity
 
 
     public void setupDrawerContent(NavigationView upDrawerContent) {
-   /*     Menu menu = navigationView.getMenu();
-        //If user not l
-        Log.i("Sajal","I am here");
-        if(false) {
+        Menu menu = navigationView.getMenu();
+        SharedPreferences sharedPreferences = MainActivity.this.getSharedPreferences(getString(R.string.PREF_FILE),MODE_PRIVATE);
+        login = sharedPreferences.getBoolean(getString(R.string.LOGIN),false);
+        if(!login) {
 
             menu.findItem(R.id.nav_account).setVisible(true);
             menu.findItem(R.id.nav_logout).setVisible(false);
+            menu.findItem(R.id.nav_address).setEnabled(false);
+            menu.findItem(R.id.nav_pre_order).setEnabled(false);
 
-        }*/
-        //else logged in
-
-    /*    else
+        }
+        else
         {
-        Log.i("Sajal","I Logged in user");
         menu.findItem(R.id.nav_account).setVisible(false);
         menu.findItem(R.id.nav_logout).setVisible(true);
         menu.findItem(R.id.nav_address).setEnabled(true);
         menu.findItem(R.id.nav_pre_order).setEnabled(true);
-        }*/
+        }
         navigationView.setNavigationItemSelectedListener(this);
     }
 
@@ -175,16 +178,27 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
-
-
+        SharedPreferences sharedPreferences = MainActivity.this.getSharedPreferences(getString(R.string.PREF_FILE),MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        Menu menu = navigationView.getMenu();
         int id = item.getItemId();
-        /*if (id == R.id.nav_account) {
-            Toast.makeText(this,"Login",Toast.LENGTH_SHORT).show();
-        } else if (id == R.id.nav_notification) {
-            Toast.makeText(this,"Notification",Toast.LENGTH_SHORT).show();
-            TextView txt = (TextView) findViewById(R.id.counter);
-            txt.setText("2");*/
-
+        if (id == R.id.nav_account) {
+            item.setVisible(false);
+            menu.findItem(R.id.nav_logout).setVisible(true);
+            menu.findItem(R.id.nav_address).setEnabled(true);
+            menu.findItem(R.id.nav_pre_order).setEnabled(true);
+            login = true;
+            editor.putBoolean(getString(R.string.LOGIN),login);
+            editor.commit();
+        } else if (id == R.id.nav_logout) {
+            menu.findItem(R.id.nav_account).setVisible(true);
+            menu.findItem(R.id.nav_logout).setVisible(false);
+            menu.findItem(R.id.nav_address).setEnabled(false);
+            menu.findItem(R.id.nav_pre_order).setEnabled(false);
+            login = false;
+            editor.putBoolean(getString(R.string.LOGIN),login);
+            editor.commit();
+        }
             /*if (navigationView != null) {
                 setupDrawerContent(nainitvigationView);
             }
