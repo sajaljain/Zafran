@@ -1,6 +1,8 @@
 package com.monkporter.zafran.activity;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
@@ -11,7 +13,12 @@ import android.support.v4.view.MenuItemCompat;
 
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.RecyclerView;
+
+import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -158,7 +165,16 @@ public class MainActivity extends AppCompatActivity
         menu.findItem(R.id.nav_address).setEnabled(true);
         menu.findItem(R.id.nav_pre_order).setEnabled(true);
         }
+
+       /* SpannableStringBuilder text = new SpannableStringBuilder();
+        text.append("address");
+
+        text.setSpan(new ForegroundColorSpan(Color.LTGRAY),
+                0, text.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        menu.findItem(R.id.nav_address).setTitle(text);*/
+
         navigationView.setNavigationItemSelectedListener(this);
+
     }
 
 
@@ -185,6 +201,7 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_account) {
             item.setVisible(false);
             menu.findItem(R.id.nav_logout).setVisible(true);
+            menu.findItem(R.id.nav_logout).setVisible(true);
             menu.findItem(R.id.nav_address).setEnabled(true);
             menu.findItem(R.id.nav_pre_order).setEnabled(true);
             login = true;
@@ -198,6 +215,15 @@ public class MainActivity extends AppCompatActivity
             login = false;
             editor.putBoolean(getString(R.string.LOGIN),login);
             editor.commit();
+        }
+        if(id == R.id.nav_share){
+
+
+            Intent shareIntent = new Intent(Intent.ACTION_SEND);
+            shareIntent.setAction(Intent.ACTION_SEND);
+            shareIntent.setType("text/plain");
+            shareIntent.putExtra(Intent.EXTRA_TEXT,"Download ZAFRAN app at http://play.google.com/store/apps/details?id=com.grofers.customerapp ");
+            startActivity(shareIntent);
         }
             /*if (navigationView != null) {
                 setupDrawerContent(nainitvigationView);
