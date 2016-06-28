@@ -225,6 +225,11 @@ public class MainActivity extends AppCompatActivity
             shareIntent.putExtra(Intent.EXTRA_TEXT,"Download ZAFRAN app at http://play.google.com/store/apps/details?id=com.grofers.customerapp ");
             startActivity(shareIntent);
         }
+
+        if(id == R.id.nav_pre_order){
+            Intent intent = new Intent(this,OrderHistoryActivity.class);
+            startActivity(intent);
+        }
             /*if (navigationView != null) {
                 setupDrawerContent(nainitvigationView);
             }

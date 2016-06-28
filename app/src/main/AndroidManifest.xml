@@ -30,6 +30,14 @@
             </intent-filter>
 
         </activity>
+        <activity
+            android:name=".activity.OrderHistoryActivity"
+            android:label="@string/title_order_history_activity"
+            android:theme="@style/AppTheme">
+
+
+
+        </activity>
         <activity android:name=".activity.NotificationCenter" />
         <activity android:name=".activity.OrderItemListMainActivity">
 

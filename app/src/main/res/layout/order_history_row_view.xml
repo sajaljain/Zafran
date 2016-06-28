@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#D3D3D3">
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/order_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        app:cardCornerRadius="4dp">
+
+        <LinearLayout
+            android:id="@+id/mainLayout_card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/txt_history_order_id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:text="Order Number"
+                    android:textSize="@dimen/text_size_chemist_address"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/history_order_id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="6"
+                    android:gravity="center_vertical"
+                    android:text="Order Number"
+                    android:textSize="@dimen/text_size_chemist_address" />
+
+                <ImageView
+                    android:id="@+id/zafran_logo_id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/cup" />
+
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#BBF" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/txt_delivery_date_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="5dp"
+                    android:text="Scheduled for:"
+                    android:textSize="@dimen/text_size_chemist_address"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/delivery_date_value_id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="24dp"
+                    android:layout_marginTop="5dp"
+                    android:text="Date And Time"
+                    android:textSize="@dimen/text_size_chemist_address"
+                    android:visibility="visible" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="2dp"
+                android:background="#BBF" />
+
+            <RelativeLayout
+                android:id="@+id/order_detail_layput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp">
+
+
+                <TextView
+                    android:id="@+id/txt_subtotal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="5dp"
+                    android:text="Sub Total:"
+                    android:textSize="@dimen/text_size_chemist_address"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/subtotal_amt_value_id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginLeft="1dp"
+                    android:layout_marginTop="5dp"
+                    android:text="SubTotal Amount"
+                    android:textSize="@dimen/text_size_chemist_address" />
+
+
+                <TextView
+                    android:id="@+id/txt_delivery_charge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/txt_subtotal"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="5dp"
+                    android:text="Delivery Charge:"
+                    android:textSize="@dimen/text_size_chemist_address"
+                    android:textStyle="bold" />
+
+
+                <TextView
+                    android:id="@+id/delivery_charge_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_below="@+id/subtotal_amt_value_id"
+                    android:layout_marginTop="5dp"
+                    android:text="Free"
+                    android:textColor="#009900"
+                    android:textSize="@dimen/text_size_chemist_address" />
+
+
+                <View
+                    android:id="@+id/seprater"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_below="@+id/txt_delivery_charge"
+                    android:layout_marginTop="5dp"
+                    android:background="#BBF" />
+
+
+                <TextView
+                    android:id="@+id/txt_total_amt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/seprater"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="5dp"
+                    android:text="My Social Support:"
+                    android:textSize="@dimen/text_size_chemist_address"
+                    android:textStyle="bold" />
+
+                <View
+                    android:id="@+id/seprater2"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_below="@+id/txt_total_amt"
+
+                    android:layout_marginTop="5dp"
+                    android:background="#BBF" />
+
+                <TextView
+                    android:id="@+id/total_amt_value_id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_below="@+id/seprater"
+                    android:layout_marginLeft="1dp"
+                    android:layout_marginTop="5dp"
+                    android:text="Total Amount"
+                    android:textSize="@dimen/text_size_chemist_address" />
+
+
+                <TextView
+                    android:id="@+id/txt_vender_details"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/seprater2"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="5dp"
+                    android:text="Vender Details:"
+
+                    android:textSize="@dimen/text_size_chemist_address"
+                    android:textStyle="bold" />
+
+
+                <View
+                    android:id="@+id/seprater3"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_below="@+id/txt_vender_details"
+                    android:layout_marginTop="5dp"
+                    android:background="#BBF" />
+
+                <TextView
+                    android:id="@+id/vender_name_id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/seprater3"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="5dp"
+                    android:text="Shyam"
+                    android:textSize="20dp"
+
+                    />
+
+                <TextView
+                    android:id="@+id/work_hours_id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/vender_name_id"
+                    android:layout_centerHorizontal="true"
+                    android:paddingLeft="30dp"
+                    android:text="7:00AM-8:00PM"
+                    android:textSize="20dp" />
+
+                <ImageView
+                    android:id="@+id/call_button_id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="5dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_below="@+id/seprater3"
+                    android:src="@drawable/ic_call_black_24dp" />
+
+            </RelativeLayout>
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+</RelativeLayout>
