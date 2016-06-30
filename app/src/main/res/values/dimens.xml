@@ -35,5 +35,6 @@
     <dimen name="prod_desc">12dp</dimen>
     <dimen name="card_margin">5dp</dimen>
     <dimen name="text_size_chemist_address">14dp</dimen>
+    <dimen name="text_size_medium">14dp</dimen>
 
 </resources>

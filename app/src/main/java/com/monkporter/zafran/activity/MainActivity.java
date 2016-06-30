@@ -230,6 +230,11 @@ public class MainActivity extends AppCompatActivity
             Intent intent = new Intent(this,OrderHistoryActivity.class);
             startActivity(intent);
         }
+
+        if(id == R.id.nav_address){
+            Intent intent = new Intent(this,AddressDetailActivity.class);
+            startActivity(intent);
+        }
             /*if (navigationView != null) {
                 setupDrawerContent(nainitvigationView);
             }

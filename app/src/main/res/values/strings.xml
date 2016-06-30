@@ -113,4 +113,7 @@
         "when a user tries to pick up one of cards.\n\n"
     </string>
     <string name="title_order_history_activity">OrderHistory2</string>
+    <string name="address_line1">Add. Line 1:</string>
+    <string name="address_line2">Add. Line 2:</string>
+    <string name="city"><![CDATA[Area & City:]]></string>
 </resources>
