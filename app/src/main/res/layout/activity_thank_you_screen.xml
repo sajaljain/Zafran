@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    tools:context="com.monkporter.zafran.ThankYouScreen">
+
+
+
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:id="@+id/relative_id"
+    >
+
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:id="@+id/app_bar_id"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <include layout="@layout/tool_bar"
+            android:id="@+id/tool_bar_id"/>
+
+    </android.support.design.widget.AppBarLayout>
+
+
+    <ImageView
+        android:id="@+id/tick_icon_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_check"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:layout_below="@+id/app_bar_id"
+        android:tint="#8BC34A"/>
+
+    <TextView
+        android:id="@+id/order_confirm_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Order Successfully Placed"
+        android:layout_below="@+id/tick_icon_id"
+        android:layout_centerHorizontal="true"
+        android:textSize="22dp"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"/>
+
+    <View
+        android:id="@+id/st_line_id"
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:background="@drawable/straight_line"
+        android:layout_below="@+id/order_confirm_id"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:layout_marginLeft="62dp"
+        android:layout_marginRight="62dp"/>
+
+    <TextView
+        android:id="@+id/text_time_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Scheduled Date And Time"
+        android:layout_below="@+id/st_line_id"
+        android:layout_centerHorizontal="true"
+        android:textSize="18dp"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:textColor="@color/darker_gray"/>
+
+    <TextView
+        android:id="@+id/delivery_day_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tomorrow"
+        android:layout_below="@+id/text_time_id"
+        android:layout_centerHorizontal="true"
+        android:textSize="32dp"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+       />
+
+
+    <TextView
+        android:id="@+id/delivery_time_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="06:00PM"
+        android:layout_below="@+id/delivery_day_id"
+        android:layout_centerHorizontal="true"
+        android:textSize="20dp"
+        android:layout_marginBottom="24dp"
+        />
+
+    <View
+        android:id="@+id/dotted_line_id"
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:background="@drawable/dotted_line"
+        android:layout_below="@+id/delivery_time_id"
+
+        />
+</RelativeLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:id="@+id/linear_id"
+        android:layout_below="@+id/relative_id"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_done"
+                android:tint="#8BC34A"
+                android:layout_marginTop="24dp"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Store price guarantee.Assured refundin case of variation"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="24dp"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:textColor="@color/darker_gray"
+                android:textSize="18dp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_done"
+                android:tint="#8BC34A"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="100% replacement guarantee."
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:textColor="@color/darker_gray"
+                android:textSize="18dp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+
+            >
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_done"
+                android:tint="#8BC34A"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Store price guarantee.Assured refundin case of variation"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:textColor="@color/darker_gray"
+                android:textSize="18dp"/>
+
+        </LinearLayout>
+
+
+
+    </LinearLayout>
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_alignParentBottom="true"
+    android:orientation="horizontal">
+    <Button
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="match_parent"
+        android:background="@color/colorPrimary"
+        android:text="Check Order Status"
+        android:layout_marginRight="1dp"
+        android:textColor="@color/white"
+
+        />
+    <Button
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="match_parent"
+        android:text="Continue Shopping"
+        android:background="@color/colorPrimary"
+        android:layout_marginLeft="1dp"
+        android:textColor="@color/white"
+
+        />
+</LinearLayout>
+</RelativeLayout>

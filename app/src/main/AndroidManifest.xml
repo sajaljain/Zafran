@@ -24,12 +24,6 @@
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme">
 
-            <intent-filter>
-                <category android:name="android.intent.category.LAUNCHER" />
-
-                <action android:name="android.intent.action.MAIN" />
-            </intent-filter>
-
         </activity>
         <activity
             android:name=".activity.OrderHistoryActivity"
@@ -53,12 +47,20 @@
         <activity
             android:name=".activity.AddressDetailActivity"
             android:label="My Addresses"
-            android:theme="@style/AppTheme"></activity>
-        <activity android:name=".activity.OrderDetailActivity"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".activity.OrderDetailActivity"
             android:label="Order Detail"
-            android:theme="@style/AppTheme"
-            >
+            android:theme="@style/AppTheme"></activity>
+        <activity android:name=".ThankYouScreen"
+            android:label="Thank you"
+            android:theme="@style/AppTheme">
 
+            <intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
 
         </activity>
     </application>
