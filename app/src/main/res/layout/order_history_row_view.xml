@@ -62,7 +62,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="#BBF" />
+                android:background= "@color/darker_gray"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -95,7 +95,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginTop="2dp"
-                android:background="#BBF" />
+                android:background="@color/darker_gray" />
 
             <RelativeLayout
                 android:id="@+id/order_detail_layput"
@@ -155,7 +155,7 @@
                     android:layout_height="1dp"
                     android:layout_below="@+id/txt_delivery_charge"
                     android:layout_marginTop="5dp"
-                    android:background="#BBF" />
+                    android:background="@color/darker_gray" />
 
 
                 <TextView
@@ -176,7 +176,7 @@
                     android:layout_below="@+id/txt_total_amt"
 
                     android:layout_marginTop="5dp"
-                    android:background="#BBF" />
+                    android:background="@color/darker_gray" />
 
                 <TextView
                     android:id="@+id/total_amt_value_id"
@@ -209,7 +209,7 @@
                     android:layout_height="1dp"
                     android:layout_below="@+id/txt_vender_details"
                     android:layout_marginTop="5dp"
-                    android:background="#BBF" />
+                    android:background="@color/darker_gray" />
 
                 <TextView
                     android:id="@+id/vender_name_id"

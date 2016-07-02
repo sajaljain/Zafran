@@ -68,23 +68,13 @@
                 </RelativeLayout>
         -->
 
-        <ImageView
-            android:id="@+id/top_view"
-            android:layout_width="match_parent"
-            android:layout_height="5dp"
-            android:layout_marginEnd="@dimen/screen_margin_right"
-            android:layout_marginLeft="@dimen/screen_margin_left"
-            android:layout_marginRight="@dimen/screen_margin_right"
-            android:layout_marginStart="@dimen/screen_margin_left"
-            android:layout_marginTop="5dp"
-            android:layerType="software"
-            android:src="@drawable/dotted_line" />
+
 
 
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="40dp">
+            >
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -652,14 +642,7 @@
                             android:textSize="@dimen/text_size" />
                     </LinearLayout>
 
-                    <ImageView
-                        android:id="@+id/onhold_view"
-                        android:layout_width="match_parent"
-                        android:layout_height="5dp"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
-                        android:layerType="software"
-                        android:src="@drawable/dotted_line" />
+
                     <!--
                        <LinearLayout
                                                android:id="@+id/onhold_note_layout"

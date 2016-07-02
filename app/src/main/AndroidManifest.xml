@@ -24,6 +24,12 @@
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme">
 
+            <intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+
         </activity>
         <activity
             android:name=".activity.OrderHistoryActivity"
@@ -53,11 +59,7 @@
             android:theme="@style/AppTheme"
             >
 
-            <intent-filter>
-                <category android:name="android.intent.category.LAUNCHER" />
 
-                <action android:name="android.intent.action.MAIN" />
-            </intent-filter>
         </activity>
     </application>
 
