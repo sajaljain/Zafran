@@ -3,9 +3,12 @@
     package="com.monkporter.zafran">
 
     <!-- Make request to server -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <!-- if you want to load images from a file OR from the internet (allow files from the internet to be cached into local storage.) -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
         android:name=".Zafran"
@@ -16,7 +19,7 @@
         android:theme="@style/AppTheme">
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyAii1RotCTgBTZQPTR0fthWMeCiuUXS2mM" />
+            android:value="AIzaSyACau6bKSGStVsPrN8rKggXVVFI3ySAKIs" />
 
         <activity android:name=".activity.Splash" />
         <activity
@@ -24,7 +27,7 @@
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme"></activity>
         <activity
-            android:name=".activity.OrderHistoryActivity"
+            android:name=".activity.OrderHistory"
             android:label="@string/title_order_history_activity"
             android:theme="@style/AppTheme" />
         <activity android:name=".activity.NotificationCenter" />
@@ -43,11 +46,11 @@
         </service>
 
         <activity
-            android:name=".activity.AddressDetailActivity"
+            android:name=".activity.AddressDetail"
             android:label="My Addresses"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".activity.OrderDetailActivity"
+            android:name=".activity.OrderDetail"
             android:label="Order Detail"
             android:theme="@style/AppTheme" />
         <activity
@@ -56,7 +59,10 @@
             android:theme="@style/AppTheme">
 
         </activity>
-        <activity android:name=".activity.NoConnectionScreen"
+        <activity android:name=".activity.Refresh"
+            android:theme="@style/AppTheme">
+        </activity>
+        <activity android:name=".activity.FetchLocationActivity"
             android:theme="@style/AppTheme">
 
             <intent-filter>

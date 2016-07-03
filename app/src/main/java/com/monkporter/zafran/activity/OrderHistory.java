@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * Created by Vaibhav on 6/28/2016.
  */
-public class OrderHistoryActivity extends AppCompatActivity{
+public class OrderHistory extends AppCompatActivity{
     private RecyclerView recyclerView;
     private OrderHistoryAdapter adapter;
 
@@ -28,9 +28,9 @@ public class OrderHistoryActivity extends AppCompatActivity{
         setSupportActionBar(toolbar);
 
         recyclerView = (RecyclerView) findViewById(R.id.order_history_recyclerview);
-        adapter = new OrderHistoryAdapter(OrderHistoryActivity.this,getData());
+        adapter = new OrderHistoryAdapter(OrderHistory.this,getData());
         recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(OrderHistoryActivity.this));
+        recyclerView.setLayoutManager(new LinearLayoutManager(OrderHistory.this));
     }
 
     private List<OrderHistoryAttribute> getData() {

@@ -17,7 +17,7 @@ import com.monkporter.zafran.model.AddressDetailAttributes;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AddressDetailActivity extends AppCompatActivity {
+public class AddressDetail extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private AddressDetailAdapter adapter;
@@ -34,9 +34,9 @@ public class AddressDetailActivity extends AppCompatActivity {
 
 
         recyclerView = (RecyclerView) findViewById(R.id.address_detail_recyclerview);
-        adapter = new AddressDetailAdapter(AddressDetailActivity.this,getData());
+        adapter = new AddressDetailAdapter(AddressDetail.this,getData());
         recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(AddressDetailActivity.this));
+        recyclerView.setLayoutManager(new LinearLayoutManager(AddressDetail.this));
     }
 
     private List<AddressDetailAttributes> getData() {
@@ -75,7 +75,7 @@ public class AddressDetailActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.add_button_id) {
-            Toast.makeText(AddressDetailActivity.this, "Add Button Clicked", Toast.LENGTH_SHORT).show();
+            Toast.makeText(AddressDetail.this, "Add Button Clicked", Toast.LENGTH_SHORT).show();
             AddressDetailAttributes current = new AddressDetailAttributes();
             current.userName="Vaibhav";
             current.addressLine1="H.No - 1093";
@@ -86,7 +86,7 @@ public class AddressDetailActivity extends AppCompatActivity {
         }
         if(id == android.R.id.home){
            this.finish();
-           // Toast.makeText(AddressDetailActivity.this, "Back Button", Toast.LENGTH_SHORT).show();
+           // Toast.makeText(AddressDetail.this, "Back Button", Toast.LENGTH_SHORT).show();
             return true;
         }
         return super.onOptionsItemSelected(item);
