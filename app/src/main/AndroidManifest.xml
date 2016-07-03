@@ -22,9 +22,7 @@
         <activity
             android:name=".activity.MainActivity"
             android:label="@string/title_activity_main"
-            android:theme="@style/AppTheme">
-
-        </activity>
+            android:theme="@style/AppTheme"></activity>
         <activity
             android:name=".activity.OrderHistoryActivity"
             android:label="@string/title_order_history_activity"
@@ -51,9 +49,14 @@
         <activity
             android:name=".activity.OrderDetailActivity"
             android:label="Order Detail"
-            android:theme="@style/AppTheme"></activity>
-        <activity android:name=".ThankYouScreen"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".activity.ThankYouScreen"
             android:label="Thank you"
+            android:theme="@style/AppTheme">
+
+        </activity>
+        <activity android:name=".activity.NoConnectionScreen"
             android:theme="@style/AppTheme">
 
             <intent-filter>

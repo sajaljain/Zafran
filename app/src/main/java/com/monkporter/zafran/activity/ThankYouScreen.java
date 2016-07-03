@@ -1,4 +1,4 @@
-package com.monkporter.zafran;
+package com.monkporter.zafran.activity;
 
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.monkporter.zafran.R;
 import com.monkporter.zafran.model.AddressDetailAttributes;
 
 public class ThankYouScreen extends AppCompatActivity {
