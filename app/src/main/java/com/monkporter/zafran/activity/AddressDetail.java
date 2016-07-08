@@ -1,13 +1,16 @@
 package com.monkporter.zafran.activity;
 
+import android.content.Context;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.monkporter.zafran.R;
@@ -31,7 +34,11 @@ public class AddressDetail extends AppCompatActivity {
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
+    /*    actionBar.setDisplayShowCustomEnabled(true);
 
+        LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View v = inflater.inflate(R.layout.actionbar_address_layout,null);
+actionBar.setCustomView(v);*/
 
         recyclerView = (RecyclerView) findViewById(R.id.address_detail_recyclerview);
         adapter = new AddressDetailAdapter(AddressDetail.this,getData());

@@ -66,16 +66,13 @@ public class CommonMethod {
         if (connectivity == null) {
             return false;
         } else {
-            NetworkInfo[] info = connectivity.getAllNetworkInfo();
+            NetworkInfo info = connectivity.getActiveNetworkInfo();
             if (info != null) {
-                for (int i = 0; i < info.length; i++) {
-                    if (info[i].getState() == NetworkInfo.State.CONNECTED) {
-                        return true;
-                    }
-                }
+                return true;
+            } else{
+             return  false;
             }
         }
-        return false;
     }
 
 

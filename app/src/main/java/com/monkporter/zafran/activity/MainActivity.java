@@ -1,5 +1,6 @@
 package com.monkporter.zafran.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -16,8 +17,11 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.daimajia.slider.library.SliderLayout;
@@ -30,6 +34,7 @@ import com.monkporter.zafran.model.Products;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.zip.Inflater;
 
 /*
 * Initially user is not logged in
@@ -48,7 +53,10 @@ public class MainActivity extends AppCompatActivity
     HashMap<String,String> url_maps ;
     private StaggeredGridLayoutManager staggeredGridLayoutManager;
     private RecyclerView recyclerView;
+    View v;
     private boolean login;
+    private ViewGroup viewGroup;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,7 +65,18 @@ public class MainActivity extends AppCompatActivity
         setupToolbar();
         initSlider();
 
+       // LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+       // v = inflater.inflate(R.layout.actionbar_address_layout,null);
 
+        viewGroup = (ViewGroup) findViewById(R.id.toolbar_address_layout_id);
+        viewGroup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(MainActivity.this, "Hello", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(MainActivity.this,PlacesAutoCompleteActivity.class);
+                startActivity(intent);
+            }
+        });
 
         recyclerView = (RecyclerView)findViewById(R.id.products);
         recyclerView.setHasFixedSize(true);
@@ -94,6 +113,8 @@ public class MainActivity extends AppCompatActivity
         final ActionBar ab = getSupportActionBar();
 
         ab.setHomeAsUpIndicator(R.drawable.ic_menu);
+        ab.setDisplayShowCustomEnabled(true);
+       // ab.setCustomView(v);
         ab.setTitle("");
 
         ab.setDisplayHomeAsUpEnabled(true);
@@ -110,10 +131,12 @@ public class MainActivity extends AppCompatActivity
                     scrollRange = appBarLayout.getTotalScrollRange();
                 }
                 if (scrollRange + verticalOffset == 0) {
-                    collapsingToolbarLayout.setTitle("Zafran");
+                    collapsingToolbarLayout.setTitle("");
+                    viewGroup.setVisibility(View.VISIBLE);
                     isShow = true;
                 } else if(isShow) {
                     collapsingToolbarLayout.setTitle("");
+                    viewGroup.setVisibility(View.GONE);
                     isShow = false;
                 }
             }

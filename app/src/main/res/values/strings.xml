@@ -23,5 +23,5 @@
     <string name="address_line2">Add. Line 2:</string>
     <string name="city"><![CDATA[Area & City:]]></string>
     <string name="use_my_location">Use current location</string>
-    <string name="autocomplete_hint">Search Area, City</string>
+    <string name="autocomplete_hint">Pick Locality</string>
 </resources>

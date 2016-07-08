@@ -13,6 +13,7 @@
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         >
 
+
         <!--Here we will put ActionBar-->
 
         <include layout="@layout/toolbar_main_layout" />

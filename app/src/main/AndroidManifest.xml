@@ -7,7 +7,6 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <!-- if you want to load images from a file OR from the internet (allow files from the internet to be cached into local storage.) -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
@@ -21,11 +20,17 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyACau6bKSGStVsPrN8rKggXVVFI3ySAKIs" />
 
-        <activity android:name=".activity.Splash" />
+        <activity android:name=".activity.Splash" >
+
+        </activity>
         <activity
             android:name=".activity.MainActivity"
             android:label="@string/title_activity_main"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme">
+
+
+
+        </activity>
         <activity
             android:name=".activity.OrderHistory"
             android:label="@string/title_order_history_activity"
@@ -56,20 +61,25 @@
         <activity
             android:name=".activity.ThankYouScreen"
             android:label="Thank you"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".activity.Refresh"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".activity.FetchLocationActivity"
+            android:theme="@style/AppTheme" >
+
+
+
 
         </activity>
-        <activity android:name=".activity.Refresh"
-            android:theme="@style/AppTheme">
-        </activity>
-        <activity android:name=".activity.FetchLocationActivity"
-            android:theme="@style/AppTheme">
-
+        <activity android:name=".activity.PlacesAutoCompleteActivity">
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />
 
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
+
 
         </activity>
     </application>
