@@ -166,6 +166,13 @@ public class PlacesAutoCompleteActivity extends AppCompatActivity implements Goo
                             mArea = getAreaFromAddress((String) item.description);
                             mCompleteAddress = (String) item.description;
 
+
+                            Log.i("UserLocation", "City: " + mCity);
+                            Log.i("UserLocation", "Area: " + mArea);
+                            Log.i("UserLocation", "des: " + mCompleteAddress);
+
+
+
                                 userLocation = new UserLocation();
                                 userLocation.setArea(mArea);
                                 userLocation.setCity(mCity);
@@ -259,6 +266,7 @@ public class PlacesAutoCompleteActivity extends AppCompatActivity implements Goo
             buildAlertMessageNoGps();
         } else {
             if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                Log.v("Permisssions", "Permission not found");
                 return;
             }
             if (CommonMethod.isNetworkAvailable(PlacesAutoCompleteActivity.this)) {

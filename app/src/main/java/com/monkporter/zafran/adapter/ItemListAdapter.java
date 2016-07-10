@@ -1,22 +1,8 @@
 package com.monkporter.zafran.adapter;
 
-/**
- * Created by Vaibhav on 6/15/2016.
- */
-//public class ItemListAdapter {
-
-//}
-
-
-
-
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
-import android.text.SpannableStringBuilder;
-import android.text.style.ImageSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,27 +11,39 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
 import com.monkporter.zafran.R;
 import com.monkporter.zafran.model.OrderItem;
 
-import java.security.AccessController;
 import java.util.Collections;
 import java.util.List;
 
 /**
  * Created by Vaibhav on 5/24/2016.
  */
-public class ItemListAdapter  extends RecyclerView.Adapter<ItemListAdapter.MyViewHolder>  {
+public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.MyViewHolder>  {
     List<OrderItem> itemList = Collections.emptyList();
     private LayoutInflater inflator;
-    int pos;
+    public TextView cartQuantity;
+    public TextView cartPrice;
+    View cartBar;
+    int count = 0;
+    MyViewHolder myViewHolder = null;
+    //View layoutScrollView;
+    int pos,poss = -1;
+    int p;
     int product_set;
     Context context;
     SharedPreferences sharedPreferences;
-    public ItemListAdapter(Context contexti, List<OrderItem> itemList){
+    public ItemListAdapter(Context contexti, List<OrderItem> itemList, TextView cartPrice, TextView cartQuantity, View cartBar){
+        this.cartQuantity = cartQuantity;
+        this.cartPrice = cartPrice;
+        this.cartBar = cartBar;
         this.itemList = itemList;
         context = contexti;
         inflator = LayoutInflater.from(context);
+
+        // layoutScrollView = inflator.inflate(R.id.scroll_view, LinearLayout,false);
         sharedPreferences = context.getSharedPreferences(context.getString(R.string.PREF_FILE),context.MODE_PRIVATE);
         pos = sharedPreferences.getInt(context.getString(R.string.SET_POSITION),-1);
         product_set = sharedPreferences.getInt(context.getString(R.string.PRODUCT_SET),0);
@@ -55,18 +53,60 @@ public class ItemListAdapter  extends RecyclerView.Adapter<ItemListAdapter.MyVie
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View layoutView = inflator.inflate(R.layout.order_item_view,parent ,false);
         MyViewHolder holder = new MyViewHolder(layoutView);
+
         return holder;
     }
 
     @Override
-    public void onBindViewHolder(final MyViewHolder holder,final int position) {
+    public void onBindViewHolder(final MyViewHolder holder, final int position) {
         final OrderItem current = itemList.get(position);
+        OrderItem cur;
         holder.listTitle.setText("Rs "+current.price);
-        holder.listDetail.setText("Set of "+current.setOFCups);
+        holder.listDetail.setText("Set of "+current.set);
         holder.listImage.setImageResource(current.photo);
         if(pos != -1 && pos == position){
-            current.setOFCups = product_set;
+            current.set = product_set;
             holder.listButton.setText("ADD");
+            holder.listButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    myViewHolder.listButton.setText("ADD");
+                    myViewHolder.listButton.setVisibility(View.VISIBLE);
+                    myViewHolder.incre.setText("+");
+                    myViewHolder.incre.setVisibility(View.GONE);
+                    myViewHolder.decre.setText("-");
+                    myViewHolder.decre.setVisibility(View.GONE);
+                    myViewHolder.quantity.setText("" + product_set);
+                    myViewHolder.quantity.setVisibility(View.GONE);
+
+                    myViewHolder = holder;
+                    p = position;
+                    count = 1;
+                    product_set = current.set;
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putInt(context.getString(R.string.PRODUCT_SET),product_set);
+                    pos = position;
+                    editor.putInt(context.getString(R.string.SET_POSITION),pos);
+                    editor.commit();
+                    //notifyItem(position);
+                    //new ItemListAdapter(context,itemList,cartPrice,cartQuantity,cartBar);
+
+                    holder.listButton.setVisibility(View.GONE);
+                    holder.incre.setText("+");
+                    holder.incre.setVisibility(View.VISIBLE);
+                    holder.decre.setText("-");
+                    holder.decre.setVisibility(View.VISIBLE);
+                    holder.quantity.setText(""+current.set);
+                    holder.quantity.setVisibility(View.VISIBLE);
+
+                    cartPrice.setText("Rs."+current.price);
+                    cartQuantity.setText(""+current.set);
+                    cartBar.setVisibility(View.VISIBLE);
+
+
+                }
+            });
             holder.listButton.setVisibility(View.GONE);
             holder.incre.setText("+");
             holder.incre.setVisibility(View.VISIBLE);
@@ -74,65 +114,75 @@ public class ItemListAdapter  extends RecyclerView.Adapter<ItemListAdapter.MyVie
             holder.decre.setVisibility(View.VISIBLE);
             holder.quantity.setText(""+product_set);
             holder.quantity.setVisibility(View.VISIBLE);
-        }else {
+            cartPrice.setText("Rs."+product_set*10);
+
+            cartQuantity.setText(""+product_set);
+            cartBar.setVisibility(View.VISIBLE);
+            myViewHolder = holder;
+        }
+        else{
             holder.listButton.setText("ADD");
             holder.listButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
+                    myViewHolder.listButton.setText("ADD");
+                    myViewHolder.listButton.setVisibility(View.VISIBLE);
+                    myViewHolder.incre.setText("+");
+                    myViewHolder.incre.setVisibility(View.GONE);
+                    myViewHolder.decre.setText("-");
+                    myViewHolder.decre.setVisibility(View.GONE);
+                    myViewHolder.quantity.setText("" + product_set);
+                    myViewHolder.quantity.setVisibility(View.GONE);
+
+                    myViewHolder = holder;
+                    p = position;
+                    count = 1;
+                    product_set = current.set;
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putInt(context.getString(R.string.PRODUCT_SET),product_set);
                     pos = position;
+                    editor.putInt(context.getString(R.string.SET_POSITION),pos);
+                    editor.commit();
+                    //notifyItem(position);
+                    //new ItemListAdapter(context,itemList,cartPrice,cartQuantity,cartBar);
+
                     holder.listButton.setVisibility(View.GONE);
                     holder.incre.setText("+");
                     holder.incre.setVisibility(View.VISIBLE);
                     holder.decre.setText("-");
                     holder.decre.setVisibility(View.VISIBLE);
-                    holder.quantity.setText("" + current.setOFCups);
+                    holder.quantity.setText(""+current.set);
                     holder.quantity.setVisibility(View.VISIBLE);
 
-                    SpannableStringBuilder builder = new SpannableStringBuilder();
-                    builder.append(" ");
-                    ImageSpan i = new ImageSpan(inflator.getContext(), R.drawable.ic_add_shopping_cart);
-                    builder.setSpan(i, 0, builder.length(), 0);
-                    builder.append(" Rs " + current.price);
-                    Snackbar snackbar = Snackbar.make(holder.itemView, builder, Snackbar.LENGTH_LONG).setAction("Retry", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                        }
-                    });
-                    View sbView = snackbar.getView();
-                    sbView.setBackgroundColor(Color.RED);
-                    snackbar.show();
+                    cartPrice.setText("Rs."+current.price);
+                    cartQuantity.setText(""+current.set);
+                    cartBar.setVisibility(View.VISIBLE);
 
 
                 }
-            });
-        }
+            });}
         holder.incre.setOnClickListener(new View.OnClickListener(){
 
             @Override
             public void onClick(View v) {
-                current.setOFCups += 1;
-                product_set = current.setOFCups;
+                current.set += 1;
+
+                product_set = current.set;
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putInt(context.getString(R.string.PRODUCT_SET),product_set);
                 pos = position;
                 editor.putInt(context.getString(R.string.SET_POSITION),pos);
                 editor.commit();
-                current.price = 10*current.setOFCups;
-                holder.quantity.setText(""+current.setOFCups);
+                current.price = 10*current.set;
+                holder.quantity.setText(""+current.set);
+                cartPrice.setText("Rs."+current.price);
+                cartQuantity.setText(""+current.set);
+                if(current.set > 0){
+                    cartBar.setVisibility(View.VISIBLE);
+                }
 
-                SpannableStringBuilder builder = new SpannableStringBuilder();
-                builder.append(" ");
-                ImageSpan i = new ImageSpan(inflator.getContext(), R.drawable.ic_add_shopping_cart);
-                builder.setSpan(i,0,builder.length(), 0);
-                builder.append(" Rs "+current.price);
-                Snackbar snackbar = Snackbar.make(holder.itemView, builder, Snackbar.LENGTH_LONG).setAction("Retry", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                    }
-                });
-                View sbView = snackbar.getView();
-                sbView.setBackgroundColor(Color.RED);
-                snackbar.show();
+
             }
         });
 
@@ -141,31 +191,26 @@ public class ItemListAdapter  extends RecyclerView.Adapter<ItemListAdapter.MyVie
 
             @Override
             public void onClick(View v) {
-                if(current.setOFCups > 0) {
-                    current.setOFCups -= 1;
-                    product_set = current.setOFCups;
+                if(current.set > 0) {
+                    current.set -= 1;
+                    product_set = current.set;
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putInt(context.getString(R.string.PRODUCT_SET),product_set);
                     pos = position;
                     editor.putInt(context.getString(R.string.SET_POSITION),pos);
                     editor.commit();
-                    current.price = 10*current.setOFCups;
+                    current.price = 10*current.set;
+                    cartBar.setVisibility(View.VISIBLE);
                 }
-                holder.quantity.setText(""+current.setOFCups);
+                if(current.set == 0){
+                    cartBar.setVisibility(View.GONE);
+                }
 
-                SpannableStringBuilder builder = new SpannableStringBuilder();
-                builder.append(" ");
-                ImageSpan i = new ImageSpan(inflator.getContext(), R.drawable.ic_add_shopping_cart);
-                builder.setSpan(i,0,builder.length(), 0);
-                builder.append(" Rs "+current.price);
-                Snackbar snackbar = Snackbar.make(holder.itemView, builder, Snackbar.LENGTH_LONG).setAction("Retry", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                    }
-                });
-                View sbView = snackbar.getView();
-                sbView.setBackgroundColor(Color.RED);
-                snackbar.show();
+                holder.quantity.setText(""+current.set);
+                cartPrice.setText("Rs."+current.price);
+                cartQuantity.setText(""+current.set);
+
+
             }
         });
 
@@ -202,7 +247,7 @@ public class ItemListAdapter  extends RecyclerView.Adapter<ItemListAdapter.MyVie
 
         @Override
         public void onClick(View view) {
-            Toast.makeText(view.getContext(), "Clicked Position = " + getPosition(), Toast.LENGTH_LONG).show();
+            Toast.makeText(view.getContext(), "Clicked Position = " + getAdapterPosition(), Toast.LENGTH_LONG).show();
         }
     }
 }

@@ -23,7 +23,7 @@
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="false"
             android:layout_marginRight="16dp"
-            android:src="@mipmap/ic_launcher"
+            android:src="@drawable/n264"
 
             />
 

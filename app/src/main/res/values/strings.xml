@@ -24,4 +24,9 @@
     <string name="city"><![CDATA[Area & City:]]></string>
     <string name="use_my_location">Use current location</string>
     <string name="autocomplete_hint">Pick Locality</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="company_name">Company Name</string>
+    <string name="address_detail">Floor/Address Details</string>
+    <string name="address_place"><![CDATA[Area & city]]></string>
+    <string name="delivery_address">Delivery Addresss</string>
 </resources>
