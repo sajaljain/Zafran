@@ -1,7 +1,9 @@
-package com.monkporter.zafran;
+package com.monkporter.zafran.activity;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import com.monkporter.zafran.R;
 
 public class DeliveryAddress extends AppCompatActivity {
 

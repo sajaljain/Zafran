@@ -9,6 +9,10 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
+    <!-- For receiving messages -->
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.READ_SMS" />
+
     <application
         android:name=".Zafran"
         android:allowBackup="true"
@@ -20,19 +24,17 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyACau6bKSGStVsPrN8rKggXVVFI3ySAKIs" />
 
-        <activity android:name=".activity.Splash"></activity>
+        <activity android:name=".activity.Splash" />
         <activity
             android:name=".activity.MainActivity"
             android:label="@string/title_activity_main"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".activity.OrderHistory"
             android:label="@string/title_order_history_activity"
             android:theme="@style/AppTheme" />
         <activity android:name=".activity.NotificationCenter" />
-        <activity android:name=".activity.OrderItemListMainActivity">
-
-        </activity>
+        <activity android:name=".activity.OrderItemListMainActivity" />
         <activity android:name=".activity.Test" />
         <!-- Services -->
         <service android:name=".pushnotification.MyFirebaseMessagingService">
@@ -63,16 +65,38 @@
             android:theme="@style/AppTheme" />
         <activity
             android:name=".activity.FetchLocationActivity"
-            android:theme="@style/AppTheme"></activity>
-        <activity android:name=".activity.PlacesAutoCompleteActivity"></activity>
-        <activity android:name=".DeliveryAddress"
+            android:theme="@style/AppTheme" />
+        <activity android:name=".activity.PlacesAutoCompleteActivity" />
+        <activity
+            android:name=".activity.DeliveryAddress"
             android:label="Delivery Address"
             android:theme="@style/AppTheme">
+
+        </activity>
+        <activity android:name=".activity.VerificationActivity" />
+
+        <!-- SMS Receiver -->
+        <receiver android:name=".receiver.SmsReceiver">
+            <intent-filter android:priority="99999">
+                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
+            </intent-filter>
+        </receiver>
+
+        <!-- Intent service -->
+        <service
+            android:name=".Service.HttpService"
+            android:exported="false" />
+
+        <activity android:name=".activity.SmsActivity"
+            android:label="SmsActivity"
+            android:theme="@style/AppTheme">
+
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />
 
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
+
 
         </activity>
     </application>
