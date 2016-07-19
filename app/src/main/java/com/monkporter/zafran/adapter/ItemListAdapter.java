@@ -121,6 +121,8 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.MyView
             myViewHolder = holder;
         }
         else{
+            if(pos == -1)
+                myViewHolder = holder;
             holder.listButton.setText("ADD");
             holder.listButton.setOnClickListener(new View.OnClickListener() {
                 @Override

@@ -11,6 +11,8 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -59,8 +61,11 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class PlacesAutoCompleteActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, View.OnClickListener {
-   AddressSendRequest addressSendRequest;
+    private static final String TAG = "PLaces";
+    AddressSendRequest addressSendRequest;
     protected GoogleApiClient mGoogleApiClient;
+    private String[] locationPermission = new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION};
+    private final int LOCATION_PERMISSIONS_REQUEST = 101;
     private List<Address> addressList;
     private Location mLastLocation;
     private static final LatLngBounds BOUNDS_INDIA = new LatLngBounds(
@@ -261,12 +266,55 @@ public class PlacesAutoCompleteActivity extends AppCompatActivity implements Goo
 
 
     private void onCurrentLocationClick() {
+        if(Build.VERSION.SDK_INT >= 23) {
+            if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(PlacesAutoCompleteActivity.this, "Requesting Permission", Toast.LENGTH_SHORT).show();
+                ActivityCompat.requestPermissions(PlacesAutoCompleteActivity.this, locationPermission, LOCATION_PERMISSIONS_REQUEST);
+            } else {
+                Toast.makeText(PlacesAutoCompleteActivity.this, "Permission already granted", Toast.LENGTH_SHORT).show();
+                showMyLocation();
+            }
+        }
+        else{
+            showMyLocation();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+
+        if (requestCode == LOCATION_PERMISSIONS_REQUEST) {
+            Log.i(TAG, "Received response for permissions request.");
+            Toast.makeText(PlacesAutoCompleteActivity.this, "Received response for permissions request.", Toast.LENGTH_SHORT).show();
+
+            // We have requested multiple permissions for contacts, so all of them need to be
+            // checked.
+            if (grantResults.length>0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // All required permissions have been granted, display contacts fragment.
+                Toast.makeText(PlacesAutoCompleteActivity.this, "Permissions were granted.", Toast.LENGTH_SHORT).show();
+                showMyLocation();
+            } else {
+                Log.i(TAG, "Permissions were NOT granted.");
+                Toast.makeText(PlacesAutoCompleteActivity.this, "Permissions were NOT granted.", Toast.LENGTH_SHORT).show();
+            }
+
+        } else {
+            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
+
+
+
+
+
+    private void showMyLocation() {
         final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (manager != null && !manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             buildAlertMessageNoGps();
         } else {
             if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                Log.v("Permisssions", "Permission not found");
+                Toast.makeText(PlacesAutoCompleteActivity.this, "No Permission", Toast.LENGTH_SHORT).show();
                 return;
             }
             if (CommonMethod.isNetworkAvailable(PlacesAutoCompleteActivity.this)) {

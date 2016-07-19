@@ -1,12 +1,21 @@
 package com.monkporter.zafran.receiver;
 
+import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.content.pm.ActivityInfoCompat;
 import android.telephony.SmsMessage;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.monkporter.zafran.Manifest;
 import com.monkporter.zafran.Service.HttpService;
 
 /**
@@ -14,6 +23,7 @@ import com.monkporter.zafran.Service.HttpService;
  */
 public class SmsReceiver extends BroadcastReceiver{
     private static final String TAG = SmsReceiver.class.getSimpleName();
+
     @Override
     public void onReceive(Context context, Intent intent) {
 

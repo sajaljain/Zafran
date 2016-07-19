@@ -246,7 +246,10 @@ public class MainActivity extends AppCompatActivity
             Intent intent = new Intent(this,AddressDetail.class);
             startActivity(intent);
         }
-            /*if (navigationView != null) {
+        if(id == R.id.nav_about) {
+            Intent intent = new Intent(this, SmsActivity.class);
+            startActivity(intent);
+        }            /*if (navigationView != null) {
                 setupDrawerContent(nainitvigationView);
             }
 
