@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.monkporter.zafran.activity.CheckoutScreen">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/place_order_button_id"
+        android:orientation="vertical">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+
+                <ImageView
+                    android:id="@+id/tea_image_id"
+                    android:layout_width="match_parent"
+                    android:layout_height="120dp"
+                    android:padding="5dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/assam" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginTop="4dp"
+                    android:background="@android:color/darker_gray" />
+
+                <RelativeLayout
+
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="10dp"
+                        android:text="Tea Name:"
+                        android:textSize="30dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:paddingRight="10dp"
+
+                        android:text="Masala Tea"
+                        android:textColor="#000000"
+                        android:textSize="20dp" />
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@android:color/darker_gray" />
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp">
+
+                    <TextView
+                        android:id="@+id/quantity"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="10dp"
+                        android:text="Quantity"
+                        android:textSize="30dp" />
+
+                    <TextView
+                        android:id="@+id/price"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:paddingRight="10dp"
+                        android:text="Price"
+                        android:textSize="30dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_below="@id/price"
+                        android:paddingRight="30dp"
+                        android:paddingTop="15dp"
+                        android:text="Rs. 20"
+                        android:textSize="20sp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/quantity"
+                        android:orientation="horizontal"
+                        android:paddingLeft="10dp"
+                        android:paddingTop="5dp">
+
+                        <Button
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:onClick="increment"
+                            android:text="+" />
+
+                        <TextView
+                            android:id="@+id/quantity_text_view"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="8dp"
+                            android:paddingRight="8dp"
+                            android:text="0"
+                            android:textColor="@android:color/black"
+                            android:textSize="16sp" />
+
+                        <Button
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:onClick="decrement"
+                            android:text="-" />
+
+
+                    </LinearLayout>
+
+
+                </RelativeLayout>
+
+                <View
+
+
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginTop="4dp"
+                    android:background="@android:color/darker_gray" />
+
+
+                <RelativeLayout
+                    android:id="@+id/time_picker_layout_id"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?android:attr/selectableItemBackground">
+
+                    <TextView
+                        android:id="@+id/time_picker_txt_id"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="10dp"
+                        android:text="Pick Time"
+                        android:textSize="30dp" />
+
+                    <TextView
+                        android:id="@+id/pick_time_id"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/time_picker_txt_id"
+                        android:paddingLeft="10dp"
+                        android:text="1:00 AM"
+                        android:textSize="20dp" />
+
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginTop="4dp"
+                    android:background="@android:color/darker_gray" />
+
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp">
+
+                    <TextView
+                        android:id="@+id/d_address"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="10dp"
+                        android:text="Delivery Address"
+                        android:textSize="30dp" />
+
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_alignParentRight="true"
+                        android:paddingRight="10dp"
+                        android:src="@drawable/ic_edit" />
+
+                    <TextView
+                        android:id="@+id/address_first_line"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/d_address"
+                        android:paddingLeft="10dp"
+                        android:text="Sanyam Jain" />
+
+                    <TextView
+                        android:id="@+id/address_second_line"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/address_first_line"
+                        android:paddingLeft="10dp"
+                        android:text="A-III,ABCD Lane,Noida Sector-62" />
+
+                    <TextView
+                        android:id="@+id/address_third_line"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/address_second_line"
+                        android:paddingLeft="10dp"
+                        android:text="Phone No 9876543211" />
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginTop="4dp"
+                    android:background="@android:color/darker_gray" />
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/vendor_details"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="10dp"
+                        android:text="Vendor Details"
+                        android:textSize="30dp" />
+
+                    <TextView
+                        android:id="@+id/vendor_details1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/vendor_details"
+                        android:paddingLeft="10dp"
+                        android:text="Suresh Tea Stall" />
+
+                    <TextView
+                        android:id="@+id/vendor_details2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/vendor_details1"
+                        android:paddingLeft="10dp"
+                        android:text="Shop No. 2,X Crossing Noida Sector-62" />
+
+                    <TextView
+                        android:id="@+id/vendor_details3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/vendor_details2"
+                        android:paddingLeft="10dp"
+                        android:text="Phone No. 987654321x" />
+
+
+                </RelativeLayout>
+
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/place_order_button_id"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/colorPrimary"
+        android:fontFamily="sans-serif-thin"
+        android:includeFontPadding="true"
+        android:text="Place Order"
+        android:textAllCaps="false"
+        android:textColor="#fff"
+        android:textSize="30dp"
+        android:textStyle="italic|bold" />
+
+
+</RelativeLayout>

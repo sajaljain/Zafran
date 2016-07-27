@@ -1,15 +1,20 @@
 package com.monkporter.zafran.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.monkporter.zafran.R;
 import com.monkporter.zafran.activity.MainActivity;
+import com.monkporter.zafran.activity.OrderItemListMainActivity;
+import com.monkporter.zafran.activity.PlacesAutoCompleteActivity;
 import com.monkporter.zafran.model.Products;
 
 import java.util.List;
@@ -42,6 +47,9 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
     @Override
     public int getItemCount() {
         return this.products.size();
+    }
+    public Products getItem(int positions){
+        return products.get(positions);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 
 import com.monkporter.zafran.R;
+import com.monkporter.zafran.helper.PrefManager;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -18,11 +19,12 @@ import java.util.Collections;
  * Created by Vaibhav on 7/5/2016.
  */
 public class SelectedPlacesAdapter extends RecyclerView.Adapter<SelectedPlacesAdapter.MyViewHolder> {
-    private ArrayList<PlacesAutoCompleteAdapter.PlaceAutocomplete> mResultList = new ArrayList<>();
+    private ArrayList<PlacesAutoCompleteAdapter.PlaceAutocomplete> mResultList;
     LayoutInflater inflater;
     Context context;
-    public SelectedPlacesAdapter(Context context){
+    public SelectedPlacesAdapter(Context context,ArrayList<PlacesAutoCompleteAdapter.PlaceAutocomplete> arrayList){
         this.context = context;
+        mResultList = arrayList;
         inflater = LayoutInflater.from(context);
     }
 
@@ -49,6 +51,8 @@ public class SelectedPlacesAdapter extends RecyclerView.Adapter<SelectedPlacesAd
     public void insertItem(PlacesAutoCompleteAdapter.PlaceAutocomplete item){
         mResultList.add(0,item);
         notifyItemInserted(0);
+    //    PrefManager prefManager = new PrefManager(context);
+     //   prefManager.saveLocations(mResultList);
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder{

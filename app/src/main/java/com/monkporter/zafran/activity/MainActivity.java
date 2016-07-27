@@ -22,6 +22,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.daimajia.slider.library.SliderLayout;
@@ -29,7 +31,10 @@ import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.TextSliderView;
 import com.monkporter.zafran.R;
 import com.monkporter.zafran.adapter.ProductsAdapter;
+import com.monkporter.zafran.helper.PrefManager;
+import com.monkporter.zafran.model.OrderItem;
 import com.monkporter.zafran.model.Products;
+import com.monkporter.zafran.model.RecyclerItemClickListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -54,6 +59,8 @@ public class MainActivity extends AppCompatActivity
     private StaggeredGridLayoutManager staggeredGridLayoutManager;
     private RecyclerView recyclerView;
     View v;
+    TextView toolbarAddress;
+    String address = null;
     private boolean login;
     private ViewGroup viewGroup;
 
@@ -61,6 +68,16 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        toolbarAddress = (TextView) findViewById(R.id.toolbar_address_id);
+        PrefManager prefManager = new PrefManager(MainActivity.this);
+        address = prefManager.getUserCurrentLocation();
+        if(address != null){
+            toolbarAddress.setText(address);
+        }
+        else{
+            startActivity(new Intent(MainActivity.this,PlacesAutoCompleteActivity.class));
+        }
+
         initNavigationDrawer();
         setupToolbar();
         initSlider();
@@ -83,8 +100,23 @@ public class MainActivity extends AppCompatActivity
         staggeredGridLayoutManager = new StaggeredGridLayoutManager(2, 1);
         recyclerView.setLayoutManager(staggeredGridLayoutManager);
         List<Products> productsList = getListItemData();
-        ProductsAdapter productsAdapter = new ProductsAdapter(MainActivity.this, productsList);
+        final ProductsAdapter productsAdapter = new ProductsAdapter(MainActivity.this, productsList);
         recyclerView.setAdapter(productsAdapter);
+        recyclerView.addOnItemTouchListener( new RecyclerItemClickListener(MainActivity.this, new RecyclerItemClickListener.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Intent intent = new Intent(MainActivity.this,OrderItemListMainActivity.class);
+                Products products;
+                products = productsAdapter.getItem(position);
+                int teaImgId = products.getThumbnail();
+                String teaName = products.getName();
+                Bundle extras = new Bundle();
+                extras.putInt("TEA_IMAGE_ID",teaImgId);
+                extras.putString("TEA_NAME",teaName);
+                intent.putExtras(extras);
+                startActivity(intent);
+            }
+        }));
     }
     private void initSlider() {
         sliderShow = (SliderLayout) findViewById(R.id.slider);
@@ -198,7 +230,11 @@ public class MainActivity extends AppCompatActivity
             super.onBackPressed();
         }
     }
+@Override
+    public void onResume(){
+        super.onResume();
 
+    }
 
 
     @SuppressWarnings("StatementWithEmptyBody")

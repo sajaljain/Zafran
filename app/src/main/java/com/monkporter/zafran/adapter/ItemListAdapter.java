@@ -224,6 +224,10 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.MyView
     public int getItemCount() {
         return itemList.size();
     }
+    public OrderItem getItem(int positions){
+        return itemList.get(positions);
+    }
+
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 

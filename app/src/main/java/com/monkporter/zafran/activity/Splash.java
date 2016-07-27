@@ -13,25 +13,39 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.monkporter.zafran.Interfece.TempUserRequest;
 import com.monkporter.zafran.Manifest;
 import com.monkporter.zafran.R;
+import com.monkporter.zafran.model.TemporaryUser;
+import com.monkporter.zafran.model.TemporaryUserResponse;
+import com.monkporter.zafran.pushnotification.MyFirebaseInstanceIDService;
+import com.monkporter.zafran.rest.TempUserApiClient;
+
+import java.util.Calendar;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class Splash extends AppCompatActivity {
     private static final String TAG = "Splash";
     private static int SPLASH_TIME_OUT = 3000;
     private PreferenceManager pm;
     Context context;
-
+    String dveiceRegistrationToken;
+    TempUserRequest tempUserRequest;
     private String[] locationPermission = new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION};
     private String[] MY_PERMISSIONS = new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
             android.Manifest.permission.RECEIVE_SMS ,android.Manifest.permission.READ_SMS};
 
 
     private final int PERMISSIONS_REQUEST = 111;
+    String usrNAme;
     Intent intent;
     ProgressBar pb;
     private Handler mHandler = new Handler();
@@ -39,9 +53,38 @@ public class Splash extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+        dveiceRegistrationToken = new MyFirebaseInstanceIDService().getRefreshedToken();
         intent = new Intent(this, MainActivity.class);
+        TemporaryUser temporaryUser = new TemporaryUser();
+        temporaryUser.setRegistrationChannelTypeID(0);
+        temporaryUser.setCell("");
+        temporaryUser.setFirstName("");
+        temporaryUser.setLastName("");
+        String mytime = java.text.DateFormat.getTimeInstance().format(Calendar.getInstance().getTime());
+        String mydate =java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
+        usrNAme = "temp_"+mydate+"_"+mytime;
+        temporaryUser.setUserName(usrNAme);
+        temporaryUser.setSex(1);
+        temporaryUser.setSocialMediaUserId("");
+        temporaryUser.setEmailId("");
+        temporaryUser.setDeviceRegistrationIDDeviceRegistrationID(dveiceRegistrationToken);
+        temporaryUser.setCellVerified(0);
 
+        // Here Sending post request for user
+        tempUserRequest = TempUserApiClient.getClient().create(TempUserRequest.class);
+        Call<TemporaryUserResponse> call = tempUserRequest.getResponse(temporaryUser);
+        call.enqueue(new Callback<TemporaryUserResponse>() {
+            @Override
+            public void onResponse(Call<TemporaryUserResponse> call, Response<TemporaryUserResponse> response) {
+                int status = response.code();
+                TemporaryUserResponse temporaryUserResponse = response.body();
+            }
 
+            @Override
+            public void onFailure(Call<TemporaryUserResponse> call, Throwable t) {
+                Log.d("Temporary user","onFailure ="+t.getMessage());
+            }
+        });
         pb = (ProgressBar) findViewById(R.id.progressBar);
         if (Build.VERSION.SDK_INT < 23) {
             Toast.makeText(Splash.this, "Below 23", Toast.LENGTH_SHORT).show();

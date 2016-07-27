@@ -89,11 +89,15 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:background="@android:color/holo_red_light"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:visibility="visible"
         android:id="@+id/cart_bar"
         >
-
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?android:attr/selectableItemBackground"
+    android:orientation="horizontal">
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -131,25 +135,35 @@
             android:text="hello"
             android:textColor="#FFF"
             android:id="@+id/cart_price"
-            android:layout_marginLeft="50dp"
+            android:layout_marginLeft="14dp"
             android:textSize="20dp"
             />
-        <View
+    <!--    <View
             android:layout_width="1dp"
             android:layout_height="match_parent"
             android:layout_marginLeft="5dp"
             android:background="@android:color/white"
-            />
+            /> -->
+
+    <TextView
+        android:layout_width="90dp"
+        android:layout_height="50dp"
+        android:gravity="center_vertical"
+        android:layout_gravity="center_vertical"
+        android:text="Checkout"
+        android:textColor="#FFF"
+        android:textSize="20dp"
+        />
         <ImageView
-            android:layout_width="0dp"
-            android:layout_weight="1"
+            android:layout_width="40dp"
             android:layout_height="50dp"
             android:gravity="center_vertical"
             android:layout_gravity="center_vertical"
             android:src="@drawable/ic_arrow_forward_white"
             android:id="@+id/callback"
+            android:layout_marginRight="5dp"
             />
     </LinearLayout>
-
+    </LinearLayout>
 
 </LinearLayout>

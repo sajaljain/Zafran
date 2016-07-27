@@ -43,7 +43,7 @@
                             android:id="@+id/toolbar_address_id"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Sector 14, Gurgaon"
+                            android:text="Sector 62, Noida"
                             android:layout_below="@+id/text_delivery_id"
                             android:textColor="@color/white"
                             app:layout_collapseMode="parallax"/>
