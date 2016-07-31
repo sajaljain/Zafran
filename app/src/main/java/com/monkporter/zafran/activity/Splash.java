@@ -1,5 +1,6 @@
 package com.monkporter.zafran.activity;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -18,13 +19,21 @@ import android.util.Log;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.monkporter.zafran.Interfece.CheckUserRequest;
 import com.monkporter.zafran.Interfece.TempUserRequest;
+import com.monkporter.zafran.Interfece.UpdateFcmRequest;
 import com.monkporter.zafran.Manifest;
 import com.monkporter.zafran.R;
+import com.monkporter.zafran.helper.PrefManager;
+import com.monkporter.zafran.model.CheckUser;
 import com.monkporter.zafran.model.TemporaryUser;
 import com.monkporter.zafran.model.TemporaryUserResponse;
+import com.monkporter.zafran.model.UpdateFcm;
+import com.monkporter.zafran.model.UpdateFcmResponse;
 import com.monkporter.zafran.pushnotification.MyFirebaseInstanceIDService;
+import com.monkporter.zafran.rest.CheckUserApiClient;
 import com.monkporter.zafran.rest.TempUserApiClient;
+import com.monkporter.zafran.rest.UpdateFcmApi;
 
 import java.util.Calendar;
 
@@ -43,69 +52,121 @@ public class Splash extends AppCompatActivity {
     private String[] MY_PERMISSIONS = new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
             android.Manifest.permission.RECEIVE_SMS ,android.Manifest.permission.READ_SMS};
 
+    ProgressDialog progressDialog;
 
     private final int PERMISSIONS_REQUEST = 111;
     String usrNAme;
     Intent intent;
     ProgressBar pb;
+    PrefManager prefManager;
+    String userId;
     private Handler mHandler = new Handler();
+    boolean userType;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-        dveiceRegistrationToken = new MyFirebaseInstanceIDService().getRefreshedToken();
+
+        //progressDialog = new ProgressDialog(this);
+        //progressDialog.setIndeterminate(true);
+        //progressDialog.setMessage("Loading...");
+        //progressDialog.show();
+
         intent = new Intent(this, MainActivity.class);
-        TemporaryUser temporaryUser = new TemporaryUser();
-        temporaryUser.setRegistrationChannelTypeID(0);
-        temporaryUser.setCell("");
-        temporaryUser.setFirstName("");
-        temporaryUser.setLastName("");
-        String mytime = java.text.DateFormat.getTimeInstance().format(Calendar.getInstance().getTime());
-        String mydate =java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
-        usrNAme = "temp_"+mydate+"_"+mytime;
-        temporaryUser.setUserName(usrNAme);
-        temporaryUser.setSex(1);
-        temporaryUser.setSocialMediaUserId("");
-        temporaryUser.setEmailId("");
-        temporaryUser.setDeviceRegistrationIDDeviceRegistrationID(dveiceRegistrationToken);
-        temporaryUser.setCellVerified(0);
+        prefManager = new PrefManager(Splash.this);
+        dveiceRegistrationToken = new MyFirebaseInstanceIDService().getRefreshedToken();
 
-        // Here Sending post request for user
-        tempUserRequest = TempUserApiClient.getClient().create(TempUserRequest.class);
-        Call<TemporaryUserResponse> call = tempUserRequest.getResponse(temporaryUser);
-        call.enqueue(new Callback<TemporaryUserResponse>() {
-            @Override
-            public void onResponse(Call<TemporaryUserResponse> call, Response<TemporaryUserResponse> response) {
-                int status = response.code();
-                TemporaryUserResponse temporaryUserResponse = response.body();
-            }
 
-            @Override
-            public void onFailure(Call<TemporaryUserResponse> call, Throwable t) {
-                Log.d("Temporary user","onFailure ="+t.getMessage());
-            }
-        });
-        pb = (ProgressBar) findViewById(R.id.progressBar);
-        if (Build.VERSION.SDK_INT < 23) {
-            Toast.makeText(Splash.this, "Below 23", Toast.LENGTH_SHORT).show();
-            new Thread(new Runnable() {
+        userId = prefManager.getUserId();
+        if(userId == null) {
+            TemporaryUser temporaryUser = new TemporaryUser();
+            temporaryUser.setRegistrationChannelTypeID(0);
+            temporaryUser.setCell("");
+            temporaryUser.setFirstName("");
+            temporaryUser.setLastName("");
+            String mytime = java.text.DateFormat.getTimeInstance().format(Calendar.getInstance().getTime());
+            String mydate = java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
+            usrNAme = "temp_" + mydate + "_" + mytime;
+            temporaryUser.setUserName(usrNAme);
+            temporaryUser.setSex(1);
+            temporaryUser.setSocialMediaUserId("");
+            temporaryUser.setEmailId("");
+            temporaryUser.setDeviceRegistrationID(dveiceRegistrationToken);
+            temporaryUser.setCellVerified(0);
+
+            // Here Sending post request for user
+            tempUserRequest = TempUserApiClient.getClient().create(TempUserRequest.class);
+            Call<TemporaryUserResponse> call = tempUserRequest.getResponse(temporaryUser);
+            call.enqueue(new Callback<TemporaryUserResponse>() {
                 @Override
-                public void run() {
-                    try {
-                        Thread.sleep(5000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    mHandler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            startActivity(intent);
-                            Splash.this.finish();
-                        }
-                    });
+                public void onResponse(Call<TemporaryUserResponse> call, Response<TemporaryUserResponse> response) {
+                    int status = response.code();
+                    TemporaryUserResponse temporaryUserResponse = response.body();
+                    Log.d("Temporary user", "Response =" + status);
+                    userId = temporaryUserResponse.getUserId();
+                    prefManager.setUserId(userId);
                 }
 
-            }).start();
+                @Override
+                public void onFailure(Call<TemporaryUserResponse> call, Throwable t) {
+                    Log.d("Temporary user", "onFailure =" + t.getMessage());
+                }
+            });
+        }
+      //  else{
+        /*    CheckUserRequest checkUserRequest = CheckUserApiClient.getClient().create(CheckUserRequest.class);
+            Call<CheckUser> call = checkUserRequest.getUserType();
+            call.enqueue(new Callback<CheckUser>() {
+                @Override
+                public void onResponse(Call<CheckUser> call, Response<CheckUser> response) {
+                    int status = response.code();
+                    CheckUser checkUser = response.body();
+                    Log.d("Check USer Type", "Response =" + status);
+                    Log.d("Check User Type", "User Type =" + checkUser.isTempUser());
+                    userType = prefManager.getIsTempUser();
+                }
+
+                @Override
+                public void onFailure(Call<CheckUser> call, Throwable t) {
+                    Log.d("Check user", "onFailure =" + t.getMessage());
+                }
+            });*/
+        //}
+
+        if(prefManager.getDeviceRegId() == null) {
+            prefManager.setDeviceRegId(dveiceRegistrationToken);
+        }
+        else if(dveiceRegistrationToken != prefManager.getDeviceRegId()){
+            prefManager.setDeviceRegId(dveiceRegistrationToken);
+            final UpdateFcm updateFcm = new UpdateFcm();
+            updateFcm.setDeviceRegesterationId(dveiceRegistrationToken);
+            UpdateFcmRequest updateFcmRequest = UpdateFcmApi.getClient().create(UpdateFcmRequest.class);
+            Call<UpdateFcmResponse> call = updateFcmRequest.getResponse(updateFcm);
+            Log.d("UpdateFcm Request","Fcm ="+dveiceRegistrationToken);
+            call.enqueue(new Callback<UpdateFcmResponse>() {
+                @Override
+                public void onResponse(Call<UpdateFcmResponse> call, Response<UpdateFcmResponse> response) {
+                    int status = response.code();
+                    UpdateFcmResponse updateFcmResponse = response.body();
+                    Log.d("UpdateFcm Success","Error ="+updateFcmResponse.isError());
+                  //  if(progressDialog.isShowing())
+                    //    progressDialog.dismiss();
+                }
+
+                @Override
+                public void onFailure(Call<UpdateFcmResponse> call, Throwable t) {
+                    Log.d("Update Fcm", "onFailure =" + t.getMessage());
+                //    if(progressDialog.isShowing())
+                  //      progressDialog.dismiss();
+                }
+            });
+
+        }
+
+        //pb = (ProgressBar) findViewById(R.id.progressBar);
+        if (Build.VERSION.SDK_INT < 23) {
+            startActivity(intent);
+            Splash.this.finish();
         } else {
             permissionCheck();
         }
@@ -126,8 +187,11 @@ public class Splash extends AppCompatActivity {
         }
         else {
             Toast.makeText(Splash.this, "Permission alredy granted", Toast.LENGTH_SHORT).show();
-                startActivity(intent);
+
+            startActivity(intent);
             Splash.this.finish();
+          //  if(progressDialog.isShowing())
+            //    progressDialog.dismiss();
         }
 
     }
@@ -145,6 +209,8 @@ public class Splash extends AppCompatActivity {
             if (verifyPermissions(grantResults)) {
                 // All required permissions have been granted, display contacts fragment.
                 Toast.makeText(Splash.this, "Permissions were granted.", Toast.LENGTH_SHORT).show();
+            //    if(progressDialog.isShowing())
+              //      progressDialog.dismiss();
                 startActivity(intent);
                 Splash.this.finish();
             } else {

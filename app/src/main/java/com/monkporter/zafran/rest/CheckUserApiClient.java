@@ -4,10 +4,10 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
- * Created by Vaibhav on 7/21/2016.
+ * Created by vabs on 29/7/16.
  */
-public class TempUserApiClient {
-    public static final String BASE_URL = "http://instashout.in/";
+public class CheckUserApiClient {
+    public static final String BASE_URL = "";
     private static Retrofit retrofit = null;
     public static Retrofit getClient(){
         if(retrofit == null){

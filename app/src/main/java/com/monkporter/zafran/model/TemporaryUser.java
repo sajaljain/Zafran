@@ -25,7 +25,7 @@ public class TemporaryUser {
     @SerializedName("EmailID")
     private String emailId;
     @SerializedName("DeviceRegistrationID")
-    private String DeviceRegistrationIDDeviceRegistrationID;
+    private String DeviceRegistrationID;
 
     public int getRegistrationChannelTypeID() {
         return registrationChannelTypeID;
@@ -91,12 +91,12 @@ public class TemporaryUser {
         this.emailId = emailId;
     }
 
-    public String getDeviceRegistrationIDDeviceRegistrationID() {
-        return DeviceRegistrationIDDeviceRegistrationID;
+    public String getDeviceRegistrationID() {
+        return DeviceRegistrationID;
     }
 
-    public void setDeviceRegistrationIDDeviceRegistrationID(String deviceRegistrationIDDeviceRegistrationID) {
-        DeviceRegistrationIDDeviceRegistrationID = deviceRegistrationIDDeviceRegistrationID;
+    public void setDeviceRegistrationID(String deviceRegistrationID) {
+        DeviceRegistrationID = deviceRegistrationID;
     }
 
     public int getCellVerified() {

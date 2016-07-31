@@ -43,6 +43,9 @@ public class PrefManager {
     private static final String USER_CURRENT_LOCATION = "currentLocation";
     private static final String USER_ID = "userId";
     private static final String USERNAME = "userName";
+    private static final String FIRST_TIME="firstTimeUser";
+    private static final String IS_TEMP_USER = "isTempUser";
+    private static final String DEVICE_REG_ID = "deviceRegId";
 
     public PrefManager(Context context) {
         this._context = context;
@@ -121,12 +124,12 @@ public class PrefManager {
         return pref.getString(USER_CURRENT_LOCATION,null);
     }
 
-    public void setUserId(int userId){
-        editor.putInt(USER_ID,userId);
+    public void setUserId(String userId){
+        editor.putString(USER_ID,userId);
         editor.commit();
     }
-    public int getUserId(){
-        return pref.getInt(USER_ID,-1);
+    public String getUserId(){
+        return pref.getString(USER_ID,null);
     }
     public void setUsername(String username){
         editor.putString(USERNAME,username);
@@ -135,4 +138,15 @@ public class PrefManager {
     public String getUsername(){
         return pref.getString(USERNAME,null);
     }
+    public void setIsTempUser(boolean userType){
+        editor.putBoolean(IS_TEMP_USER,userType);
+        editor.commit();
+    }
+    public boolean getIsTempUser(){return pref.getBoolean(IS_TEMP_USER,false);}
+
+    public void setDeviceRegId(String deviceRegId){
+        editor.putString(DEVICE_REG_ID,deviceRegId);
+        editor.commit();
+    }
+    public String getDeviceRegId(){return pref.getString(DEVICE_REG_ID,null);}
 }
