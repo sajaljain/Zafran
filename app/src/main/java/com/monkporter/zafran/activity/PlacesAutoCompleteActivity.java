@@ -1,6 +1,7 @@
 package com.monkporter.zafran.activity;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -20,12 +21,14 @@ import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -85,7 +88,12 @@ public class PlacesAutoCompleteActivity extends AppCompatActivity implements Goo
     private LinearLayout notOperatableLayout;
     private String mArea = "", mCity = "", mCompleteAddress = "";
     UserLocation userLocation = null;
-    ArrayList<PlacesAutoCompleteAdapter.PlaceAutocomplete> mResultList = new ArrayList<>();
+    PrefManager prefManager;
+    ArrayList<String> mResultList;
+    private int cityId;
+    private int areaId;
+    ProgressDialog progressDialog;
+    Button selectAnotherLocation;
     public PlacesAutoCompleteActivity() {
     }
 
@@ -97,17 +105,18 @@ public class PlacesAutoCompleteActivity extends AppCompatActivity implements Goo
         cardView = (CardView) findViewById(R.id.current_location_id);
         cardView.setOnClickListener(this);
         mAutocompleteView = (EditText) findViewById(R.id.autocomplete_places);
-
         delete = (ImageView) findViewById(R.id.cross);
         notOperatableLayout = (LinearLayout) findViewById(R.id.layout_non_operatable_city);
+        selectAnotherLocation = (Button) findViewById(R.id.btn_select_another_location);
+        selectAnotherLocation.setOnClickListener(this);
         mAutoCompleteAdapter = new PlacesAutoCompleteAdapter(this, R.layout.searchview_adapter,
                 mGoogleApiClient, BOUNDS_INDIA, null);
-
-    /*    PrefManager prefManager = new PrefManager(PlacesAutoCompleteActivity.this);
+progressDialog = new ProgressDialog(this);
+       prefManager = new PrefManager(PlacesAutoCompleteActivity.this);
         mResultList = prefManager.getSaveLocations();
         if(mResultList == null){
             mResultList = new ArrayList<>();
-        }*/
+        }
 
         selectedPlaceAdapter = new SelectedPlacesAdapter(this,mResultList);
         recyclerView = (RecyclerView) findViewById(R.id.RecyclerViewID);
@@ -115,6 +124,25 @@ public class PlacesAutoCompleteActivity extends AppCompatActivity implements Goo
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(selectedPlaceAdapter);
 
+
+
+        ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
+                //Remove swiped item from list and notify the RecyclerView
+                mResultList.remove(viewHolder.getAdapterPosition());
+                prefManager.saveLocations(mResultList);
+                selectedPlaceAdapter.notifyDataSetChanged();
+            }
+        };
+
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
+        itemTouchHelper.attachToRecyclerView(recyclerView);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         mLinearLayoutManager = new LinearLayoutManager(this);
@@ -125,6 +153,7 @@ public class PlacesAutoCompleteActivity extends AppCompatActivity implements Goo
 
             public void onTextChanged(CharSequence s, int start, int before,
                                       int count) {
+
                 if (!s.toString().equals("") && mGoogleApiClient.isConnected()) {
                     mAutoCompleteAdapter.getFilter().filter(s.toString());
                     delete.setVisibility(View.VISIBLE);
@@ -155,7 +184,7 @@ public class PlacesAutoCompleteActivity extends AppCompatActivity implements Goo
                         final PlacesAutoCompleteAdapter.PlaceAutocomplete item = mAutoCompleteAdapter.getItem(position);
                         final String placeId = String.valueOf(item.placeId);
                         Log.i("TAG", "Autocomplete item selected: " + item.description);
-                        selectedPlaceAdapter.insertItem(item);
+                        selectedPlaceAdapter.insertItem((String) item.description);
                         /*
                              Issue a request to the Places Geo Data API to retrieve a Place object with additional details about the place.
                          */
@@ -176,7 +205,8 @@ public class PlacesAutoCompleteActivity extends AppCompatActivity implements Goo
                         Log.i("TAG", "Clicked: " + item.description);
                         Log.i("TAG", "Clicked: " + item.area);
                         Log.i("TAG", "Clicked: " + item.city);
-                        if(mCity.toString().equals("") && mArea.toString().equals("") && mCompleteAddress.toString().equals("")){
+
+                        if(mCity.equals("") && mArea.equals("") && mCompleteAddress.equals("")){
                             mCity = getCityFromAddress((String) item.description);
                             mArea = getAreaFromAddress((String) item.description);
                             mCompleteAddress = (String) item.description;
@@ -191,26 +221,8 @@ public class PlacesAutoCompleteActivity extends AppCompatActivity implements Goo
                                 userLocation = new UserLocation();
                                 userLocation.setArea(mArea);
                                 userLocation.setCity(mCity);
-                                addressSendRequest = UserLocationApiClient.getClient().create(AddressSendRequest.class);
-                                Call<UserLocationResponse> call = addressSendRequest.getResponseMessage(userLocation);
-                                call.enqueue(new Callback<UserLocationResponse>() {
-                                    @Override
-                                    public void onResponse(Call<UserLocationResponse> call, Response<UserLocationResponse> response) {
-                                        int statuscode = response.code();
-                                        UserLocationResponse userLocationResponse = response.body();
-                                        Log.d("UserDetail","response status ="+userLocationResponse.getAreaId());
-                                    }
+                            sendUserLocationRequest(userLocation);
 
-                                    @Override
-                                    public void onFailure(Call<UserLocationResponse> call, Throwable t) {
-                                        Log.d("UserLocation","onFailure ="+t.getMessage());
-                                    }
-                                });
-                            String add = mArea+","+mCity;
-                            PrefManager prefManager = new PrefManager(PlacesAutoCompleteActivity.this);
-                            prefManager.setUserCurrentLocation(add);
-                            Intent intent = new Intent(PlacesAutoCompleteActivity.this,MainActivity.class);
-                            startActivity(intent);
                         }
                         else{
 
@@ -224,6 +236,84 @@ public class PlacesAutoCompleteActivity extends AppCompatActivity implements Goo
                 })
         );
 
+        recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(this, new RecyclerItemClickListener.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                final String address = selectedPlaceAdapter.getItem(position);
+                if(mCity.equals("") && mArea.equals("") && mCompleteAddress.equals("")){
+                    mCity = getCityFromAddress(address);
+                    mArea = getAreaFromAddress(address);
+                    mCompleteAddress = address;
+
+
+                    Log.i("UserLocation", "City: " + mCity);
+                    Log.i("UserLocation", "Area: " + mArea);
+                    Log.i("UserLocation", "des: " + mCompleteAddress);
+
+
+
+                    userLocation = new UserLocation();
+                    userLocation.setArea(mArea);
+                    userLocation.setCity(mCity);
+                    sendUserLocationRequest(userLocation);
+                }
+                else{
+
+                    Log.i("TAG", String.format("Area =  '%s' & City = '%s' & Address = '%s' ",
+                            mArea,mCity,mCompleteAddress));
+                }
+
+                //Log.i("TAG", "Called getPlaceById to get Place details for " + item.placeId);
+
+            }
+        }));
+
+
+    }
+
+    private void sendUserLocationRequest(final UserLocation userLocation) {
+        progressDialog.setMessage("fetching location...");
+        progressDialog.setIndeterminate(true);
+        progressDialog.show();
+        addressSendRequest = UserLocationApiClient.getClient().create(AddressSendRequest.class);
+        Call<UserLocationResponse> call = addressSendRequest.getResponseMessage(userLocation);
+        call.enqueue(new Callback<UserLocationResponse>() {
+            @Override
+            public void onResponse(Call<UserLocationResponse> call, Response<UserLocationResponse> response) {
+                int statuscode = response.code();
+                UserLocationResponse userLocationResponse = response.body();
+                Log.d("UserLocation","response status ="+userLocationResponse.getAreaId());
+                if (progressDialog.isShowing())
+                    progressDialog.dismiss();
+                 cityId = userLocationResponse.getCityId();
+                 areaId = userLocationResponse.getAreaId();
+                Log.d("AreaID ="+areaId,"CityID ="+cityId);
+
+
+                if(areaId == 1 && cityId == 1) {
+                    String add = mArea + "," + mCity;
+                    PrefManager prefManager = new PrefManager(PlacesAutoCompleteActivity.this);
+                    prefManager.setUserCurrentLocation(add);
+                    Intent intent = new Intent(PlacesAutoCompleteActivity.this, MainActivity.class);
+                    startActivity(intent);
+                }
+                else if(areaId == -1 && cityId == 1){
+                    CommonMethod.showAlert("We are not operational in this Area. Please select another Area...",PlacesAutoCompleteActivity.this);
+                    mArea = mCity = mCompleteAddress = "";
+                }
+                else{
+                    notOperatableLayout.setVisibility(View.VISIBLE);
+                    mArea = mCity = mCompleteAddress = "";
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserLocationResponse> call, Throwable t) {
+                if (progressDialog.isShowing())
+                    progressDialog.dismiss();
+                Log.d("UserLocation","onFailure ="+t.getMessage());
+            }
+        });
 
     }
 
@@ -276,6 +366,13 @@ public class PlacesAutoCompleteActivity extends AppCompatActivity implements Goo
         if (v == cardView) {
             onCurrentLocationClick();
         }
+        if (v == selectAnotherLocation){
+            changeLocation();
+        }
+    }
+
+    private void changeLocation() {
+        notOperatableLayout.setVisibility(View.GONE);
     }
 
 
@@ -337,37 +434,17 @@ public class PlacesAutoCompleteActivity extends AppCompatActivity implements Goo
                 result.setResultCallback(new ResultCallback<PlaceLikelihoodBuffer>() {
                     @Override
                     public void onResult(PlaceLikelihoodBuffer likelyPlaces) {
-                        if(mCity.toString().equals("") && mArea.toString().equals("") && mCompleteAddress.toString().equals("")){
+                        if(mCity.equals("") && mArea.equals("") && mCompleteAddress.equals("")){
                             mCity = getCityFromAddress((String)  likelyPlaces.get(0).getPlace().getAddress());
                             mArea = getAreaFromAddress((String)  likelyPlaces.get(0).getPlace().getAddress());
 
                             mCompleteAddress = (String) likelyPlaces.get(0).getPlace().getAddress();
-
+                            selectedPlaceAdapter.insertItem(mCompleteAddress);
 
                             userLocation = new UserLocation();
                             userLocation.setArea(mArea);
                             userLocation.setCity(mCity);
-                            addressSendRequest = UserLocationApiClient.getClient().create(AddressSendRequest.class);
-                            Call<UserLocationResponse> call = addressSendRequest.getResponseMessage(userLocation);
-                            call.enqueue(new Callback<UserLocationResponse>() {
-                                @Override
-                                public void onResponse(Call<UserLocationResponse> call, Response<UserLocationResponse> response) {
-                                    int statuscode = response.code();
-                                    UserLocationResponse userLocationResponse = response.body();
-                                    Log.d("UserDetail","response status ="+userLocationResponse.getAreaId());
-                                }
-
-                                @Override
-                                public void onFailure(Call<UserLocationResponse> call, Throwable t) {
-                                    Log.d("UserLocation","onFailure ="+t.getMessage());
-                                }
-                            });
-                            String add = mArea+","+mCity;
-                            PrefManager prefManager = new PrefManager(PlacesAutoCompleteActivity.this);
-                            prefManager.setUserCurrentLocation(add);
-                            Intent intent = new Intent(PlacesAutoCompleteActivity.this,MainActivity.class);
-                            startActivity(intent);
-
+                            sendUserLocationRequest(userLocation);
                         }
 
                         else{
@@ -399,7 +476,7 @@ public class PlacesAutoCompleteActivity extends AppCompatActivity implements Goo
                     }
                 })
                 .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    public void onClick(final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                    public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
                         dialog.cancel();
                     }
                 });

@@ -4,6 +4,7 @@ package com.monkporter.zafran.adapter;
  * Created by Vaibhav on 7/5/2016.
  */
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -45,7 +46,7 @@ public class PlacesAutoCompleteAdapter
     private GoogleApiClient mGoogleApiClient;
     private LatLngBounds mBounds;
     private AutocompleteFilter mPlaceFilter;
-
+ProgressDialog progressDialog;
     private Context mContext;
     private int layout;
 
@@ -56,6 +57,7 @@ public class PlacesAutoCompleteAdapter
         mGoogleApiClient = googleApiClient;
         mBounds = bounds;
         mPlaceFilter = filter;
+
     }
 
     /**
@@ -77,6 +79,7 @@ public class PlacesAutoCompleteAdapter
                 // Skip the autocomplete query if no constraints are given.
                 if (constraint != null) {
                     // Query the autocomplete API for the (constraint) search string.
+
                     mResultList = getAutocomplete(constraint);
                     if (mResultList != null) {
                         // The API successfully returned results.
@@ -91,6 +94,8 @@ public class PlacesAutoCompleteAdapter
             protected void publishResults(CharSequence constraint, FilterResults results) {
                 if (results != null && results.count > 0) {
                     // The API returned at least one result, update the data.
+                  //  if (progressDialog.isShowing())
+                    //progressDialog.dismiss();
                     notifyDataSetChanged();
                 } else {
                     // The API did not return any results, invalidate the data set.

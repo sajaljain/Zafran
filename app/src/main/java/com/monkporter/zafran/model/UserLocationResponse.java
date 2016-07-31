@@ -7,10 +7,16 @@ import com.google.gson.annotations.SerializedName;
  */
 public class UserLocationResponse {
 
-     @SerializedName("cityId")
+     @SerializedName("CityID")
     private int cityId;
-    @SerializedName("areaId")
+    @SerializedName("AreaID")
     private int areaId;
+    @SerializedName("AreaName")
+    private String areaName;
+    @SerializedName("CityName")
+    private String cityName;
+    @SerializedName("SearchString")
+    private String searchString;
 
     public int getCityId() {
         return cityId;
@@ -26,5 +32,29 @@ public class UserLocationResponse {
 
     public void setAreaId(int areaId) {
         this.areaId = areaId;
+    }
+
+    public String getAreaName() {
+        return areaName;
+    }
+
+    public void setAreaName(String areaName) {
+        this.areaName = areaName;
+    }
+
+    public String getCityName() {
+        return cityName;
+    }
+
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
+    }
+
+    public String getSearchString() {
+        return searchString;
+    }
+
+    public void setSearchString(String searchString) {
+        this.searchString = searchString;
     }
 }

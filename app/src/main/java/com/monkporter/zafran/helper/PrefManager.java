@@ -97,21 +97,21 @@ public class PrefManager {
         return profile;
     }
 
-    public void saveLocations(ArrayList<PlacesAutoCompleteAdapter.PlaceAutocomplete> arrayList){
+    public void saveLocations(ArrayList<String> arrayList){
 
       Gson gson = new Gson();
-        Type type = new TypeToken<ArrayList<PlacesAutoCompleteAdapter.PlaceAutocomplete>>() {}.getType();
+        Type type = new TypeToken<ArrayList<String>>() {}.getType();
         String json = gson.toJson(arrayList,type);
         editor.putString(SELECTED_LOCATION,json);
         editor.commit();
 
 
     }
-    public ArrayList<PlacesAutoCompleteAdapter.PlaceAutocomplete> getSaveLocations(){
+    public ArrayList<String> getSaveLocations(){
         Gson gson = new Gson();
         String json = pref.getString(SELECTED_LOCATION, null);
-        Type type = new TypeToken<ArrayList<PlacesAutoCompleteAdapter.PlaceAutocomplete>>() {}.getType();
-        ArrayList<PlacesAutoCompleteAdapter.PlaceAutocomplete> arrayList = gson.fromJson(json, type);
+        Type type = new TypeToken<ArrayList<String>>() {}.getType();
+        ArrayList<String> arrayList = gson.fromJson(json, type);
         return arrayList;
     }
 

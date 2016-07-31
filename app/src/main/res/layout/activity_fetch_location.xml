@@ -199,7 +199,7 @@
         </ScrollView>
 
         <LinearLayout
-            android:id="@+id/layout_non_op_city"
+            android:id="@+id/layout_no_op_city"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@id/toolbar"

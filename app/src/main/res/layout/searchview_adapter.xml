@@ -7,6 +7,7 @@
     android:layout_centerVertical="true"
     android:gravity="center_vertical">
 
+
     <ImageView
         android:id="@+id/image"
         android:layout_width="22dp"
@@ -33,5 +34,4 @@
     android:background="@drawable/straight_line"
     android:layout_alignParentBottom="true"
     />
-
 </RelativeLayout>

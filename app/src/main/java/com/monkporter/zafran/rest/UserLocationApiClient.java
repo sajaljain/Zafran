@@ -7,7 +7,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * Created by Vaibhav on 7/6/2016.
  */
 public class UserLocationApiClient {
-    public static final String BASE_URL = "http://10.0.2.2:8080/android_sms/";
+    public static final String BASE_URL = "http://instashout.in/";
     private static Retrofit retrofit = null;
 
     public static Retrofit getClient(){

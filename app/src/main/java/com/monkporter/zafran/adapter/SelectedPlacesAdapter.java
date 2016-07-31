@@ -19,10 +19,10 @@ import java.util.Collections;
  * Created by Vaibhav on 7/5/2016.
  */
 public class SelectedPlacesAdapter extends RecyclerView.Adapter<SelectedPlacesAdapter.MyViewHolder> {
-    private ArrayList<PlacesAutoCompleteAdapter.PlaceAutocomplete> mResultList;
+    private ArrayList<String> mResultList;
     LayoutInflater inflater;
     Context context;
-    public SelectedPlacesAdapter(Context context,ArrayList<PlacesAutoCompleteAdapter.PlaceAutocomplete> arrayList){
+    public SelectedPlacesAdapter(Context context,ArrayList<String> arrayList){
         this.context = context;
         mResultList = arrayList;
         inflater = LayoutInflater.from(context);
@@ -37,7 +37,7 @@ public class SelectedPlacesAdapter extends RecyclerView.Adapter<SelectedPlacesAd
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        holder.delivery_address.setText(mResultList.get(position).description);
+        holder.delivery_address.setText(mResultList.get(position));
     }
 
     @Override
@@ -48,11 +48,17 @@ public class SelectedPlacesAdapter extends RecyclerView.Adapter<SelectedPlacesAd
             return 0;
     }
 
-    public void insertItem(PlacesAutoCompleteAdapter.PlaceAutocomplete item){
-        mResultList.add(0,item);
-        notifyItemInserted(0);
-    //    PrefManager prefManager = new PrefManager(context);
-     //   prefManager.saveLocations(mResultList);
+    public String getItem(int pos){
+        return mResultList.get(pos);
+    }
+
+    public void insertItem(String address){
+        if(!mResultList.contains(address)) {
+            mResultList.add(0, address);
+            notifyItemInserted(0);
+            PrefManager prefManager = new PrefManager(context);
+            prefManager.saveLocations(mResultList);
+        }
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder{
