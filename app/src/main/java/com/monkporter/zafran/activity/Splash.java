@@ -24,6 +24,7 @@ import com.monkporter.zafran.Interfece.TempUserRequest;
 import com.monkporter.zafran.Interfece.UpdateFcmRequest;
 import com.monkporter.zafran.Manifest;
 import com.monkporter.zafran.R;
+import com.monkporter.zafran.helper.FetchUserEmail;
 import com.monkporter.zafran.helper.PrefManager;
 import com.monkporter.zafran.model.CheckUser;
 import com.monkporter.zafran.model.TemporaryUser;
@@ -50,13 +51,14 @@ public class Splash extends AppCompatActivity {
     TempUserRequest tempUserRequest;
     private String[] locationPermission = new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION};
     private String[] MY_PERMISSIONS = new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            android.Manifest.permission.RECEIVE_SMS ,android.Manifest.permission.READ_SMS};
+            android.Manifest.permission.RECEIVE_SMS ,android.Manifest.permission.READ_SMS,android.Manifest.permission.GET_ACCOUNTS};
 
     ProgressDialog progressDialog;
 
     private final int PERMISSIONS_REQUEST = 111;
     String usrNAme;
     Intent intent;
+    String emailID;
     ProgressBar pb;
     PrefManager prefManager;
     String userId;
@@ -71,12 +73,29 @@ public class Splash extends AppCompatActivity {
         //progressDialog.setIndeterminate(true);
         //progressDialog.setMessage("Loading...");
         //progressDialog.show();
+        if (Build.VERSION.SDK_INT < 23) {
+            requestCalls();
+        }else{
+            permissionCheck();
+        }
 
+
+
+
+
+        //pb = (ProgressBar) findViewById(R.id.progressBar);
+
+    }
+
+    private void requestCalls() {
         intent = new Intent(this, MainActivity.class);
         prefManager = new PrefManager(Splash.this);
         dveiceRegistrationToken = new MyFirebaseInstanceIDService().getRefreshedToken();
-
-
+        emailID = FetchUserEmail.getEmail(this);
+        Toast.makeText(Splash.this, "Email ="+emailID, Toast.LENGTH_SHORT).show();
+        Log.d("email","emailId");
+        if(emailID == null)
+            emailID = "";
         userId = prefManager.getUserId();
         if(userId == null) {
             TemporaryUser temporaryUser = new TemporaryUser();
@@ -90,9 +109,8 @@ public class Splash extends AppCompatActivity {
             temporaryUser.setUserName(usrNAme);
             temporaryUser.setSex(1);
             temporaryUser.setSocialMediaUserId("");
-            temporaryUser.setEmailId("");
+            temporaryUser.setEmailId(emailID);
             temporaryUser.setDeviceRegistrationID(dveiceRegistrationToken);
-            temporaryUser.setCellVerified(0);
 
             // Here Sending post request for user
             tempUserRequest = TempUserApiClient.getClient().create(TempUserRequest.class);
@@ -105,6 +123,8 @@ public class Splash extends AppCompatActivity {
                     Log.d("Temporary user", "Response =" + status);
                     userId = temporaryUserResponse.getUserId();
                     prefManager.setUserId(userId);
+                    startActivity(intent);
+                    Splash.this.finish();
                 }
 
                 @Override
@@ -113,7 +133,8 @@ public class Splash extends AppCompatActivity {
                 }
             });
         }
-      //  else{
+
+        //  else{
         /*    CheckUserRequest checkUserRequest = CheckUserApiClient.getClient().create(CheckUserRequest.class);
             Call<CheckUser> call = checkUserRequest.getUserType();
             call.enqueue(new Callback<CheckUser>() {
@@ -149,27 +170,39 @@ public class Splash extends AppCompatActivity {
                     int status = response.code();
                     UpdateFcmResponse updateFcmResponse = response.body();
                     Log.d("UpdateFcm Success","Error ="+updateFcmResponse.isError());
-                  //  if(progressDialog.isShowing())
+
+                    //  if(progressDialog.isShowing())
                     //    progressDialog.dismiss();
                 }
 
                 @Override
                 public void onFailure(Call<UpdateFcmResponse> call, Throwable t) {
                     Log.d("Update Fcm", "onFailure =" + t.getMessage());
-                //    if(progressDialog.isShowing())
-                  //      progressDialog.dismiss();
+                    //    if(progressDialog.isShowing())
+                    //      progressDialog.dismiss();
                 }
             });
 
         }
+        if(userId != null){
+            new Thread(new Runnable() {  @Override
+            public void run() {
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        startActivity(intent);
+                        Splash.this.finish();
+                    }
+                });
+            }
 
-        //pb = (ProgressBar) findViewById(R.id.progressBar);
-        if (Build.VERSION.SDK_INT < 23) {
-            startActivity(intent);
-            Splash.this.finish();
-        } else {
-            permissionCheck();
-        }
+        }).start();
+    }
     }
 
     private void permissionCheck() {
@@ -177,19 +210,18 @@ public class Splash extends AppCompatActivity {
         int storage = ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
         int receiveSms = ContextCompat.checkSelfPermission(this, android.Manifest.permission.RECEIVE_SMS);
         int readSms = ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_SMS);
-
-
+        int fetchEmail = ContextCompat.checkSelfPermission(this,android.Manifest.permission.GET_ACCOUNTS);
 
         if ( storage != PackageManager.PERMISSION_GRANTED ||
-        receiveSms != PackageManager.PERMISSION_GRANTED ||readSms != PackageManager.PERMISSION_GRANTED ) {
+        receiveSms != PackageManager.PERMISSION_GRANTED ||readSms != PackageManager.PERMISSION_GRANTED ||
+                fetchEmail!= PackageManager.PERMISSION_GRANTED) {
             Toast.makeText(Splash.this, "Requesting Permission", Toast.LENGTH_SHORT).show();
             ActivityCompat.requestPermissions(this, MY_PERMISSIONS,PERMISSIONS_REQUEST);
         }
         else {
             Toast.makeText(Splash.this, "Permission alredy granted", Toast.LENGTH_SHORT).show();
 
-            startActivity(intent);
-            Splash.this.finish();
+requestCalls();
           //  if(progressDialog.isShowing())
             //    progressDialog.dismiss();
         }
@@ -211,8 +243,9 @@ public class Splash extends AppCompatActivity {
                 Toast.makeText(Splash.this, "Permissions were granted.", Toast.LENGTH_SHORT).show();
             //    if(progressDialog.isShowing())
               //      progressDialog.dismiss();
-                startActivity(intent);
-                Splash.this.finish();
+               // startActivity(intent);
+                //Splash.this.finish();
+                requestCalls();
             } else {
                 Log.i(TAG, "Permissions were NOT granted.");
                 Toast.makeText(Splash.this, "Permissions were NOT granted.", Toast.LENGTH_SHORT).show();

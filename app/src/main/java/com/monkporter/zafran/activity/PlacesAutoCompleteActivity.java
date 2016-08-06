@@ -428,12 +428,15 @@ progressDialog = new ProgressDialog(this);
                 Toast.makeText(PlacesAutoCompleteActivity.this, "No Permission", Toast.LENGTH_SHORT).show();
                 return;
             }
+
             if (CommonMethod.isNetworkAvailable(PlacesAutoCompleteActivity.this)) {
                 PendingResult<PlaceLikelihoodBuffer> result = Places.PlaceDetectionApi
                         .getCurrentPlace(mGoogleApiClient, null);
+
                 result.setResultCallback(new ResultCallback<PlaceLikelihoodBuffer>() {
                     @Override
                     public void onResult(PlaceLikelihoodBuffer likelyPlaces) {
+                        if(likelyPlaces != null){
                         if(mCity.equals("") && mArea.equals("") && mCompleteAddress.equals("")){
                             mCity = getCityFromAddress((String)  likelyPlaces.get(0).getPlace().getAddress());
                             mArea = getAreaFromAddress((String)  likelyPlaces.get(0).getPlace().getAddress());
@@ -457,7 +460,7 @@ progressDialog = new ProgressDialog(this);
                                 likelyPlaces.get(0).getPlace().getAddress()));
 
                         likelyPlaces.release();
-                    }
+                    }}
                 });
             } else {
                 CommonMethod.showAlert("It seems that you are not connected to Internet.Please check your Internet Connection and then continue.",PlacesAutoCompleteActivity.this);

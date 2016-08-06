@@ -10,8 +10,6 @@ public class TemporaryUser {
    private int registrationChannelTypeID;
     @SerializedName("Cell")
     private  String cell;
-    @SerializedName("CellVerified")
-    private int cellVerified;
     @SerializedName("FirstName")
     private String firstName;
     @SerializedName("LastName")
@@ -99,11 +97,5 @@ public class TemporaryUser {
         DeviceRegistrationID = deviceRegistrationID;
     }
 
-    public int getCellVerified() {
-        return cellVerified;
-    }
 
-    public void setCellVerified(int cellVerified) {
-        this.cellVerified = cellVerified;
-    }
 }

@@ -1,6 +1,5 @@
 package com.monkporter.zafran.activity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -17,29 +16,38 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.TextSliderView;
+import com.monkporter.zafran.Interfece.BannerRequest;
+import com.monkporter.zafran.Interfece.GetProductRequest;
 import com.monkporter.zafran.R;
 import com.monkporter.zafran.adapter.ProductsAdapter;
 import com.monkporter.zafran.helper.PrefManager;
-import com.monkporter.zafran.model.OrderItem;
+import com.monkporter.zafran.model.Banner;
+import com.monkporter.zafran.model.GetBanner;
+import com.monkporter.zafran.model.GetProducts;
+import com.monkporter.zafran.model.Product;
 import com.monkporter.zafran.model.Products;
 import com.monkporter.zafran.model.RecyclerItemClickListener;
+import com.monkporter.zafran.rest.BannerApiClient;
+import com.monkporter.zafran.rest.ProductApiClient;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.zip.Inflater;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /*
 * Initially user is not logged in
@@ -62,12 +70,17 @@ public class MainActivity extends AppCompatActivity
     TextView toolbarAddress;
     String address = null;
     private boolean login;
+    GetBanner getBanner;
     private ViewGroup viewGroup;
+    List<Product> productsList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        getBanner();
+        initSlider();
+        getProductsList();
         toolbarAddress = (TextView) findViewById(R.id.toolbar_address_id);
         PrefManager prefManager = new PrefManager(MainActivity.this);
         address = prefManager.getUserCurrentLocation();
@@ -80,7 +93,7 @@ public class MainActivity extends AppCompatActivity
 
         initNavigationDrawer();
         setupToolbar();
-        initSlider();
+
 
        // LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
        // v = inflater.inflate(R.layout.actionbar_address_layout,null);
@@ -119,6 +132,7 @@ public class MainActivity extends AppCompatActivity
         }));
     }
     private void initSlider() {
+
         sliderShow = (SliderLayout) findViewById(R.id.slider);
         HashMap<String,Integer> file_maps = new HashMap<String, Integer>();
 
@@ -136,6 +150,58 @@ public class MainActivity extends AppCompatActivity
             sliderShow.addSlider(textSliderView);
         }
     }
+
+    public HashMap getBanner() {
+
+        final HashMap<String, String> sliderBanner = new HashMap<>();
+        BannerRequest bannerRequest = BannerApiClient.getClient().create(BannerRequest.class);
+        Call<GetBanner> call = bannerRequest.getResponse();
+        call.enqueue(new Callback<GetBanner>() {
+            @Override
+            public void onResponse(Call<GetBanner> call, Response<GetBanner> response) {
+                int status = response.code();
+                getBanner = response.body();
+                if(getBanner != null) {
+                    boolean error = getBanner.isError();
+                    String message = getBanner.getMessage();
+                    Log.d("Get Banner", "message =" + message);
+                    Log.d("Get Banner", "error =" + error);
+
+                    int size = getBanner.getBanners().size();
+                    Toast.makeText(MainActivity.this, "" + size, Toast.LENGTH_SHORT).show();
+                    for (Banner banner : getBanner.getBanners()) {
+
+                        sliderBanner.put(banner.getBannerHead(), banner.getBannerUrl());
+                        Log.d("Baner url", "url =" + banner.getBannerHead());
+                    }
+                    sliderShow.removeAllSliders();
+                    for (String name : sliderBanner.keySet()) {
+                        textSliderView = new TextSliderView(MainActivity.this);
+                        // initialize a SliderLayout
+                        textSliderView
+                                .description(name)
+                                .image(sliderBanner.get(name))
+                                .setScaleType(BaseSliderView.ScaleType.Fit);
+                        // Toast.makeText(MainActivity.this, sliderBanner.get(name), Toast.LENGTH_SHORT).show();
+                        sliderShow.addSlider(textSliderView);
+                    }
+
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<GetBanner> call, Throwable t) {
+                Log.d("Get Banner", "onFailure =" + t.getMessage());
+            }
+        });
+
+        return sliderBanner;
+    }
+
+
+
+
 
     private void setupToolbar() {
 
@@ -233,7 +299,7 @@ public class MainActivity extends AppCompatActivity
 @Override
     public void onResume(){
         super.onResume();
-
+        sliderShow.startAutoCycle();
     }
 
 
@@ -313,6 +379,31 @@ public class MainActivity extends AppCompatActivity
         listViewItems.add(new Products("Cardamom Tea","Some Description", R.drawable.cardamom_tea));
 
         return listViewItems;
+    }
+
+    public List<Product> getProductsList() {
+        GetProductRequest productRequest = ProductApiClient.getClient().create(GetProductRequest.class);
+        Call<GetProducts> call = productRequest.getResponse();
+        call.enqueue(new Callback<GetProducts>() {
+            @Override
+            public void onResponse(Call<GetProducts> call, Response<GetProducts> response) {
+                int status = response.code();
+                GetProducts getProducts = response.body();
+                if(getProducts != null){
+                    Log.d("Product Response","message ="+getProducts.getMessage());
+                    Log.d("Product Response","error ="+getProducts.isError());
+                    productsList = getProducts.getProducts();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<GetProducts> call, Throwable t) {
+
+            }
+        });
+
+        return productsList;
     }
 
 
