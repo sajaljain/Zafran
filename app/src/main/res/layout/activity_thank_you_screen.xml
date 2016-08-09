@@ -211,7 +211,7 @@
         android:background="@color/colorPrimary"
         android:layout_marginLeft="1dp"
         android:textColor="@color/white"
-
+        android:onClick="rateTea"
         />
 </LinearLayout>
 </RelativeLayout>

@@ -130,6 +130,7 @@ public class Splash extends AppCompatActivity {
                 @Override
                 public void onFailure(Call<TemporaryUserResponse> call, Throwable t) {
                     Log.d("Temporary user", "onFailure =" + t.getMessage());
+                    startActivity(new Intent(Splash.this,Refresh.class));
                 }
             });
         }
@@ -180,6 +181,7 @@ public class Splash extends AppCompatActivity {
                     Log.d("Update Fcm", "onFailure =" + t.getMessage());
                     //    if(progressDialog.isShowing())
                     //      progressDialog.dismiss();
+                    startActivity(new Intent(Splash.this,Refresh.class));
                 }
             });
 

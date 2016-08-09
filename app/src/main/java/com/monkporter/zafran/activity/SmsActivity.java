@@ -212,6 +212,7 @@ public class SmsActivity extends AppCompatActivity implements View.OnClickListen
             @Override
             public void onFailure(Call<UserDetailResponse> call, Throwable t) {
                 Log.d("RequestSmsResponse","onFailure ="+t.getMessage());
+                startActivity(new Intent(SmsActivity.this,Refresh.class));
             }
         });
     }

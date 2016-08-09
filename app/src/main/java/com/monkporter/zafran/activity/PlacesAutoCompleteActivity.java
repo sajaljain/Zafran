@@ -86,12 +86,13 @@ public class PlacesAutoCompleteActivity extends AppCompatActivity implements Goo
     private SelectedPlacesAdapter selectedPlaceAdapter;
     private CardView cardView;
     private LinearLayout notOperatableLayout;
-    private String mArea = "", mCity = "", mCompleteAddress = "";
+    private String mArea = "", mCity = "", mCompleteAddress = "",mLatitude = "",mLongitude = "",mPlaceId = "";
     UserLocation userLocation = null;
     PrefManager prefManager;
     ArrayList<String> mResultList;
     private int cityId;
     private int areaId;
+
     ProgressDialog progressDialog;
     Button selectAnotherLocation;
     public PlacesAutoCompleteActivity() {
@@ -197,6 +198,13 @@ progressDialog = new ProgressDialog(this);
                                 if (places.getCount() == 1) {
                                     //Do the things here on Click.....
                                     Toast.makeText(getApplicationContext(), String.valueOf(places.get(0).getLatLng()), Toast.LENGTH_SHORT).show();
+                                    if(mCity.equals("") && mArea.equals("") && mCompleteAddress.equals("") && mLatitude.equals("") && mLongitude.equals("") && mPlaceId.equals("")){
+                                        mLatitude = String.valueOf(places.get(0).getLatLng());
+                                        String s[] = mLatitude.split(",",0);
+                                        for(String s1:s){
+                                            Log.d("lat",s1);
+                                        }
+                                }
                                 } else {
                                     Toast.makeText(getApplicationContext(), Constants.SOMETHING_WENT_WRONG, Toast.LENGTH_SHORT).show();
                                 }
@@ -206,11 +214,11 @@ progressDialog = new ProgressDialog(this);
                         Log.i("TAG", "Clicked: " + item.area);
                         Log.i("TAG", "Clicked: " + item.city);
 
-                        if(mCity.equals("") && mArea.equals("") && mCompleteAddress.equals("")){
+                        if(mCity.equals("") && mArea.equals("") && mCompleteAddress.equals("") && mPlaceId.equals("")){
                             mCity = getCityFromAddress((String) item.description);
                             mArea = getAreaFromAddress((String) item.description);
                             mCompleteAddress = (String) item.description;
-
+                            mPlaceId = (String)item.placeId;
 
                             Log.i("UserLocation", "City: " + mCity);
                             Log.i("UserLocation", "Area: " + mArea);
@@ -312,6 +320,8 @@ progressDialog = new ProgressDialog(this);
                 if (progressDialog.isShowing())
                     progressDialog.dismiss();
                 Log.d("UserLocation","onFailure ="+t.getMessage());
+                startActivity(new Intent(PlacesAutoCompleteActivity.this,Refresh.class));
+
             }
         });
 
@@ -433,35 +443,40 @@ progressDialog = new ProgressDialog(this);
                 PendingResult<PlaceLikelihoodBuffer> result = Places.PlaceDetectionApi
                         .getCurrentPlace(mGoogleApiClient, null);
 
+
                 result.setResultCallback(new ResultCallback<PlaceLikelihoodBuffer>() {
                     @Override
                     public void onResult(PlaceLikelihoodBuffer likelyPlaces) {
-                        if(likelyPlaces != null){
-                        if(mCity.equals("") && mArea.equals("") && mCompleteAddress.equals("")){
-                            mCity = getCityFromAddress((String)  likelyPlaces.get(0).getPlace().getAddress());
-                            mArea = getAreaFromAddress((String)  likelyPlaces.get(0).getPlace().getAddress());
+                        if (likelyPlaces.getCount() > 0) {
+                            if (mCity.equals("") && mArea.equals("") && mCompleteAddress.equals("")) {
+                                mCity = getCityFromAddress((String) likelyPlaces.get(0).getPlace().getAddress());
+                                mArea = getAreaFromAddress((String) likelyPlaces.get(0).getPlace().getAddress());
+                                mCompleteAddress = (String) likelyPlaces.get(0).getPlace().getAddress();
+                                selectedPlaceAdapter.insertItem(mCompleteAddress);
 
-                            mCompleteAddress = (String) likelyPlaces.get(0).getPlace().getAddress();
-                            selectedPlaceAdapter.insertItem(mCompleteAddress);
+                                userLocation = new UserLocation();
+                                userLocation.setArea(mArea);
+                                userLocation.setCity(mCity);
+                                sendUserLocationRequest(userLocation);
+                                Log.i("TAG", String.format("Area =  '%s' & City = '%s' & Address = '%s' ",
+                                        mArea, mCity, mCompleteAddress));
+                            } else {
 
-                            userLocation = new UserLocation();
-                            userLocation.setArea(mArea);
-                            userLocation.setCity(mCity);
-                            sendUserLocationRequest(userLocation);
+                                Log.i("TAG", String.format("Area =  '%s' & City = '%s' & Address = '%s' ",
+                                        mArea, mCity, mCompleteAddress));
+                            }
+
+                            Log.i("TAG", String.format("Place '%s' is",
+                                    likelyPlaces.get(0).getPlace().getAddress()));
+
+                            likelyPlaces.release();
                         }
-
                         else{
-
-                            Log.i("TAG", String.format("Area =  '%s' & City = '%s' & Address = '%s' ",
-                                    mArea,mCity,mCompleteAddress));
+                           // CommonMethod.showAlert("It seems that you are not connected to Internet.Please check your Internet Connection and then continue.",PlacesAutoCompleteActivity.this);
+                            startActivity(new Intent(PlacesAutoCompleteActivity.this,Refresh.class));
                         }
-
-                        Log.i("TAG", String.format("Place '%s' is",
-                                likelyPlaces.get(0).getPlace().getAddress()));
-
-                        likelyPlaces.release();
-                    }}
-                });
+                    }
+               });
             } else {
                 CommonMethod.showAlert("It seems that you are not connected to Internet.Please check your Internet Connection and then continue.",PlacesAutoCompleteActivity.this);
             }

@@ -59,7 +59,8 @@
             android:text="Refresh"
             android:textSize="24dp"
             android:padding="8dp"
-            android:textAllCaps="false"/>
+            android:textAllCaps="false"
+            android:onClick="checkConnection"/>
 
 
 

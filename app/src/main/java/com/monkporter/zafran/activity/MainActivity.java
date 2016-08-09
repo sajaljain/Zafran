@@ -193,6 +193,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onFailure(Call<GetBanner> call, Throwable t) {
                 Log.d("Get Banner", "onFailure =" + t.getMessage());
+                startActivity(new Intent(MainActivity.this,Refresh.class));
             }
         });
 
@@ -399,7 +400,7 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public void onFailure(Call<GetProducts> call, Throwable t) {
-
+                startActivity(new Intent(MainActivity.this,Refresh.class));
             }
         });
 

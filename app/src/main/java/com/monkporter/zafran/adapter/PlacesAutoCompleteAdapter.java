@@ -6,6 +6,7 @@ package com.monkporter.zafran.adapter;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -28,6 +29,8 @@ import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.gson.annotations.SerializedName;
 import com.monkporter.zafran.R;
+import com.monkporter.zafran.activity.PlacesAutoCompleteActivity;
+import com.monkporter.zafran.activity.Refresh;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -128,6 +131,7 @@ ProgressDialog progressDialog;
             // Confirm that the query completed successfully, otherwise return null
             final Status status = autocompletePredictions.getStatus();
             if (!status.isSuccess()) {
+                mContext.startActivity(new Intent(mContext,Refresh.class));
                 Toast.makeText(mContext, "Error contacting API: " + status.toString(),
                         Toast.LENGTH_SHORT).show();
                 Log.e("", "Error getting autocomplete prediction API call: " + status.toString());
