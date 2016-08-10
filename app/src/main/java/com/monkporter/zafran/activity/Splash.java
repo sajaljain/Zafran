@@ -43,13 +43,15 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class Splash extends AppCompatActivity {
-    private static final String TAG = "Splash";
+    private final String TAG = this.getClass().getSimpleName();
+
+
     private static int SPLASH_TIME_OUT = 3000;
     private PreferenceManager pm;
     Context context;
     String dveiceRegistrationToken;
     TempUserRequest tempUserRequest;
-    private String[] locationPermission = new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION};
+    //private String[] locationPermission = new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION};
     private String[] MY_PERMISSIONS = new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
             android.Manifest.permission.RECEIVE_SMS ,android.Manifest.permission.READ_SMS,android.Manifest.permission.GET_ACCOUNTS};
 
@@ -120,7 +122,9 @@ public class Splash extends AppCompatActivity {
                 public void onResponse(Call<TemporaryUserResponse> call, Response<TemporaryUserResponse> response) {
                     int status = response.code();
                     TemporaryUserResponse temporaryUserResponse = response.body();
-                    Log.d("Temporary user", "Response =" + status);
+                    Log.d(TAG, "Temporary user error =" + temporaryUserResponse.isError());
+                    Log.d(TAG, "Temporary user message =" + temporaryUserResponse.getMessage());
+                    Log.d(TAG, "Temporary user userID =" + temporaryUserResponse.getUserId());
                     userId = temporaryUserResponse.getUserId();
                     prefManager.setUserId(userId);
                     startActivity(intent);
@@ -129,7 +133,7 @@ public class Splash extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<TemporaryUserResponse> call, Throwable t) {
-                    Log.d("Temporary user", "onFailure =" + t.getMessage());
+                    Log.d(TAG,"Temporary User onFailure =" + t.getMessage());
                     startActivity(new Intent(Splash.this,Refresh.class));
                 }
             });
@@ -162,6 +166,7 @@ public class Splash extends AppCompatActivity {
             prefManager.setDeviceRegId(dveiceRegistrationToken);
             final UpdateFcm updateFcm = new UpdateFcm();
             updateFcm.setDeviceRegesterationId(dveiceRegistrationToken);
+            updateFcm.setUserId(userId);
             UpdateFcmRequest updateFcmRequest = UpdateFcmApi.getClient().create(UpdateFcmRequest.class);
             Call<UpdateFcmResponse> call = updateFcmRequest.getResponse(updateFcm);
             Log.d("UpdateFcm Request","Fcm ="+dveiceRegistrationToken);
@@ -170,7 +175,8 @@ public class Splash extends AppCompatActivity {
                 public void onResponse(Call<UpdateFcmResponse> call, Response<UpdateFcmResponse> response) {
                     int status = response.code();
                     UpdateFcmResponse updateFcmResponse = response.body();
-                    Log.d("UpdateFcm Success","Error ="+updateFcmResponse.isError());
+                    Log.d(TAG,"UpdateFcm Error ="+updateFcmResponse.isError());
+                    Log.d(TAG,"UpdateFcm message ="+updateFcmResponse.getMessage());
 
                     //  if(progressDialog.isShowing())
                     //    progressDialog.dismiss();
@@ -178,7 +184,7 @@ public class Splash extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<UpdateFcmResponse> call, Throwable t) {
-                    Log.d("Update Fcm", "onFailure =" + t.getMessage());
+                    Log.d(TAG, "Update Fcm onFailure =" + t.getMessage());
                     //    if(progressDialog.isShowing())
                     //      progressDialog.dismiss();
                     startActivity(new Intent(Splash.this,Refresh.class));
@@ -190,7 +196,7 @@ public class Splash extends AppCompatActivity {
             new Thread(new Runnable() {  @Override
             public void run() {
                 try {
-                    Thread.sleep(3000);
+                    Thread.sleep(SPLASH_TIME_OUT);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -208,7 +214,7 @@ public class Splash extends AppCompatActivity {
     }
 
     private void permissionCheck() {
-        int location = ContextCompat.checkSelfPermission(this,android.Manifest.permission.ACCESS_FINE_LOCATION);
+       // int location = ContextCompat.checkSelfPermission(this,android.Manifest.permission.ACCESS_FINE_LOCATION);
         int storage = ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
         int receiveSms = ContextCompat.checkSelfPermission(this, android.Manifest.permission.RECEIVE_SMS);
         int readSms = ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_SMS);

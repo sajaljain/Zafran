@@ -23,13 +23,13 @@
                 android:orientation="vertical">
 
 
-                <ImageView
+             <!--  <ImageView
                     android:id="@+id/tea_image_id"
                     android:layout_width="match_parent"
                     android:layout_height="120dp"
                     android:padding="5dp"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/assam" />
+                    android:src="@drawable/assam" />-->
 
                 <View
                     android:layout_width="match_parent"

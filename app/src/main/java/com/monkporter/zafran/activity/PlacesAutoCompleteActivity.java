@@ -156,12 +156,15 @@ progressDialog = new ProgressDialog(this);
                                       int count) {
 
                 if (!s.toString().equals("") && mGoogleApiClient.isConnected()) {
+                    mRecyclerView.setVisibility(View.VISIBLE);
                     mAutoCompleteAdapter.getFilter().filter(s.toString());
                     delete.setVisibility(View.VISIBLE);
+                    recyclerView.setVisibility(View.GONE);
 
                 } else if (s.toString().equals("")) {
                     mAutoCompleteAdapter.clear();
                     delete.setVisibility(View.GONE);
+                    recyclerView.setVisibility(View.VISIBLE);
                 } else if (!mGoogleApiClient.isConnected()) {
                     Toast.makeText(getApplicationContext(), Constants.API_NOT_CONNECTED, Toast.LENGTH_SHORT).show();
                     Log.e(Constants.PlacesTag, Constants.API_NOT_CONNECTED);
@@ -198,12 +201,9 @@ progressDialog = new ProgressDialog(this);
                                 if (places.getCount() == 1) {
                                     //Do the things here on Click.....
                                     Toast.makeText(getApplicationContext(), String.valueOf(places.get(0).getLatLng()), Toast.LENGTH_SHORT).show();
-                                    if(mCity.equals("") && mArea.equals("") && mCompleteAddress.equals("") && mLatitude.equals("") && mLongitude.equals("") && mPlaceId.equals("")){
-                                        mLatitude = String.valueOf(places.get(0).getLatLng());
-                                        String s[] = mLatitude.split(",",0);
-                                        for(String s1:s){
-                                            Log.d("lat",s1);
-                                        }
+                                   if(mLatitude.equals("") && mLongitude.equals("")){
+                                        String loc= String.valueOf(places.get(0).getLatLng());
+                                       getLAtLong(loc);
                                 }
                                 } else {
                                     Toast.makeText(getApplicationContext(), Constants.SOMETHING_WENT_WRONG, Toast.LENGTH_SHORT).show();
@@ -279,10 +279,26 @@ progressDialog = new ProgressDialog(this);
 
     }
 
+    private void getLAtLong(String loc) {
+        String s[] = loc.split(",",0);
+
+        for(String s1:s){
+            if(mLatitude == "")
+                mLatitude = s1.replaceAll("[^ 0-9 .]","");
+            else
+                mLongitude = s1.replaceAll("[^ 0-9 .]","");
+            // Log.d("lat",s1);
+        }
+        Log.d("lat ="+mLatitude,"long ="+mLongitude);
+
+    }
+
     private void sendUserLocationRequest(final UserLocation userLocation) {
-        progressDialog.setMessage("fetching location...");
-        progressDialog.setIndeterminate(true);
-        progressDialog.show();
+        if(!progressDialog.isShowing()) {
+            progressDialog.setMessage("fetching location...");
+            progressDialog.setIndeterminate(true);
+            progressDialog.show();
+        }
         addressSendRequest = UserLocationApiClient.getClient().create(AddressSendRequest.class);
         Call<UserLocationResponse> call = addressSendRequest.getResponseMessage(userLocation);
         call.enqueue(new Callback<UserLocationResponse>() {
@@ -306,12 +322,14 @@ progressDialog = new ProgressDialog(this);
                     startActivity(intent);
                 }
                 else if(areaId == -1 && cityId == 1){
+                    mRecyclerView.setVisibility(View.GONE);
                     CommonMethod.showAlert("We are not operational in this Area. Please select another Area...",PlacesAutoCompleteActivity.this);
-                    mArea = mCity = mCompleteAddress = "";
+                    mArea = mCity = mCompleteAddress = mLatitude = mLongitude = mPlaceId = "";
                 }
                 else{
+                    mRecyclerView.setVisibility(View.GONE);
                     notOperatableLayout.setVisibility(View.VISIBLE);
-                    mArea = mCity = mCompleteAddress = "";
+                    mArea = mCity = mCompleteAddress = mLatitude = mLongitude = mPlaceId = "";
                 }
             }
 
@@ -412,6 +430,7 @@ progressDialog = new ProgressDialog(this);
             // We have requested multiple permissions for contacts, so all of them need to be
             // checked.
             if (grantResults.length>0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
                 // All required permissions have been granted, display contacts fragment.
                 Toast.makeText(PlacesAutoCompleteActivity.this, "Permissions were granted.", Toast.LENGTH_SHORT).show();
                 showMyLocation();
@@ -430,6 +449,11 @@ progressDialog = new ProgressDialog(this);
 
 
     private void showMyLocation() {
+        if(!progressDialog.isShowing()) {
+            progressDialog.setMessage("fetching location...");
+            progressDialog.setIndeterminate(true);
+            progressDialog.show();
+        }
         final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (manager != null && !manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             buildAlertMessageNoGps();
@@ -452,11 +476,18 @@ progressDialog = new ProgressDialog(this);
                                 mCity = getCityFromAddress((String) likelyPlaces.get(0).getPlace().getAddress());
                                 mArea = getAreaFromAddress((String) likelyPlaces.get(0).getPlace().getAddress());
                                 mCompleteAddress = (String) likelyPlaces.get(0).getPlace().getAddress();
+                                mPlaceId =  likelyPlaces.get(0).getPlace().getId();
+                                String loc = String.valueOf(likelyPlaces.get(0).getPlace().getLatLng());
+                                getLAtLong(loc);
                                 selectedPlaceAdapter.insertItem(mCompleteAddress);
 
                                 userLocation = new UserLocation();
                                 userLocation.setArea(mArea);
                                 userLocation.setCity(mCity);
+                                userLocation.setLatitude(mLatitude);
+                                userLocation.setLongitude(mLongitude);
+                                userLocation.setPlaceId(mPlaceId);
+                                userLocation.setSearchString(mCompleteAddress);
                                 sendUserLocationRequest(userLocation);
                                 Log.i("TAG", String.format("Area =  '%s' & City = '%s' & Address = '%s' ",
                                         mArea, mCity, mCompleteAddress));

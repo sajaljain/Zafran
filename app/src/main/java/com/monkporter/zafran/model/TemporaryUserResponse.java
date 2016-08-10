@@ -8,8 +8,10 @@ import com.google.gson.annotations.SerializedName;
 public class TemporaryUserResponse {
     @SerializedName("UserID")
     private String userId;
-    @SerializedName("UserName")
-    private String userName;
+    @SerializedName("error")
+    private boolean error;
+    @SerializedName("message")
+    private String message;
 
     public String getUserId() {
         return userId;
@@ -19,11 +21,19 @@ public class TemporaryUserResponse {
         this.userId = userId;
     }
 
-    public String getUserName() {
-        return userName;
+    public boolean isError() {
+        return error;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setError(boolean error) {
+        this.error = error;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 }
