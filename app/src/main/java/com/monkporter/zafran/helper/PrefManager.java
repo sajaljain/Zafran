@@ -46,6 +46,15 @@ public class PrefManager {
     private static final String FIRST_TIME="firstTimeUser";
     private static final String IS_TEMP_USER = "isTempUser";
     private static final String DEVICE_REG_ID = "deviceRegId";
+    private static final String USER_LATITUDE = "mLatitude";
+    private static final String USER_LONGITUDE = "mLongitude";
+    private static final String USER_PLACEID = "mPlaceID";
+    private static final String LATITUDE = "latitude";
+    private static final String LONGITUDE = "longitude";
+    private static final String PLACEID = "placeid";
+    private static final String REF_SCRN = "pressExit";
+
+
 
     public PrefManager(Context context) {
         this._context = context;
@@ -61,6 +70,12 @@ public class PrefManager {
     public boolean isWaitingForSms() {
         return pref.getBoolean(KEY_IS_WAITING_FOR_SMS, false);
     }
+
+    public void pressExit(boolean press){
+        editor.putBoolean(REF_SCRN,press);
+        editor.commit();
+    }
+    public  boolean isExit(){return pref.getBoolean(REF_SCRN,false);}
 
     public void setMobileNumber(String mobileNumber) {
         editor.putString(KEY_MOBILE_NUMBER, mobileNumber);
@@ -107,6 +122,36 @@ public class PrefManager {
 
 
     }
+    public void saveLongitude(ArrayList<String> arrayList){
+
+        Gson gson = new Gson();
+        Type type = new TypeToken<ArrayList<String>>() {}.getType();
+        String json = gson.toJson(arrayList,type);
+        editor.putString(LONGITUDE,json);
+        editor.commit();
+
+
+    }
+    public void saveLatitude(ArrayList<String> arrayList){
+
+        Gson gson = new Gson();
+        Type type = new TypeToken<ArrayList<String>>() {}.getType();
+        String json = gson.toJson(arrayList,type);
+        editor.putString(LATITUDE,json);
+        editor.commit();
+
+
+    }
+    public void savePlaceId(ArrayList<String> arrayList){
+
+        Gson gson = new Gson();
+        Type type = new TypeToken<ArrayList<String>>() {}.getType();
+        String json = gson.toJson(arrayList,type);
+        editor.putString(PLACEID,json);
+        editor.commit();
+
+
+    }
     public ArrayList<String> getSaveLocations(){
         Gson gson = new Gson();
         String json = pref.getString(SELECTED_LOCATION, null);
@@ -115,13 +160,61 @@ public class PrefManager {
         return arrayList;
     }
 
+    public ArrayList<String> getSaveLatitude(){
+        Gson gson = new Gson();
+        String json = pref.getString(LATITUDE, null);
+        Type type = new TypeToken<ArrayList<String>>() {}.getType();
+        ArrayList<String> arrayList = gson.fromJson(json, type);
+        return arrayList;
+    }
+
+    public ArrayList<String> getSaveLongitude(){
+        Gson gson = new Gson();
+        String json = pref.getString(LONGITUDE, null);
+        Type type = new TypeToken<ArrayList<String>>() {}.getType();
+        ArrayList<String> arrayList = gson.fromJson(json, type);
+        return arrayList;
+    }
+
+    public ArrayList<String> getSavePlaceId(){
+        Gson gson = new Gson();
+        String json = pref.getString(PLACEID, null);
+        Type type = new TypeToken<ArrayList<String>>() {}.getType();
+        ArrayList<String> arrayList = gson.fromJson(json, type);
+        return arrayList;
+    }
+
+
+
     public void setUserCurrentLocation(String address){
         editor.putString(USER_CURRENT_LOCATION,address);
         editor.commit();
     }
 
+    public void setUserCurrentLatitude(String lat){
+        editor.putString(USER_LATITUDE,lat);
+        editor.commit();
+    }
+    public void setUserCurrentLongitude(String lon){
+        editor.putString(USER_LONGITUDE,lon);
+        editor.commit();
+    }
+    public void setUserCurrentPlaceId(String placeId){
+        editor.putString(USER_PLACEID,placeId);
+        editor.commit();
+    }
+
     public String getUserCurrentLocation(){
         return pref.getString(USER_CURRENT_LOCATION,null);
+    }
+    public String getUserCurrentLatitude(){
+        return pref.getString(USER_LATITUDE,null);
+    }
+    public String getUserCurrentLongitude(){
+        return pref.getString(USER_LONGITUDE,null);
+    }
+    public String getUserCurrentPlaceId(){
+        return pref.getString(USER_PLACEID,null);
     }
 
     public void setUserId(String userId){

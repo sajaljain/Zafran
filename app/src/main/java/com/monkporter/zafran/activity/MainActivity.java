@@ -74,13 +74,13 @@ public class MainActivity extends AppCompatActivity
     private ViewGroup viewGroup;
     List<Product> productsList;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        getBanner();
-        initSlider();
-        getProductsList();
+
+
         toolbarAddress = (TextView) findViewById(R.id.toolbar_address_id);
         PrefManager prefManager = new PrefManager(MainActivity.this);
         address = prefManager.getUserCurrentLocation();
@@ -90,7 +90,9 @@ public class MainActivity extends AppCompatActivity
         else{
             startActivity(new Intent(MainActivity.this,PlacesAutoCompleteActivity.class));
         }
-
+        getBanner();
+        initSlider();
+        getProductsList();
         initNavigationDrawer();
         setupToolbar();
 
@@ -258,6 +260,7 @@ public class MainActivity extends AppCompatActivity
 
     public void setupDrawerContent(NavigationView upDrawerContent) {
         Menu menu = navigationView.getMenu();
+
         SharedPreferences sharedPreferences = MainActivity.this.getSharedPreferences(getString(R.string.PREF_FILE),MODE_PRIVATE);
         login = sharedPreferences.getBoolean(getString(R.string.LOGIN),false);
         if(!login) {

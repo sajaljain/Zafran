@@ -53,6 +53,7 @@ import com.monkporter.zafran.adapter.SelectedPlacesAdapter;
 import com.monkporter.zafran.helper.PrefManager;
 import com.monkporter.zafran.model.Constants;
 import com.monkporter.zafran.model.RecyclerItemClickListener;
+import com.monkporter.zafran.model.UserDetailResponse;
 import com.monkporter.zafran.model.UserLocation;
 import com.monkporter.zafran.model.UserLocationResponse;
 import com.monkporter.zafran.rest.UserLocationApiClient;
@@ -89,7 +90,7 @@ public class PlacesAutoCompleteActivity extends AppCompatActivity implements Goo
     private String mArea = "", mCity = "", mCompleteAddress = "",mLatitude = "",mLongitude = "",mPlaceId = "";
     UserLocation userLocation = null;
     PrefManager prefManager;
-    ArrayList<String> mResultList;
+    ArrayList<String> mResultList,mLatList,mLongList,mPlaceIdList;
     private int cityId;
     private int areaId;
 
@@ -115,8 +116,15 @@ public class PlacesAutoCompleteActivity extends AppCompatActivity implements Goo
 progressDialog = new ProgressDialog(this);
        prefManager = new PrefManager(PlacesAutoCompleteActivity.this);
         mResultList = prefManager.getSaveLocations();
+        mLatList = prefManager.getSaveLatitude();
+        mLongList = prefManager.getSaveLongitude();
+        mPlaceIdList = prefManager.getSavePlaceId();
         if(mResultList == null){
             mResultList = new ArrayList<>();
+            mLatList = new ArrayList<>();
+            mLongList = new ArrayList<>();
+            mPlaceIdList = new ArrayList<>();
+
         }
 
         selectedPlaceAdapter = new SelectedPlacesAdapter(this,mResultList);
@@ -136,9 +144,15 @@ progressDialog = new ProgressDialog(this);
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
                 //Remove swiped item from list and notify the RecyclerView
+                mLatList.remove(viewHolder.getAdapterPosition());
+                mLongList.remove(viewHolder.getAdapterPosition());
+                mPlaceIdList.remove(viewHolder.getAdapterPosition());
                 mResultList.remove(viewHolder.getAdapterPosition());
                 prefManager.saveLocations(mResultList);
                 selectedPlaceAdapter.notifyDataSetChanged();
+                prefManager.saveLatitude(mLatList);
+                prefManager.saveLongitude(mLongList);
+                prefManager.savePlaceId(mPlaceIdList);
             }
         };
 
@@ -188,7 +202,9 @@ progressDialog = new ProgressDialog(this);
                         final PlacesAutoCompleteAdapter.PlaceAutocomplete item = mAutoCompleteAdapter.getItem(position);
                         final String placeId = String.valueOf(item.placeId);
                         Log.i("TAG", "Autocomplete item selected: " + item.description);
-                        selectedPlaceAdapter.insertItem((String) item.description);
+
+
+
                         /*
                              Issue a request to the Places Geo Data API to retrieve a Place object with additional details about the place.
                          */
@@ -201,9 +217,42 @@ progressDialog = new ProgressDialog(this);
                                 if (places.getCount() == 1) {
                                     //Do the things here on Click.....
                                     Toast.makeText(getApplicationContext(), String.valueOf(places.get(0).getLatLng()), Toast.LENGTH_SHORT).show();
-                                   if(mLatitude.equals("") && mLongitude.equals("")){
+                                   if(mLatitude.equals("") && mLongitude.equals("") && mCompleteAddress.equals("") && mPlaceId.equals("")){
                                         String loc= String.valueOf(places.get(0).getLatLng());
                                        getLAtLong(loc);
+                                       mCompleteAddress = (String) item.description;
+                                       mPlaceId = (String)item.placeId;
+
+                                       //  Log.i("UserLocation", "City: " + mCity);
+                                       //Log.i("UserLocation", "Area: " + mArea);
+                                       Log.i("UserLocation", "des: " + mCompleteAddress);
+
+
+
+                                       userLocation = new UserLocation();
+                                       //userLocation.setArea(mArea);
+                                       //userLocation.setCity(mCity);
+                                       userLocation.setLongitude(mLongitude);
+                                       userLocation.setLatitude(mLatitude);
+                                       userLocation.setPlaceId(mPlaceId);
+                                       userLocation.setSearchString(mCompleteAddress);
+                                       sendUserLocationRequest(userLocation);
+
+                                       Log.i("TAG", "Called getPlaceById to get Place details for " + item.placeId);
+                                       if(!mResultList.contains(mCompleteAddress)){
+                                           selectedPlaceAdapter.insertItem((String) item.description);
+                                           mLatList.add(mLatitude);
+                                           mPlaceIdList.add(mPlaceId);
+                                           mLongList.add(mLongitude);
+                                           prefManager.saveLatitude(mLatList);
+                                           prefManager.savePlaceId(mPlaceIdList);
+                                           prefManager.saveLongitude(mLongList);
+
+                                       }
+                                       Log.i("TAG", String.format("LAtitude =  '%s' & Longitude = '%s' & Placeid = '%s' ",
+                                               mLatList.get(0),mLongList.get(0),mPlaceIdList.get(0)));
+
+
                                 }
                                 } else {
                                     Toast.makeText(getApplicationContext(), Constants.SOMETHING_WENT_WRONG, Toast.LENGTH_SHORT).show();
@@ -211,58 +260,44 @@ progressDialog = new ProgressDialog(this);
                             }
                         });
                         Log.i("TAG", "Clicked: " + item.description);
-                        Log.i("TAG", "Clicked: " + item.area);
-                        Log.i("TAG", "Clicked: " + item.city);
-
-                        if(mCity.equals("") && mArea.equals("") && mCompleteAddress.equals("") && mPlaceId.equals("")){
-                            mCity = getCityFromAddress((String) item.description);
-                            mArea = getAreaFromAddress((String) item.description);
-                            mCompleteAddress = (String) item.description;
-                            mPlaceId = (String)item.placeId;
-
-                            Log.i("UserLocation", "City: " + mCity);
-                            Log.i("UserLocation", "Area: " + mArea);
-                            Log.i("UserLocation", "des: " + mCompleteAddress);
+                     //   Log.i("TAG", "Clicked: " + item.area);
+                      //  Log.i("TAG", "Clicked: " + item.city);
 
 
 
-                                userLocation = new UserLocation();
-                                userLocation.setArea(mArea);
-                                userLocation.setCity(mCity);
-                            sendUserLocationRequest(userLocation);
-
-                        }
-                        else{
-
-                            Log.i("TAG", String.format("Area =  '%s' & City = '%s' & Address = '%s' ",
-                                    mArea,mCity,mCompleteAddress));
-                        }
-
-                        Log.i("TAG", "Called getPlaceById to get Place details for " + item.placeId);
 
                     }
                 })
+
         );
+/////////////////////////////////////////////////////////////////////
+        ////////////////////
+        /////////////////
+        ///////////////////
 
         recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(this, new RecyclerItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 final String address = selectedPlaceAdapter.getItem(position);
-                if(mCity.equals("") && mArea.equals("") && mCompleteAddress.equals("")){
-                    mCity = getCityFromAddress(address);
-                    mArea = getAreaFromAddress(address);
+                if(mCompleteAddress.equals("") && mLatitude.equals("") && mLongitude.equals("") && mPlaceId.equals("")){
+                  //  mCity = getCityFromAddress(address);
+                  //  mArea = getAreaFromAddress(address);
                     mCompleteAddress = address;
+                        mLatitude = mLatList.get(position);
+                        mLongitude = mLongList.get(position);
+                        mPlaceId = mPlaceIdList.get(position);
 
-
-                    Log.i("UserLocation", "City: " + mCity);
-                    Log.i("UserLocation", "Area: " + mArea);
-                    Log.i("UserLocation", "des: " + mCompleteAddress);
+                   // Log.i("UserLocation", "City: " + mCity);
+                    //Log.i("UserLocation", "Area: " + mArea);
+                    Log.i("TAG", String.format("LAtitude =  '%s' & Longitude = '%s' & Placeid = '%s' ",
+                            mLatitude,mLongitude,mPlaceId));
 
 
 
                     userLocation = new UserLocation();
-                    userLocation.setArea(mArea);
-                    userLocation.setCity(mCity);
+                   // userLocation.setArea(mArea);
+                    //userLocation.setCity(mCity);
+
                     sendUserLocationRequest(userLocation);
                 }
                 else{
@@ -300,44 +335,49 @@ progressDialog = new ProgressDialog(this);
             progressDialog.show();
         }
         addressSendRequest = UserLocationApiClient.getClient().create(AddressSendRequest.class);
-        Call<UserLocationResponse> call = addressSendRequest.getResponseMessage(userLocation);
-        call.enqueue(new Callback<UserLocationResponse>() {
+        Call<UserDetailResponse> call = addressSendRequest.getResponseMessage(userLocation);
+        call.enqueue(new Callback<UserDetailResponse>() {
             @Override
-            public void onResponse(Call<UserLocationResponse> call, Response<UserLocationResponse> response) {
+            public void onResponse(Call<UserDetailResponse> call, Response<UserDetailResponse> response) {
                 int statuscode = response.code();
-                UserLocationResponse userLocationResponse = response.body();
-                Log.d("UserLocation","response status ="+userLocationResponse.getAreaId());
+                UserDetailResponse userLocationResponse = response.body();
+                Log.d(TAG,"UserLocation error ="+userLocationResponse.isError());
                 if (progressDialog.isShowing())
                     progressDialog.dismiss();
-                 cityId = userLocationResponse.getCityId();
-                 areaId = userLocationResponse.getAreaId();
-                Log.d("AreaID ="+areaId,"CityID ="+cityId);
-
-
-                if(areaId == 1 && cityId == 1) {
-                    String add = mArea + "," + mCity;
+                 //cityId = userLocationResponse.getCityId();
+                 //areaId = userLocationResponse.getAreaId();
+                Log.d(TAG,"User Location message ="+userLocationResponse.getMessage());
+                boolean error = userLocationResponse.isError();
+                if(!error) {
+                    String c = getCityFromAddress(mCompleteAddress);
+                    String a = getAreaFromAddress(mCompleteAddress);
+                    String add = "";
+                    if(a!=""&&c!="") {
+                        add = a + "," + c;
+                    }
+                    else{
+                        add = mCompleteAddress;
+                    }
                     PrefManager prefManager = new PrefManager(PlacesAutoCompleteActivity.this);
                     prefManager.setUserCurrentLocation(add);
+                    prefManager.setUserCurrentLatitude(mLatitude);
+                    prefManager.setUserCurrentLongitude(mLongitude);
+                    prefManager.setUserCurrentPlaceId(mPlaceId);
                     Intent intent = new Intent(PlacesAutoCompleteActivity.this, MainActivity.class);
                     startActivity(intent);
-                }
-                else if(areaId == -1 && cityId == 1){
-                    mRecyclerView.setVisibility(View.GONE);
-                    CommonMethod.showAlert("We are not operational in this Area. Please select another Area...",PlacesAutoCompleteActivity.this);
-                    mArea = mCity = mCompleteAddress = mLatitude = mLongitude = mPlaceId = "";
                 }
                 else{
                     mRecyclerView.setVisibility(View.GONE);
                     notOperatableLayout.setVisibility(View.VISIBLE);
-                    mArea = mCity = mCompleteAddress = mLatitude = mLongitude = mPlaceId = "";
+                    mCompleteAddress = mLatitude = mLongitude = mPlaceId = "";
                 }
             }
 
             @Override
-            public void onFailure(Call<UserLocationResponse> call, Throwable t) {
+            public void onFailure(Call<UserDetailResponse> call, Throwable t) {
                 if (progressDialog.isShowing())
                     progressDialog.dismiss();
-                Log.d("UserLocation","onFailure ="+t.getMessage());
+                Log.d(TAG,"UserLocation onFailure ="+t.getMessage());
                 startActivity(new Intent(PlacesAutoCompleteActivity.this,Refresh.class));
 
             }
@@ -449,11 +489,7 @@ progressDialog = new ProgressDialog(this);
 
 
     private void showMyLocation() {
-        if(!progressDialog.isShowing()) {
-            progressDialog.setMessage("fetching location...");
-            progressDialog.setIndeterminate(true);
-            progressDialog.show();
-        }
+
         final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (manager != null && !manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             buildAlertMessageNoGps();
@@ -464,6 +500,11 @@ progressDialog = new ProgressDialog(this);
             }
 
             if (CommonMethod.isNetworkAvailable(PlacesAutoCompleteActivity.this)) {
+                if(!progressDialog.isShowing()) {
+                    progressDialog.setMessage("fetching location...");
+                    progressDialog.setIndeterminate(true);
+                    progressDialog.show();
+                }
                 PendingResult<PlaceLikelihoodBuffer> result = Places.PlaceDetectionApi
                         .getCurrentPlace(mGoogleApiClient, null);
 
@@ -472,9 +513,10 @@ progressDialog = new ProgressDialog(this);
                     @Override
                     public void onResult(PlaceLikelihoodBuffer likelyPlaces) {
                         if (likelyPlaces.getCount() > 0) {
-                            if (mCity.equals("") && mArea.equals("") && mCompleteAddress.equals("")) {
-                                mCity = getCityFromAddress((String) likelyPlaces.get(0).getPlace().getAddress());
-                                mArea = getAreaFromAddress((String) likelyPlaces.get(0).getPlace().getAddress());
+                            if (mCompleteAddress.equals("") && mLatitude.equals("") && mLongitude.equals("")
+                                    && mPlaceId.equals("")) {
+                             //   mCity = getCityFromAddress((String) likelyPlaces.get(0).getPlace().getAddress());
+                               // mArea = getAreaFromAddress((String) likelyPlaces.get(0).getPlace().getAddress());
                                 mCompleteAddress = (String) likelyPlaces.get(0).getPlace().getAddress();
                                 mPlaceId =  likelyPlaces.get(0).getPlace().getId();
                                 String loc = String.valueOf(likelyPlaces.get(0).getPlace().getLatLng());
@@ -482,28 +524,28 @@ progressDialog = new ProgressDialog(this);
                                 selectedPlaceAdapter.insertItem(mCompleteAddress);
 
                                 userLocation = new UserLocation();
-                                userLocation.setArea(mArea);
-                                userLocation.setCity(mCity);
+                             //   userLocation.setArea(mArea);
+                               // userLocation.setCity(mCity);
                                 userLocation.setLatitude(mLatitude);
                                 userLocation.setLongitude(mLongitude);
                                 userLocation.setPlaceId(mPlaceId);
                                 userLocation.setSearchString(mCompleteAddress);
+                                if(!mResultList.contains(mCompleteAddress)){
+                                        mLatList.add(mLatitude);
+                                        mPlaceIdList.add(mPlaceId);
+                                        mLongList.add(mLongitude);
+                                }
                                 sendUserLocationRequest(userLocation);
-                                Log.i("TAG", String.format("Area =  '%s' & City = '%s' & Address = '%s' ",
-                                        mArea, mCity, mCompleteAddress));
-                            } else {
-
-                                Log.i("TAG", String.format("Area =  '%s' & City = '%s' & Address = '%s' ",
-                                        mArea, mCity, mCompleteAddress));
+                              //  Log.i("TAG", String.format("Area =  '%s' & City = '%s' & Address = '%s' ",
+                                //        mArea, mCity, mCompleteAddress));
                             }
-
                             Log.i("TAG", String.format("Place '%s' is",
                                     likelyPlaces.get(0).getPlace().getAddress()));
 
                             likelyPlaces.release();
                         }
                         else{
-                           // CommonMethod.showAlert("It seems that you are not connected to Internet.Please check your Internet Connection and then continue.",PlacesAutoCompleteActivity.this);
+                          // CommonMethod.showAlert("It seems that you are not connected to Internet.Please check your Internet Connection and then continue.",PlacesAutoCompleteActivity.this);
                             startActivity(new Intent(PlacesAutoCompleteActivity.this,Refresh.class));
                         }
                     }
