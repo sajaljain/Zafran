@@ -1,5 +1,6 @@
 package com.monkporter.zafran.activity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -21,6 +22,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -67,6 +69,7 @@ public class MainActivity extends AppCompatActivity
     private StaggeredGridLayoutManager staggeredGridLayoutManager;
     private RecyclerView recyclerView;
     View v;
+    ProgressDialog progressDialog;
     TextView toolbarAddress;
     String address = null;
     private boolean login;
@@ -80,7 +83,8 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setCancelable(false);
 
         toolbarAddress = (TextView) findViewById(R.id.toolbar_address_id);
         PrefManager prefManager = new PrefManager(MainActivity.this);
@@ -303,6 +307,10 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onResume(){
         super.onResume();
+        if(!progressDialog.isShowing()) {
+            progressDialog.setMessage("Fetching Products...");
+            progressDialog.show();;
+        }
         Log.d(TAG,"Resume");
         sliderShow.startAutoCycle();
         getBanner();
@@ -401,6 +409,8 @@ public class MainActivity extends AppCompatActivity
                     Log.d("Product Response","error ="+getProducts.isError());
                     productsList = getProducts.getProducts();
                 }
+                if(progressDialog.isShowing())
+                    progressDialog.dismiss();
                 productsAdapter = new ProductsAdapter(MainActivity.this, productsList);
                 recyclerView.setAdapter(productsAdapter);
 
@@ -408,6 +418,8 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public void onFailure(Call<GetProducts> call, Throwable t) {
+                if(progressDialog.isShowing())
+                    progressDialog.dismiss();
                 startActivity(new Intent(MainActivity.this,Refresh.class));
             }
         });
