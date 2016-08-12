@@ -111,7 +111,7 @@ public class FetchLocationActivity extends AppCompatActivity
         btnSelAnotherLoc.setOnClickListener(this);
 
         myLocationLayout = (LinearLayout) findViewById(R.id.my_location_lin);
-        layoutNonOpCity = (LinearLayout) findViewById(R.id.layout_non_operatable_city);
+       // layoutNonOpCity = (LinearLayout) findViewById(R.id.layout_non_operatable_city);
         layoutEnterArea = (LinearLayout) findViewById(R.id.layout_enter_area);
         myLocationLayout.setOnClickListener(this);
 

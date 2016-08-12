@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/search_place_id"
     android:background="#FFF"
-
     >
 
     <LinearLayout
@@ -111,58 +117,9 @@
         android:layout_below="@+id/linear_layout_id"
         android:scrollbars="vertical" />
 
-    <LinearLayout
-        android:id="@+id/layout_non_operatable_city"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/toolbar"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:visibility="gone">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="10"
-            android:background="@color/white"
-            android:elevation="10dp"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:gravity="center"
-                android:text="SORRY!!"
-                android:textColor="@color/darker_gray"
-                android:textSize="80dp" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:gravity="center"
-                android:text="We do not have any associated partner in your area.
-
-We will soon be in your area to serve you with best of our services."
-                android:textSize="10pt" />
-
-        </LinearLayout>
-
-        <Button
-            android:id="@+id/btn_select_another_location"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
-            android:padding="5dp"
-            android:text="Select Another Location"
-            android:textColor="@color/white"
-            android:textSize="15dp" />
+</RelativeLayout>
+    <include layout="@layout/not_operatable_layout"
+        android:id="@+id/not_operatable_layout_id">
+    </include>
 
     </LinearLayout>
-
-
-
-
-</RelativeLayout>

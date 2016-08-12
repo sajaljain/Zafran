@@ -21,6 +21,7 @@ import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -28,10 +29,12 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -81,6 +84,7 @@ public class PlacesAutoCompleteActivity extends AppCompatActivity implements Goo
 
     private EditText mAutocompleteView;
     private RecyclerView mRecyclerView, recyclerView;
+    private RelativeLayout searchPlace;
     private LinearLayoutManager mLinearLayoutManager, linearLayoutManager;
     private PlacesAutoCompleteAdapter mAutoCompleteAdapter;
     ImageView delete;
@@ -93,7 +97,7 @@ public class PlacesAutoCompleteActivity extends AppCompatActivity implements Goo
     ArrayList<String> mResultList,mLatList,mLongList,mPlaceIdList;
     private int cityId;
     private int areaId;
-
+    View view;
     ProgressDialog progressDialog;
     Button selectAnotherLocation;
     public PlacesAutoCompleteActivity() {
@@ -104,17 +108,22 @@ public class PlacesAutoCompleteActivity extends AppCompatActivity implements Goo
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
         buildGoogleApiClient();
+        Toolbar toolbar = (Toolbar) findViewById(R.id.not_operatable_toolbar);
+        setSupportActionBar(toolbar);
         cardView = (CardView) findViewById(R.id.current_location_id);
         cardView.setOnClickListener(this);
         mAutocompleteView = (EditText) findViewById(R.id.autocomplete_places);
         delete = (ImageView) findViewById(R.id.cross);
-        notOperatableLayout = (LinearLayout) findViewById(R.id.layout_non_operatable_city);
+
+        searchPlace = (RelativeLayout) findViewById(R.id.search_place_id);
+        notOperatableLayout = (LinearLayout) findViewById(R.id.not_operatable_layout_id);
         selectAnotherLocation = (Button) findViewById(R.id.btn_select_another_location);
         selectAnotherLocation.setOnClickListener(this);
         mAutoCompleteAdapter = new PlacesAutoCompleteAdapter(this, R.layout.searchview_adapter,
                 mGoogleApiClient, BOUNDS_INDIA, null);
-progressDialog = new ProgressDialog(this);
-       prefManager = new PrefManager(PlacesAutoCompleteActivity.this);
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setCancelable(false);
+        prefManager = new PrefManager(PlacesAutoCompleteActivity.this);
         mResultList = prefManager.getSaveLocations();
         mLatList = prefManager.getSaveLatitude();
         mLongList = prefManager.getSaveLongitude();
@@ -238,20 +247,20 @@ progressDialog = new ProgressDialog(this);
                                        userLocation.setSearchString(mCompleteAddress);
                                        sendUserLocationRequest(userLocation);
 
-                                       Log.i("TAG", "Called getPlaceById to get Place details for " + item.placeId);
+                                       Log.i("TAG", "Called getPlaceByIdSajal to get Place details for " + item.placeId);
                                        if(!mResultList.contains(mCompleteAddress)){
                                            selectedPlaceAdapter.insertItem((String) item.description);
-                                           mLatList.add(mLatitude);
-                                           mPlaceIdList.add(mPlaceId);
-                                           mLongList.add(mLongitude);
+                                           mLatList.add(0,mLatitude);
+                                           mPlaceIdList.add(0,mPlaceId);
+                                           mLongList.add(0,mLongitude);
                                            prefManager.saveLatitude(mLatList);
                                            prefManager.savePlaceId(mPlaceIdList);
                                            prefManager.saveLongitude(mLongList);
 
                                        }
 
-                                       Log.i("TAG", String.format("LAtitude =  '%s' & Longitude = '%s' & Placeid = '%s' ",
-                                               mLatList.get(0),mLongList.get(0),mPlaceIdList.get(0)));
+                                       Log.i("TAG", String.format("LAtitude Sajal =  '%s' & Longitude = '%s' & Placeid = '%s' ",
+                                               mLatitude,mLongitude,mPlaceId));
 
 
                                 }
@@ -372,10 +381,19 @@ progressDialog = new ProgressDialog(this);
                     prefManager.setUserCurrentLongitude(mLongitude);
                     prefManager.setUserCurrentPlaceId(mPlaceId);
                     Intent intent = new Intent(PlacesAutoCompleteActivity.this, MainActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     startActivity(intent);
                 }
                 else{
-                    mRecyclerView.setVisibility(View.GONE);
+                  //  mRecyclerView.setVisibility(View.GONE);
+                    searchPlace.setVisibility(View.GONE);
+                    view = PlacesAutoCompleteActivity.this.getCurrentFocus();
+                    if(view != null){
+                        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(view.getWindowToken(),InputMethodManager.HIDE_IMPLICIT_ONLY);
+                    }
                     notOperatableLayout.setVisibility(View.VISIBLE);
                     mCompleteAddress = mLatitude = mLongitude = mPlaceId = "";
                 }
@@ -448,6 +466,7 @@ progressDialog = new ProgressDialog(this);
     }
 
     private void changeLocation() {
+        searchPlace.setVisibility(View.VISIBLE);
         notOperatableLayout.setVisibility(View.GONE);
     }
 
@@ -540,9 +559,9 @@ progressDialog = new ProgressDialog(this);
                                 userLocation.setSearchString(mCompleteAddress);
                                 if(!mResultList.contains(mCompleteAddress)){
                                     selectedPlaceAdapter.insertItem(mCompleteAddress);
-                                        mLatList.add(mLatitude);
-                                        mPlaceIdList.add(mPlaceId);
-                                        mLongList.add(mLongitude);
+                                        mLatList.add(0,mLatitude);
+                                        mPlaceIdList.add(0,mPlaceId);
+                                        mLongList.add(0,mLongitude);
                                     prefManager.saveLongitude(mLongList);
                                     prefManager.saveLatitude(mLatList);
                                     prefManager.savePlaceId(mPlaceIdList);
@@ -550,6 +569,10 @@ progressDialog = new ProgressDialog(this);
                                 sendUserLocationRequest(userLocation);
                               //  Log.i("TAG", String.format("Area =  '%s' & City = '%s' & Address = '%s' ",
                                 //        mArea, mCity, mCompleteAddress));
+                            }else {
+                                if (progressDialog.isShowing())
+                                    progressDialog.dismiss();
+                                Log.d(TAG,"variables already set");
                             }
                             Log.i("TAG", String.format("Place '%s' is",
                                     likelyPlaces.get(0).getPlace().getAddress()));
@@ -611,6 +634,12 @@ progressDialog = new ProgressDialog(this);
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        Intent intent = new Intent(PlacesAutoCompleteActivity.this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        startActivity(intent);
+        finish();
     }
 
     protected void onStart() {

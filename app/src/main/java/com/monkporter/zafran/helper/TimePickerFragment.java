@@ -27,7 +27,7 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
         int minute = c.get(Calendar.MINUTE);
 
         // Create a new instance of TimePickerDialog and return it
-        return new TimePickerDialog(getActivity(), this, hour, minute,
+        return new TimePickerDialog(getActivity(),R.style.MyTimePickerDialogTheme, this, hour, minute,
                 false);
     }
 
@@ -35,12 +35,17 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
 
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+        String min = "";
+        if(minute < 10)
+            min = "0"+minute;
+        else
+        min = ""+minute;
         if (hourOfDay > 12) {
             hourOfDay -= 12;
-             time = hourOfDay+":"+minute+" PM";
+             time = hourOfDay+":"+min+" PM";
         }
         else {
-            time = hourOfDay + ":" + minute+" AM";
+            time = hourOfDay + ":" + min+" AM";
         }
        timePick.setText(time);
     }

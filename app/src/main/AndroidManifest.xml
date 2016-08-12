@@ -26,11 +26,14 @@
             android:value="AIzaSyACau6bKSGStVsPrN8rKggXVVFI3ySAKIs" />
 
         <activity android:name=".activity.Splash">
+
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
 
         </activity>
         <activity
@@ -111,7 +114,9 @@
             android:label="SmsActivity"
             android:theme="@style/AppTheme"></activity>
         <activity android:name=".activity.CheckoutScreen"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppTheme"
+            android:label="Checkout">
+
 
 
         </activity>

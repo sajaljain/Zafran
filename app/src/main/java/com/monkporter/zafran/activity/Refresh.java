@@ -51,6 +51,7 @@ public class Refresh extends AppCompatActivity {
         if(!pressExit){
             Toast.makeText(Refresh.this, "Press Back again to Exit.", Toast.LENGTH_SHORT).show();
             pref.pressExit(true);
+
             Intent launchNextActivity;
             launchNextActivity = new Intent(this,Refresh.class);
             launchNextActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

@@ -15,5 +15,9 @@
         <item name="colorControlActivated">@color/colorPrimary</item>
     </style>
 
+    <style name="MyTimePickerDialogTheme" parent="android:Theme.Material.Light.Dialog">
+    <item name="android:colorAccent">@color/colorPrimary</item>
+    </style>
+
     <color name="duskYellow">#FFDF00</color>
 </resources>

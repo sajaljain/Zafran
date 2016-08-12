@@ -238,7 +238,7 @@ We will soon be in your area to serve you with best of our services."
             </LinearLayout>
 
             <Button
-                android:id="@+id/btn_select_another_location"
+                android:id="@+id/btn_select_another_location1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/colorPrimary"
