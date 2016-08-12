@@ -12,6 +12,6 @@ import retrofit2.http.POST;
  * Created by Vaibhav on 7/6/2016.
  */
 public interface AddressSendRequest {
-    @POST("zafran/read/address_search.php?userid=3420&location=%22Sector")
+    @POST("zafran/read/availability.php")
     Call<UserDetailResponse> getResponseMessage(@Body UserLocation userLocation);
 }

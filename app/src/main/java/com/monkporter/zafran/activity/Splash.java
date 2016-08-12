@@ -63,7 +63,7 @@ public class Splash extends AppCompatActivity {
     String emailID;
     ProgressBar pb;
     PrefManager prefManager;
-    String userId;
+    int userId;
     private Handler mHandler = new Handler();
     boolean userType;
     @Override
@@ -75,11 +75,11 @@ public class Splash extends AppCompatActivity {
         //progressDialog.setIndeterminate(true);
         //progressDialog.setMessage("Loading...");
         //progressDialog.show();
-        if (Build.VERSION.SDK_INT < 23) {
+     /*   if (Build.VERSION.SDK_INT < 23) {
             requestCalls();
         }else{
             permissionCheck();
-        }
+        }*/
 
 
 
@@ -99,7 +99,7 @@ public class Splash extends AppCompatActivity {
         if(emailID == null)
             emailID = "";
         userId = prefManager.getUserId();
-        if(userId == null) {
+        if(userId == -1) {
             TemporaryUser temporaryUser = new TemporaryUser();
             temporaryUser.setRegistrationChannelTypeID(0);
             temporaryUser.setCell("");
@@ -160,6 +160,7 @@ public class Splash extends AppCompatActivity {
         //}
 
         if(prefManager.getDeviceRegId() == null) {
+            Log.d(TAG,"Fcm = null");
             prefManager.setDeviceRegId(dveiceRegistrationToken);
         }
         else if(dveiceRegistrationToken != prefManager.getDeviceRegId()){
@@ -192,7 +193,7 @@ public class Splash extends AppCompatActivity {
             });
 
         }
-        if(userId != null){
+        if(userId != -1){
             new Thread(new Runnable() {  @Override
             public void run() {
                 try {
@@ -277,4 +278,16 @@ requestCalls();
         }
         return true;
     }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        Log.d(TAG,"Resume");
+        if (Build.VERSION.SDK_INT < 23) {
+            requestCalls();
+        }else{
+            permissionCheck();
+        }
+    }
+
 }

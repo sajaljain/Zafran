@@ -90,9 +90,9 @@ public class MainActivity extends AppCompatActivity
         else{
             startActivity(new Intent(MainActivity.this,PlacesAutoCompleteActivity.class));
         }
-        getBanner();
+     //   getBanner();
         initSlider();
-        getProductsList();
+      //  getProductsList();
         initNavigationDrawer();
         setupToolbar();
 
@@ -300,10 +300,13 @@ public class MainActivity extends AppCompatActivity
             super.onBackPressed();
         }
     }
-@Override
+    @Override
     public void onResume(){
         super.onResume();
+        Log.d(TAG,"Resume");
         sliderShow.startAutoCycle();
+        getBanner();
+        getProductsList();
     }
 
 

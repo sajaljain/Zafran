@@ -217,12 +217,12 @@ public class PrefManager {
         return pref.getString(USER_PLACEID,null);
     }
 
-    public void setUserId(String userId){
-        editor.putString(USER_ID,userId);
+    public void setUserId(int userId){
+        editor.putInt(USER_ID,userId);
         editor.commit();
     }
-    public String getUserId(){
-        return pref.getString(USER_ID,null);
+    public int getUserId(){
+        return pref.getInt(USER_ID,-1);
     }
     public void setUsername(String username){
         editor.putString(USERNAME,username);

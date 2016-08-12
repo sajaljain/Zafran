@@ -249,6 +249,7 @@ progressDialog = new ProgressDialog(this);
                                            prefManager.saveLongitude(mLongList);
 
                                        }
+
                                        Log.i("TAG", String.format("LAtitude =  '%s' & Longitude = '%s' & Placeid = '%s' ",
                                                mLatList.get(0),mLongList.get(0),mPlaceIdList.get(0)));
 
@@ -297,6 +298,10 @@ progressDialog = new ProgressDialog(this);
                     userLocation = new UserLocation();
                    // userLocation.setArea(mArea);
                     //userLocation.setCity(mCity);
+                    userLocation.setLatitude(mLatitude);
+                    userLocation.setLongitude(mLongitude);
+                    userLocation.setPlaceId(mPlaceId);
+                    userLocation.setSearchString(mCompleteAddress);
 
                     sendUserLocationRequest(userLocation);
                 }
@@ -334,6 +339,9 @@ progressDialog = new ProgressDialog(this);
             progressDialog.setIndeterminate(true);
             progressDialog.show();
         }
+        Log.d(TAG,"UserLocation Request ------>");
+        Log.i(TAG,String.format("Latitude = %s, Longitude = %s, PlaceId = %s, SearchString = %s",userLocation.getLatitude(),
+                userLocation.getLongitude(),userLocation.getPlaceId(),userLocation.getSearchString()));
         addressSendRequest = UserLocationApiClient.getClient().create(AddressSendRequest.class);
         Call<UserDetailResponse> call = addressSendRequest.getResponseMessage(userLocation);
         call.enqueue(new Callback<UserDetailResponse>() {
@@ -521,7 +529,7 @@ progressDialog = new ProgressDialog(this);
                                 mPlaceId =  likelyPlaces.get(0).getPlace().getId();
                                 String loc = String.valueOf(likelyPlaces.get(0).getPlace().getLatLng());
                                 getLAtLong(loc);
-                                selectedPlaceAdapter.insertItem(mCompleteAddress);
+
 
                                 userLocation = new UserLocation();
                              //   userLocation.setArea(mArea);
@@ -531,9 +539,13 @@ progressDialog = new ProgressDialog(this);
                                 userLocation.setPlaceId(mPlaceId);
                                 userLocation.setSearchString(mCompleteAddress);
                                 if(!mResultList.contains(mCompleteAddress)){
+                                    selectedPlaceAdapter.insertItem(mCompleteAddress);
                                         mLatList.add(mLatitude);
                                         mPlaceIdList.add(mPlaceId);
                                         mLongList.add(mLongitude);
+                                    prefManager.saveLongitude(mLongList);
+                                    prefManager.saveLatitude(mLatList);
+                                    prefManager.savePlaceId(mPlaceIdList);
                                 }
                                 sendUserLocationRequest(userLocation);
                               //  Log.i("TAG", String.format("Area =  '%s' & City = '%s' & Address = '%s' ",
@@ -545,6 +557,8 @@ progressDialog = new ProgressDialog(this);
                             likelyPlaces.release();
                         }
                         else{
+                            if (progressDialog.isShowing())
+                                progressDialog.dismiss();
                           // CommonMethod.showAlert("It seems that you are not connected to Internet.Please check your Internet Connection and then continue.",PlacesAutoCompleteActivity.this);
                             startActivity(new Intent(PlacesAutoCompleteActivity.this,Refresh.class));
                         }

@@ -11,6 +11,6 @@ import retrofit2.http.POST;
  * Created by Vaibhav on 7/21/2016.
  */
 public interface TempUserRequest {
-    @POST("zafran/create/user.php")
-    Call<TemporaryUserResponse> getResponse(@Body TemporaryUser temporayUser);
+    @POST("zafran/create/tempuser.php")
+    Call<TemporaryUserResponse> getResponse(@Body TemporaryUser temporaryUser);
 }

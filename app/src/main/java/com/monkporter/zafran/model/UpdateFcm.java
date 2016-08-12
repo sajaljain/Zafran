@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName;
  */
 public class UpdateFcm {
     @SerializedName("UserID")
-    private String userId;
+    private int userId;
     @SerializedName("DeviceRegesterationID")
     private String deviceRegesterationId;
 
@@ -19,11 +19,11 @@ public class UpdateFcm {
         this.deviceRegesterationId = deviceRegesterationId;
     }
 
-    public String getUserId() {
+    public int getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(int userId) {
         this.userId = userId;
     }
 }

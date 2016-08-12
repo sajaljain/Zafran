@@ -34,6 +34,7 @@ public class Refresh extends AppCompatActivity {
         call.enqueue(new Callback<CheckConnection>() {
             @Override
             public void onResponse(Call<CheckConnection> call, Response<CheckConnection> response) {
+                Log.d("Connection ","established");
                 finish();
             }
 
