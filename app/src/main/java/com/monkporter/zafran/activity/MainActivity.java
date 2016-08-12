@@ -70,6 +70,7 @@ public class MainActivity extends AppCompatActivity
     TextView toolbarAddress;
     String address = null;
     private boolean login;
+    ProductsAdapter productsAdapter;
     GetBanner getBanner;
     private ViewGroup viewGroup;
     List<Product> productsList;
@@ -114,19 +115,18 @@ public class MainActivity extends AppCompatActivity
         recyclerView.setHasFixedSize(true);
         staggeredGridLayoutManager = new StaggeredGridLayoutManager(2, 1);
         recyclerView.setLayoutManager(staggeredGridLayoutManager);
-        List<Products> productsList = getListItemData();
-        final ProductsAdapter productsAdapter = new ProductsAdapter(MainActivity.this, productsList);
-        recyclerView.setAdapter(productsAdapter);
+       // List<Product> productsList = getProductsList();
+
         recyclerView.addOnItemTouchListener( new RecyclerItemClickListener(MainActivity.this, new RecyclerItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 Intent intent = new Intent(MainActivity.this,OrderItemListMainActivity.class);
-                Products products;
+                Product products;
                 products = productsAdapter.getItem(position);
-                int teaImgId = products.getThumbnail();
-                String teaName = products.getName();
+                String teaImgId = products.getImageUrl();
+                String teaName = products.getProductName();
                 Bundle extras = new Bundle();
-                extras.putInt("TEA_IMAGE_ID",teaImgId);
+                extras.putString("TEA_IMAGE_ID",teaImgId);
                 extras.putString("TEA_NAME",teaName);
                 intent.putExtras(extras);
                 startActivity(intent);
@@ -170,7 +170,7 @@ public class MainActivity extends AppCompatActivity
                     Log.d("Get Banner", "error =" + error);
 
                     int size = getBanner.getBanners().size();
-                    Toast.makeText(MainActivity.this, "" + size, Toast.LENGTH_SHORT).show();
+                 //   Toast.makeText(MainActivity.this, "" + size, Toast.LENGTH_SHORT).show();
                     for (Banner banner : getBanner.getBanners()) {
 
                         sliderBanner.put(banner.getBannerHead(), banner.getBannerUrl());
@@ -401,6 +401,8 @@ public class MainActivity extends AppCompatActivity
                     Log.d("Product Response","error ="+getProducts.isError());
                     productsList = getProducts.getProducts();
                 }
+                productsAdapter = new ProductsAdapter(MainActivity.this, productsList);
+                recyclerView.setAdapter(productsAdapter);
 
             }
 

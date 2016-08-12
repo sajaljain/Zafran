@@ -28,6 +28,7 @@ import android.widget.TextView;
 import com.monkporter.zafran.R;
 import com.monkporter.zafran.adapter.ItemListAdapter;
 import com.monkporter.zafran.model.OrderItem;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +40,7 @@ public class OrderItemListMainActivity extends AppCompatActivity {
     private TextView cartPrice,cartQuantity;
     private View cartBar;
     String teaName;
-    int teaImageId;
+    String teaImageId;
     private ShareActionProvider mShareActionProvider;
     LinearLayout checkout;
 
@@ -52,10 +53,11 @@ public class OrderItemListMainActivity extends AppCompatActivity {
 
         Bundle extras = getIntent().getExtras();
         teaName = extras.getString("TEA_NAME");
-        teaImageId = extras.getInt("TEA_IMAGE_ID");
+        teaImageId = extras.getString("TEA_IMAGE_ID");
         toolbar.setTitle(teaName);
         ImageView toolbarImage = (ImageView) findViewById(R.id.backdrop);
-        toolbarImage.setImageResource(teaImageId);
+        Picasso.with(OrderItemListMainActivity.this).load(teaImageId).into(toolbarImage);
+        //toolbarImage.setImageResource(teaImageId);
        final CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
         collapsingToolbarLayout.setTitle(teaName);
 

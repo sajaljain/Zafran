@@ -15,7 +15,9 @@ import com.monkporter.zafran.R;
 import com.monkporter.zafran.activity.MainActivity;
 import com.monkporter.zafran.activity.OrderItemListMainActivity;
 import com.monkporter.zafran.activity.PlacesAutoCompleteActivity;
+import com.monkporter.zafran.model.Product;
 import com.monkporter.zafran.model.Products;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -23,9 +25,9 @@ import java.util.List;
  * Created by Sajal on 26-May-16.
  */
 public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHolder> {
-    private List<Products> products;
+    private List<Product> products;
     private Context context;
-    public ProductsAdapter(Context context, List<Products> productsList) {
+    public ProductsAdapter(Context context, List<Product> productsList) {
         this.products = productsList;
         this.context = context;
     }
@@ -39,16 +41,19 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.prodName.setText(products.get(position).getName());
-        holder.prodDetail.setText(products.get(position).getDesc());
-        holder.prodThumbnail.setImageResource(products.get(position).getThumbnail());
+
+
+        holder.prodName.setText(products.get(position).getProductName());
+        holder.prodDetail.setText(products.get(position).getProductSummary());
+        Picasso.with(context).load(products.get(position).getImageUrl()).into(holder.prodThumbnail);
+       // holder.prodThumbnail.setImageResource(Integer.parseInt(products.get(position).getImageUrl()));
     }
 
     @Override
     public int getItemCount() {
         return this.products.size();
     }
-    public Products getItem(int positions){
+    public Product getItem(int positions){
         return products.get(positions);
     }
 
