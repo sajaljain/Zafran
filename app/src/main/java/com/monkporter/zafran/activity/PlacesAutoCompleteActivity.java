@@ -135,7 +135,6 @@ public class PlacesAutoCompleteActivity extends AppCompatActivity implements Goo
             mPlaceIdList = new ArrayList<>();
 
         }
-
         selectedPlaceAdapter = new SelectedPlacesAdapter(this,mResultList);
         recyclerView = (RecyclerView) findViewById(R.id.RecyclerViewID);
         linearLayoutManager = new LinearLayoutManager(this);

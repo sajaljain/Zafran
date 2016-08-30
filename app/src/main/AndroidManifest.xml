@@ -26,13 +26,12 @@
             android:value="AIzaSyACau6bKSGStVsPrN8rKggXVVFI3ySAKIs" />
 
         <activity android:name=".activity.Splash">
-
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
 
 
         </activity>
@@ -57,9 +56,12 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-        <service android:name=".pushnotification.MyFirebaseInstanceIDService">
+
+
+
+        <service android:name=".pushnotification.MyFirebaseInstanceIDService" android:exported="true">
             <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
             </intent-filter>
         </service>
 
@@ -88,9 +90,7 @@
             android:theme="@style/AppTheme" />
         <activity android:name=".activity.PlacesAutoCompleteActivity" >
 
-
-
-            </activity>
+        </activity>
         <activity
             android:name=".activity.DeliveryAddress"
             android:label="Delivery Address"

@@ -1,6 +1,8 @@
 package com.monkporter.zafran;
 
 import android.app.Application;
+import android.content.Context;
+import android.support.multidex.MultiDex;
 import android.util.Log;
 /**
  * Created by Sajal on 25-Mar-16.
@@ -14,6 +16,12 @@ public class Zafran extends Application {
 
 
     }
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
+    }
+
 
     public static synchronized Zafran getInstance() {
         Log.i(TAG, "getInstance =" + mInstance);

@@ -8,15 +8,15 @@ import com.google.gson.annotations.SerializedName;
 public class UpdateFcm {
     @SerializedName("UserID")
     private int userId;
-    @SerializedName("DeviceRegesterationID")
-    private String deviceRegesterationId;
+    @SerializedName("DeviceRegistrationID")
+    private String deviceRegistrationId;
 
-    public String getDeviceRegesterationId() {
-        return deviceRegesterationId;
+    public String getDeviceRegistrationId() {
+        return deviceRegistrationId;
     }
 
-    public void setDeviceRegesterationId(String deviceRegesterationId) {
-        this.deviceRegesterationId = deviceRegesterationId;
+    public void setDeviceRegistrationId(String deviceRegistrationId) {
+        this.deviceRegistrationId = deviceRegistrationId;
     }
 
     public int getUserId() {

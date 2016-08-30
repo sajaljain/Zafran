@@ -69,78 +69,10 @@ public class CommonMethod {
             NetworkInfo info = connectivity.getActiveNetworkInfo();
             if (info != null) {
                 return true;
-            } else{
-             return  false;
-            }
-        }
-    }
-
-
-
-
-
-    public static int calculateInSampleSize(BitmapFactory.Options options,
-                                            int reqWidth, int reqHeight) {
-
-        final int height = options.outHeight;
-        final int width = options.outWidth;
-        int inSampleSize = 1;
-
-        if (height > reqHeight || width > reqWidth) {
-            if (width > height) {
-                inSampleSize = Math.round((float) height / (float) reqHeight);
             } else {
-                inSampleSize = Math.round((float) width / (float) reqWidth);
+                return false;
             }
         }
-        return inSampleSize;
     }
 
-
-
-
-
-
-
-
-    public static String getFilename(String fileName) {
-        File file = new File(Environment.getExternalStorageDirectory().getPath(), "Welnus");
-
-        if (!file.exists()) {
-            file.mkdirs();
-        }
-        String uriSting = (file.getAbsolutePath() + "/" + fileName);
-        return uriSting;
-    }
-
-    public static String getRealPathFromURI(String contentURI) {
-        Uri contentUri = Uri.parse(contentURI);
-        Cursor cursor = mcontext.getContentResolver().query(contentUri, null, null, null, null);
-        if (cursor == null) {
-            return contentUri.getPath();
-        } else {
-            cursor.moveToFirst();
-            int index = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
-            return cursor.getString(index);
-        }
-    }
-
-
-
-    public static void cleanDeviceData() {
-     /*   // Clean temporary order data after order complete
-        WelNus.getInstance().setAddNotes(null);
-        WelNus.getInstance().setSellerDetails(null);
-        WelNus.getInstance().setBuyerAddressModule(null);*/
-    }
-
-    public static void cleanProductDeviceData(Context context) {
-        /*// Clean temporary order data after order complete
-        WelNus.getInstance().setBuyerAddressModule(null);
-        WelNus.getInstance().setQuantityHashMap(null);
-        MyCartDBHelper myCartDBHelper = new MyCartDBHelper(context);
-        myCartDBHelper.open();
-        myCartDBHelper.deleteCart();
-        myCartDBHelper.close();*/
-    }
 }

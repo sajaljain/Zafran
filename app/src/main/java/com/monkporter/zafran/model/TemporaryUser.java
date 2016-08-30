@@ -22,6 +22,7 @@ public class TemporaryUser {
     private int sex;
     @SerializedName("EmailID")
     private String emailId;
+
     @SerializedName("DeviceRegistrationID")
     private String DeviceRegistrationID;
 

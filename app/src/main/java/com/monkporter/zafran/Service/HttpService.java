@@ -11,7 +11,7 @@ import com.monkporter.zafran.helper.PrefManager;
 import com.monkporter.zafran.model.OtpUserObjResponse;
 import com.monkporter.zafran.model.VerifyOtp;
 import com.monkporter.zafran.model.VerifyOtpResponse;
-import com.monkporter.zafran.rest.ApiClient;
+
 import com.monkporter.zafran.rest.HttpApiClient;
 import com.monkporter.zafran.rest.OtpApiClient;
 

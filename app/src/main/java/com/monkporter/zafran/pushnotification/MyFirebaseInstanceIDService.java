@@ -20,6 +20,7 @@ import android.util.Log;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
+import com.monkporter.zafran.helper.PrefManager;
 
 
 public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
@@ -38,15 +39,14 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
         refreshedToken = FirebaseInstanceId.getInstance().getToken();
         Log.d(TAG, "Refreshed token: " + refreshedToken);
 
-        // TODO: Implement this method to send any registration to your app's servers.
-        sendRegistrationToServer(refreshedToken);
+
+        sendRegistrationToPrefManager(refreshedToken);
     }
 
-    public String getRefreshedToken() {
-        return refreshedToken;
-    }
 
     // [END refresh_token]
+
+
 
     /**
      * Persist token to third-party servers.
@@ -56,7 +56,8 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
      *
      * @param token The new token.
      */
-    private void sendRegistrationToServer(String token) {
-        // Add custom implementation, as needed.
+    private void sendRegistrationToPrefManager(String token) {
+        PrefManager manager = new PrefManager(MyFirebaseInstanceIDService.this);
+        manager.setDeviceRegId(token);
     }
 }

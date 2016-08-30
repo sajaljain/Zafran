@@ -2,6 +2,7 @@ package com.monkporter.zafran.activity;
 
 /**
  * Created by Sajal Jain.
+ * TODO : remove this file
  */
 
 import android.Manifest;
@@ -52,6 +53,9 @@ import com.monkporter.zafran.utility.CommonMethod;
 
 import java.util.List;
 import java.util.Locale;
+
+
+
 
 public class FetchLocationActivity extends AppCompatActivity
         implements GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks, View.OnClickListener{
@@ -337,7 +341,7 @@ public class FetchLocationActivity extends AppCompatActivity
 
 
  /*   @Override
-    public void setAPIResponse(Object obj, byte type) {
+public void setAPIResponse(Object obj, byte type) {
         switch (type) {
             case Constants.GET_ADDRESS_INFO:
                 if (obj != null) {

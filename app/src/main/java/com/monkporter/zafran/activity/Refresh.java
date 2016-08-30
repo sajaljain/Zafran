@@ -49,6 +49,7 @@ public class Refresh extends AppCompatActivity {
         PrefManager pref = new PrefManager(this);
         boolean pressExit = pref.isExit();
         if(!pressExit){
+            //TODO: sajal This code is to be removed
             Toast.makeText(Refresh.this, "Press Back again to Exit.", Toast.LENGTH_SHORT).show();
             pref.pressExit(true);
 

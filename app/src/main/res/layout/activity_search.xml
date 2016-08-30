@@ -85,7 +85,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="20dp"
                     android:src="@drawable/ic_gps"
-                    android:tint="@color/common_action_bar_splitter"
+                    android:tint="@color/place_autocomplete_search_hint"
                     android:layout_marginTop="10dp"
                     android:layout_marginLeft="10dp"/>
             <TextView

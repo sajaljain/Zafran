@@ -43,7 +43,7 @@ public class PrefManager {
     private static final String USER_CURRENT_LOCATION = "currentLocation";
     private static final String USER_ID = "userId";
     private static final String USERNAME = "userName";
-    private static final String FIRST_TIME="firstTimeUser";
+    private static final String FIRST_TIME = "firstTimeUser";
     private static final String IS_TEMP_USER = "isTempUser";
     private static final String DEVICE_REG_ID = "deviceRegId";
     private static final String USER_LATITUDE = "mLatitude";
@@ -53,7 +53,6 @@ public class PrefManager {
     private static final String LONGITUDE = "longitude";
     private static final String PLACEID = "placeid";
     private static final String REF_SCRN = "pressExit";
-
 
 
     public PrefManager(Context context) {
@@ -71,11 +70,14 @@ public class PrefManager {
         return pref.getBoolean(KEY_IS_WAITING_FOR_SMS, false);
     }
 
-    public void pressExit(boolean press){
-        editor.putBoolean(REF_SCRN,press);
+    public void pressExit(boolean press) {
+        editor.putBoolean(REF_SCRN, press);
         editor.commit();
     }
-    public  boolean isExit(){return pref.getBoolean(REF_SCRN,false);}
+
+    public boolean isExit() {
+        return pref.getBoolean(REF_SCRN, false);
+    }
 
     public void setMobileNumber(String mobileNumber) {
         editor.putString(KEY_MOBILE_NUMBER, mobileNumber);
@@ -112,134 +114,161 @@ public class PrefManager {
         return profile;
     }
 
-    public void saveLocations(ArrayList<String> arrayList){
-
-      Gson gson = new Gson();
-        Type type = new TypeToken<ArrayList<String>>() {}.getType();
-        String json = gson.toJson(arrayList,type);
-        editor.putString(SELECTED_LOCATION,json);
-        editor.commit();
-
-
-    }
-    public void saveLongitude(ArrayList<String> arrayList){
+    public void saveLocations(ArrayList<String> arrayList) {
 
         Gson gson = new Gson();
-        Type type = new TypeToken<ArrayList<String>>() {}.getType();
-        String json = gson.toJson(arrayList,type);
-        editor.putString(LONGITUDE,json);
+        Type type = new TypeToken<ArrayList<String>>() {
+        }.getType();
+        String json = gson.toJson(arrayList, type);
+        editor.putString(SELECTED_LOCATION, json);
         editor.commit();
 
 
     }
-    public void saveLatitude(ArrayList<String> arrayList){
+
+    public void saveLongitude(ArrayList<String> arrayList) {
 
         Gson gson = new Gson();
-        Type type = new TypeToken<ArrayList<String>>() {}.getType();
-        String json = gson.toJson(arrayList,type);
-        editor.putString(LATITUDE,json);
+        Type type = new TypeToken<ArrayList<String>>() {
+        }.getType();
+        String json = gson.toJson(arrayList, type);
+        editor.putString(LONGITUDE, json);
         editor.commit();
 
 
     }
-    public void savePlaceId(ArrayList<String> arrayList){
+
+    public void saveLatitude(ArrayList<String> arrayList) {
 
         Gson gson = new Gson();
-        Type type = new TypeToken<ArrayList<String>>() {}.getType();
-        String json = gson.toJson(arrayList,type);
-        editor.putString(PLACEID,json);
+        Type type = new TypeToken<ArrayList<String>>() {
+        }.getType();
+        String json = gson.toJson(arrayList, type);
+        editor.putString(LATITUDE, json);
         editor.commit();
 
 
     }
-    public ArrayList<String> getSaveLocations(){
+
+    public void savePlaceId(ArrayList<String> arrayList) {
+
+        Gson gson = new Gson();
+        Type type = new TypeToken<ArrayList<String>>() {
+        }.getType();
+        String json = gson.toJson(arrayList, type);
+        editor.putString(PLACEID, json);
+        editor.commit();
+
+
+    }
+
+    public ArrayList<String> getSaveLocations() {
         Gson gson = new Gson();
         String json = pref.getString(SELECTED_LOCATION, null);
-        Type type = new TypeToken<ArrayList<String>>() {}.getType();
+        Type type = new TypeToken<ArrayList<String>>() {
+        }.getType();
         ArrayList<String> arrayList = gson.fromJson(json, type);
         return arrayList;
     }
 
-    public ArrayList<String> getSaveLatitude(){
+    public ArrayList<String> getSaveLatitude() {
         Gson gson = new Gson();
         String json = pref.getString(LATITUDE, null);
-        Type type = new TypeToken<ArrayList<String>>() {}.getType();
+        Type type = new TypeToken<ArrayList<String>>() {
+        }.getType();
         ArrayList<String> arrayList = gson.fromJson(json, type);
         return arrayList;
     }
 
-    public ArrayList<String> getSaveLongitude(){
+    public ArrayList<String> getSaveLongitude() {
         Gson gson = new Gson();
         String json = pref.getString(LONGITUDE, null);
-        Type type = new TypeToken<ArrayList<String>>() {}.getType();
+        Type type = new TypeToken<ArrayList<String>>() {
+        }.getType();
         ArrayList<String> arrayList = gson.fromJson(json, type);
         return arrayList;
     }
 
-    public ArrayList<String> getSavePlaceId(){
+    public ArrayList<String> getSavePlaceId() {
         Gson gson = new Gson();
         String json = pref.getString(PLACEID, null);
-        Type type = new TypeToken<ArrayList<String>>() {}.getType();
+        Type type = new TypeToken<ArrayList<String>>() {
+        }.getType();
         ArrayList<String> arrayList = gson.fromJson(json, type);
         return arrayList;
     }
 
 
-
-    public void setUserCurrentLocation(String address){
-        editor.putString(USER_CURRENT_LOCATION,address);
+    public void setUserCurrentLocation(String address) {
+        editor.putString(USER_CURRENT_LOCATION, address);
         editor.commit();
     }
 
-    public void setUserCurrentLatitude(String lat){
-        editor.putString(USER_LATITUDE,lat);
-        editor.commit();
-    }
-    public void setUserCurrentLongitude(String lon){
-        editor.putString(USER_LONGITUDE,lon);
-        editor.commit();
-    }
-    public void setUserCurrentPlaceId(String placeId){
-        editor.putString(USER_PLACEID,placeId);
+    public void setUserCurrentLatitude(String lat) {
+        editor.putString(USER_LATITUDE, lat);
         editor.commit();
     }
 
-    public String getUserCurrentLocation(){
-        return pref.getString(USER_CURRENT_LOCATION,null);
-    }
-    public String getUserCurrentLatitude(){
-        return pref.getString(USER_LATITUDE,null);
-    }
-    public String getUserCurrentLongitude(){
-        return pref.getString(USER_LONGITUDE,null);
-    }
-    public String getUserCurrentPlaceId(){
-        return pref.getString(USER_PLACEID,null);
+    public void setUserCurrentLongitude(String lon) {
+        editor.putString(USER_LONGITUDE, lon);
+        editor.commit();
     }
 
-    public void setUserId(int userId){
-        editor.putInt(USER_ID,userId);
+    public void setUserCurrentPlaceId(String placeId) {
+        editor.putString(USER_PLACEID, placeId);
         editor.commit();
     }
-    public int getUserId(){
-        return pref.getInt(USER_ID,-1);
-    }
-    public void setUsername(String username){
-        editor.putString(USERNAME,username);
-        editor.commit();
-    }
-    public String getUsername(){
-        return pref.getString(USERNAME,null);
-    }
-    public void setIsTempUser(boolean userType){
-        editor.putBoolean(IS_TEMP_USER,userType);
-        editor.commit();
-    }
-    public boolean getIsTempUser(){return pref.getBoolean(IS_TEMP_USER,false);}
 
-    public void setDeviceRegId(String deviceRegId){
-        editor.putString(DEVICE_REG_ID,deviceRegId);
+    public String getUserCurrentLocation() {
+        return pref.getString(USER_CURRENT_LOCATION, null);
+    }
+
+    public String getUserCurrentLatitude() {
+        return pref.getString(USER_LATITUDE, null);
+    }
+
+    public String getUserCurrentLongitude() {
+        return pref.getString(USER_LONGITUDE, null);
+    }
+
+    public String getUserCurrentPlaceId() {
+        return pref.getString(USER_PLACEID, null);
+    }
+
+    public void setUserId(int userId) {
+        editor.putInt(USER_ID, userId);
         editor.commit();
     }
-    public String getDeviceRegId(){return pref.getString(DEVICE_REG_ID,null);}
+
+    public int getUserId() {
+        //here default user id is kept zero, compliance with backend
+        return pref.getInt(USER_ID, 0);
+    }
+
+    public void setUsername(String username) {
+        editor.putString(USERNAME, username);
+        editor.commit();
+    }
+
+    public String getUsername() {
+        return pref.getString(USERNAME, null);
+    }
+
+    public void setIsTempUser(boolean userType) {
+        editor.putBoolean(IS_TEMP_USER, userType);
+        editor.commit();
+    }
+
+    public boolean getIsTempUser() {
+        return pref.getBoolean(IS_TEMP_USER, false);
+    }
+
+    public void setDeviceRegId(String deviceRegId) {
+        editor.putString(DEVICE_REG_ID, deviceRegId);
+        editor.commit();
+    }
+
+    public String getDeviceRegId() {
+        return pref.getString(DEVICE_REG_ID, null);
+    }
 }

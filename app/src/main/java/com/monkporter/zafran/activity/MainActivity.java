@@ -58,7 +58,7 @@ import retrofit2.Response;
 * */
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    private static final String TAG = "MainActivity";
+    private static final String TAG = MainActivity.class.getName();
     private Toolbar toolbar;
     private DrawerLayout drawer;
     private NavigationView navigationView;
@@ -89,11 +89,14 @@ public class MainActivity extends AppCompatActivity
         toolbarAddress = (TextView) findViewById(R.id.toolbar_address_id);
         PrefManager prefManager = new PrefManager(MainActivity.this);
         address = prefManager.getUserCurrentLocation();
+
         if(address != null){
             toolbarAddress.setText(address);
         }
         else{
+
             startActivity(new Intent(MainActivity.this,PlacesAutoCompleteActivity.class));
+            //TODO: Place Default Latitude Longitude
         }
      //   getBanner();
         initSlider();
@@ -109,7 +112,6 @@ public class MainActivity extends AppCompatActivity
         viewGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "Hello", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(MainActivity.this,PlacesAutoCompleteActivity.class);
                 startActivity(intent);
             }
@@ -309,7 +311,7 @@ public class MainActivity extends AppCompatActivity
         super.onResume();
         if(!progressDialog.isShowing()) {
             progressDialog.setMessage("Fetching Products...");
-            progressDialog.show();;
+            progressDialog.show();
         }
         Log.d(TAG,"Resume");
         sliderShow.startAutoCycle();
@@ -463,7 +465,4 @@ id.home:
 
         return super.onOptionsItemSelected(item);
     }
-
-
-
 }
