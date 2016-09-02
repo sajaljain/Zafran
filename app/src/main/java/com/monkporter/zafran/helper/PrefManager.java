@@ -14,6 +14,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
+import retrofit2.Retrofit;
+
 /**
  * Created by Vaibhav on 7/14/2016.
  */
@@ -53,12 +55,20 @@ public class PrefManager {
     private static final String LONGITUDE = "longitude";
     private static final String PLACEID = "placeid";
     private static final String REF_SCRN = "pressExit";
-
+    private static PrefManager pm = null;
 
     public PrefManager(Context context) {
         this._context = context;
         pref = _context.getSharedPreferences(PREF_NAME, PRIVATE_MODE);
         editor = pref.edit();
+    }
+
+    public static PrefManager getInstance(Context context){
+
+        if(pm==null){
+            pm = new PrefManager(context);
+        }
+        return pm;
     }
 
     public void setIsWaitingForSms(boolean isWaiting) {

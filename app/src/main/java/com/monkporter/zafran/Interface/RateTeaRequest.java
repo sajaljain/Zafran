@@ -1,4 +1,4 @@
-package com.monkporter.zafran.Interfece;
+package com.monkporter.zafran.Interface;
 
 import com.monkporter.zafran.model.RateResponse;
 import com.monkporter.zafran.model.RateTea;

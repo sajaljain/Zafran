@@ -2,6 +2,7 @@ package com.monkporter.zafran.activity;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -14,9 +15,9 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.google.firebase.crash.FirebaseCrash;
-import com.monkporter.zafran.Interfece.TempUserRequest;
-import com.monkporter.zafran.Interfece.UpdateFcmRequest;
+import com.monkporter.zafran.Interface.ApiInterface;
 import com.monkporter.zafran.R;
+
 import com.monkporter.zafran.helper.FetchUserEmail;
 import com.monkporter.zafran.helper.PrefManager;
 import com.monkporter.zafran.model.TemporaryUser;
@@ -25,7 +26,9 @@ import com.monkporter.zafran.model.UpdateFcm;
 import com.monkporter.zafran.model.UpdateFcmResponse;
 
 import com.monkporter.zafran.rest.ApiClient;
-import com.monkporter.zafran.rest.UpdateFcmApi;
+import com.monkporter.zafran.utility.CommonMethod;
+
+import java.io.IOException;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -35,13 +38,12 @@ public class Splash extends AppCompatActivity {
     private final String TAG = this.getClass().getSimpleName();
     private static int SPLASH_TIME_OUT = 3000;
 
-    TempUserRequest tempUserRequest;
+    //TempUserRequest tempUserRequest;
+
     //private String[] locationPermission = new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION};
     private String[] MY_PERMISSIONS = new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
             android.Manifest.permission.RECEIVE_SMS, android.Manifest.permission.READ_SMS, android.Manifest.permission.GET_ACCOUNTS};
     private final int PERMISSIONS_REQUEST = 111;
-
-    Intent intent;
     PrefManager prefManager;
     private String userName, emailID, deviceRegId, currentTimeMillis;
     private int userId, regType;
@@ -52,20 +54,25 @@ public class Splash extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-        //FirebaseCrash.report(new Exception("My first Android non-fatal error"));
-        //progressDialog = new ProgressDialog(this);
-        //progressDialog.setIndeterminate(true);
-        //progressDialog.setMessage("Loading...");
-        //progressDialog.show();
-     /*   if (Build.VERSION.SDK_INT < 23) {
-            requestCalls();
-        }else{
-            permissionCheck();
-        }*/
+        init();
 
+        if (CommonMethod.isNetworkAvailable(Splash.this)) {
 
-        //pb = (ProgressBar) findViewById(R.id.progressBar);
+            if (Build.VERSION.SDK_INT < 23) {
+                isFCMIdPresent();
+            } else {
+                permissionCheck();
+            }
+        } else {
+            Intent refreshIntent = new Intent(Splash.this, Refresh.class);
+            refreshIntent.putExtra("previousScreen", "splashScreen");
+            startActivityForResult(refreshIntent, 1001);
+        }
 
+    }
+
+    private void init() {
+        prefManager = PrefManager.getInstance(Splash.this);
     }
 
 
@@ -84,7 +91,7 @@ public class Splash extends AppCompatActivity {
         } else {
             Toast.makeText(Splash.this, "Permission alredy granted", Toast.LENGTH_SHORT).show();
 
-            requestCalls();
+            isFCMIdPresent();
             //  if(progressDialog.isShowing())
             //    progressDialog.dismiss();
         }
@@ -104,11 +111,8 @@ public class Splash extends AppCompatActivity {
             if (verifyPermissions(grantResults)) {
                 // All required permissions have been granted, display contacts fragment.
                 Toast.makeText(Splash.this, "Permissions were granted.", Toast.LENGTH_SHORT).show();
-                //    if(progressDialog.isShowing())
-                //      progressDialog.dismiss();
-                // startActivity(intent);
-                //Splash.this.finish();
-                requestCalls();
+
+                isFCMIdPresent();
             } else {
                 Log.d(TAG, "Permissions were NOT granted.");
                 Toast.makeText(Splash.this, "Permissions were NOT granted.", Toast.LENGTH_SHORT).show();
@@ -133,22 +137,9 @@ public class Splash extends AppCompatActivity {
         return true;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.d(TAG, "Resume");
-        if (Build.VERSION.SDK_INT < 23) {
-            requestCalls();
-        } else {
-            permissionCheck();
-        }
-    }
-
-    private void requestCalls() {
-        //
-        intent = new Intent(this, MainActivity.class);
-        prefManager = new PrefManager(Splash.this);
-
+    private boolean requestCreateTemporaryUser() {
+        //Here Sending post request for user
+        ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
         deviceRegId = prefManager.getDeviceRegId();
 
         emailID = FetchUserEmail.getEmail(this);
@@ -157,7 +148,8 @@ public class Splash extends AppCompatActivity {
         Log.d(TAG, "Device Registration ID is " + deviceRegId);
         if (emailID == null && deviceRegId == null) {
             //restart this activity
-            recreate();
+            return false;
+            //recreate();
         }
         //here the activity will only come after either its having a email id or its having a deviceRegId or both
 
@@ -184,8 +176,7 @@ public class Splash extends AppCompatActivity {
             temporaryUser.setEmailId(emailID);
             temporaryUser.setDeviceRegistrationID(deviceRegId);
 
-            // Here Sending post request for user
-            tempUserRequest = ApiClient.getClient().create(TempUserRequest.class);
+
             //Logging the Request Input
             FirebaseCrash.logcat(Log.INFO, TAG, "Request for Creating a temporary user");
             FirebaseCrash.logcat(Log.INFO, TAG, "Cell " + temporaryUser.getCell());
@@ -198,8 +189,32 @@ public class Splash extends AppCompatActivity {
             FirebaseCrash.logcat(Log.INFO, TAG, "Email Id " + temporaryUser.getEmailId());
             FirebaseCrash.logcat(Log.INFO, TAG, "FCM Id " + temporaryUser.getDeviceRegistrationID());
 
-            Call<TemporaryUserResponse> call = tempUserRequest.getResponse(temporaryUser);
-            call.enqueue(new Callback<TemporaryUserResponse>() {
+            Call<TemporaryUserResponse> call = apiService.createTemporaryUser(temporaryUser);
+
+            try {
+                TemporaryUserResponse temporaryUserResponse = call.execute().body();
+
+                FirebaseCrash.logcat(Log.INFO, TAG, "Response of Creating a temporary user");
+                FirebaseCrash.logcat(Log.INFO, TAG, "Temporary user error = " + temporaryUserResponse.isError());
+                FirebaseCrash.logcat(Log.INFO, TAG, "Temporary user message = " + temporaryUserResponse.getMessage());
+                FirebaseCrash.logcat(Log.INFO, TAG, "Temporary user userID = " + temporaryUserResponse.getUserId());
+
+
+                if (temporaryUserResponse.isError()) {
+                    FirebaseCrash.logcat(Log.INFO, TAG, "Temporary user creation failed");
+                    FirebaseCrash.report(new Exception("Temporary user creation failed"));
+                    Splash.this.finish();
+                } else {
+                    FirebaseCrash.logcat(Log.INFO, TAG, "Temporary user creation Success");
+                    userId = temporaryUserResponse.getUserId();
+                    prefManager.setUserId(userId);
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+  /*          call.enqueue(new Callback<TemporaryUserResponse>() {
                 @Override
                 public void onResponse(Call<TemporaryUserResponse> call, Response<TemporaryUserResponse> response) {
 
@@ -230,90 +245,124 @@ public class Splash extends AppCompatActivity {
                     startActivity(new Intent(Splash.this, Refresh.class));
 
                 }
-            });
-        }
-
-        //  else{
-        /*    CheckUserRequest checkUserRequest = CheckUserApiClient.getClient().create(CheckUserRequest.class);
-            Call<CheckUser> call = checkUserRequest.getUserType();
-            call.enqueue(new Callback<CheckUser>() {
-                @Override
-                public void onResponse(Call<CheckUser> call, Response<CheckUser> response) {
-                    int status = response.code();
-                    CheckUser checkUser = response.body();
-                    Log.d("Check USer Type", "Response =" + status);
-                    Log.d("Check User Type", "User Type =" + checkUser.isTempUser());
-                    userType = prefManager.getIsTempUser();
-                }
-
-                @Override
-                public void onFailure(Call<CheckUser> call, Throwable t) {
-                    Log.d("Check user", "onFailure =" + t.getMessage());
-                }
             });*/
-        //}
 
+        }
         if (prefManager.getDeviceRegId() != null) {
 
-            UpdateFcm updateFcm = new UpdateFcm();
-            updateFcm.setDeviceRegistrationId(deviceRegId);
-            updateFcm.setUserId(userId);
-            FirebaseCrash.logcat(Log.INFO, TAG, "Request for updating device registration id");
-            FirebaseCrash.logcat(Log.INFO, TAG, "Device Registration Id " + updateFcm.getDeviceRegistrationId());
-            FirebaseCrash.logcat(Log.INFO, TAG, "User Id " + updateFcm.getUserId());
-
-            UpdateFcmRequest updateFcmRequest = UpdateFcmApi.getClient().create(UpdateFcmRequest.class);
-            Call<UpdateFcmResponse> call = updateFcmRequest.getResponse(updateFcm);
-
-            call.enqueue(new Callback<UpdateFcmResponse>() {
-                @Override
-                public void onResponse(Call<UpdateFcmResponse> call, Response<UpdateFcmResponse> response) {
-                    int status = response.code();
-                    UpdateFcmResponse updateFcmResponse = response.body();
-                    FirebaseCrash.logcat(Log.INFO, TAG, "Response for updating device registration id");
-                    //FirebaseCrash.logcat(Log.INFO, TAG, "UpdateFcm error =" + updateFcmResponse.isError());
-                    FirebaseCrash.logcat(Log.INFO, TAG, "UpdateFcm message =" + updateFcmResponse.getMessage());
-
-                    if (updateFcmResponse.isError()) {
-                        FirebaseCrash.logcat(Log.INFO, TAG, "FCM cannot be updated");
-                        FirebaseCrash.report(new Exception("FCM cannot be updated"));
-                    } else {
-                        FirebaseCrash.logcat(Log.INFO, TAG, "FCM ID updated success-fully on server");
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<UpdateFcmResponse> call, Throwable t) {
-                    startActivity(new Intent(Splash.this, Refresh.class));
-                }
-            });
+            requestUpdateFcmId();
 
         }
-        //here we are starting the Main Activity from splash activity
-        startActivity(intent);
-        Splash.this.finish();
 
-        //TODO: sajal Remove this code
-        /*if (userId != -1) {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        Thread.sleep(SPLASH_TIME_OUT);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    mHandler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            startActivity(intent);
-                            Splash.this.finish();
-                        }
-                    });
-                }
+        return true;
 
-            }).start();
-        }*/
     }
 
+    private void requestUpdateFcmId() {
+        ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+        UpdateFcm updateFcm = new UpdateFcm();
+        updateFcm.setDeviceRegistrationId(deviceRegId);
+        updateFcm.setUserId(userId);
+        FirebaseCrash.logcat(Log.INFO, TAG, "Request for updating device registration id");
+        FirebaseCrash.logcat(Log.INFO, TAG, "Device Registration Id " + updateFcm.getDeviceRegistrationId());
+        FirebaseCrash.logcat(Log.INFO, TAG, "User Id " + updateFcm.getUserId());
+
+
+        Call<UpdateFcmResponse> call = apiService.updateFCM(updateFcm);
+        try {
+            UpdateFcmResponse updateFcmResponse = call.execute().body();
+            FirebaseCrash.logcat(Log.INFO, TAG, "Response for updating device registration id");
+            FirebaseCrash.logcat(Log.INFO, TAG, "UpdateFcm message =" + updateFcmResponse.getMessage());
+
+            if (updateFcmResponse.isError()) {
+                FirebaseCrash.logcat(Log.INFO, TAG, "FCM cannot be updated");
+                FirebaseCrash.report(new Exception("FCM cannot be updated"));
+
+            } else {
+                FirebaseCrash.logcat(Log.INFO, TAG, "FCM ID updated success-fully on server");
+
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        /*call.enqueue(new Callback<UpdateFcmResponse>() {
+            @Override
+            public void onResponse(Call<UpdateFcmResponse> call, Response<UpdateFcmResponse> response) {
+                int status = response.code();
+                UpdateFcmResponse updateFcmResponse = response.body();
+                FirebaseCrash.logcat(Log.INFO, TAG, "Response for updating device registration id");
+                FirebaseCrash.logcat(Log.INFO, TAG, "UpdateFcm message =" + updateFcmResponse.getMessage());
+
+                if (updateFcmResponse.isError()) {
+                    FirebaseCrash.logcat(Log.INFO, TAG, "FCM cannot be updated");
+                    FirebaseCrash.report(new Exception("FCM cannot be updated"));
+                } else {
+                    FirebaseCrash.logcat(Log.INFO, TAG, "FCM ID updated success-fully on server");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UpdateFcmResponse> call, Throwable t) {
+                FirebaseCrash.logcat(Log.INFO, TAG, "Some n/w error in device");
+                FirebaseCrash.report(new Exception("Some n/w error in device"));
+                startActivity(new Intent(Splash.this, Refresh.class));
+            }
+        });*/
+    }
+
+    private void requestReadVersion() {
+        //TODO : make a request to version @
+        //http:instashout.in/zafran/read/version.php
+    }
+
+    private void isFCMIdPresent() {
+
+        new Handler().postDelayed(new Runnable() {
+
+            /*
+             * Showing splash screen with a timer. This will be useful when you
+             * want to show case your app logo / company
+             */
+
+            @Override
+            public void run() {
+                String registrationId = prefManager.getDeviceRegId();
+                if (registrationId != null && !registrationId.equalsIgnoreCase("")) {
+                    //requestCreateTemporaryUser();
+                    new NetworkCalls().execute();
+                } /*else {
+                    isFCMIdPresent();
+                }*/
+            }
+        }, SPLASH_TIME_OUT);
+
+
+    }
+
+    private void startMainActivity() {
+        Intent refreshIntent = new Intent(Splash.this, MainActivity.class);
+        refreshIntent.putExtra("previousScreen", "splashScreen");
+        startActivity(refreshIntent);
+        Splash.this.finish();
+    }
+class NetworkCalls extends AsyncTask<Void, Void, Boolean> {
+
+    @Override
+    protected Boolean doInBackground(Void... params) {
+
+
+        return requestCreateTemporaryUser();
+    }
+
+    @Override
+    protected void onPostExecute(Boolean res) {
+        if(res)
+        {
+            startMainActivity();
+        }
+
+    }
+}
 }

@@ -22,15 +22,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.TextSliderView;
-import com.monkporter.zafran.Interfece.BannerRequest;
-import com.monkporter.zafran.Interfece.GetProductRequest;
+import com.monkporter.zafran.Interface.BannerRequest;
+import com.monkporter.zafran.Interface.GetProductRequest;
 import com.monkporter.zafran.R;
 import com.monkporter.zafran.adapter.ProductsAdapter;
 import com.monkporter.zafran.helper.PrefManager;

@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.monkporter.zafran.Interfece.OtpPostRequest;
+import com.monkporter.zafran.Interface.OtpPostRequest;
 import com.monkporter.zafran.activity.MainActivity;
 import com.monkporter.zafran.helper.PrefManager;
 import com.monkporter.zafran.model.OtpUserObjResponse;
@@ -13,7 +13,6 @@ import com.monkporter.zafran.model.VerifyOtp;
 import com.monkporter.zafran.model.VerifyOtpResponse;
 
 import com.monkporter.zafran.rest.HttpApiClient;
-import com.monkporter.zafran.rest.OtpApiClient;
 
 import retrofit2.Call;
 import retrofit2.Callback;

@@ -1,17 +1,13 @@
 package com.monkporter.zafran.activity;
 
-import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -44,12 +40,11 @@ import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.PlaceBuffer;
-import com.google.android.gms.location.places.PlaceLikelihood;
 import com.google.android.gms.location.places.PlaceLikelihoodBuffer;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
-import com.monkporter.zafran.Interfece.AddressSendRequest;
+import com.monkporter.zafran.Interface.AddressSendRequest;
 import com.monkporter.zafran.R;
 import com.monkporter.zafran.adapter.PlacesAutoCompleteAdapter;
 import com.monkporter.zafran.adapter.SelectedPlacesAdapter;
@@ -58,13 +53,11 @@ import com.monkporter.zafran.model.Constants;
 import com.monkporter.zafran.model.RecyclerItemClickListener;
 import com.monkporter.zafran.model.UserDetailResponse;
 import com.monkporter.zafran.model.UserLocation;
-import com.monkporter.zafran.model.UserLocationResponse;
 import com.monkporter.zafran.rest.UserLocationApiClient;
 import com.monkporter.zafran.utility.CommonMethod;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;

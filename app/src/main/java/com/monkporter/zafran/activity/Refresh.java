@@ -8,7 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import com.monkporter.zafran.Interfece.GetConnection;
+import com.monkporter.zafran.Interface.GetConnection;
 import com.monkporter.zafran.R;
 import com.monkporter.zafran.helper.PrefManager;
 import com.monkporter.zafran.model.CheckConnection;

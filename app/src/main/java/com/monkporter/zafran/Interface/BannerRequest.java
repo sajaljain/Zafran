@@ -1,7 +1,6 @@
-package com.monkporter.zafran.Interfece;
+package com.monkporter.zafran.Interface;
 
 import com.monkporter.zafran.model.GetBanner;
-import com.monkporter.zafran.model.GetProducts;
 
 import retrofit2.Call;
 import retrofit2.http.GET;

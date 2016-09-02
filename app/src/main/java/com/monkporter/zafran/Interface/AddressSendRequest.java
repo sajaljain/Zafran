@@ -1,8 +1,7 @@
-package com.monkporter.zafran.Interfece;
+package com.monkporter.zafran.Interface;
 
 import com.monkporter.zafran.model.UserDetailResponse;
 import com.monkporter.zafran.model.UserLocation;
-import com.monkporter.zafran.model.UserLocationResponse;
 
 import retrofit2.Call;
 import retrofit2.http.Body;

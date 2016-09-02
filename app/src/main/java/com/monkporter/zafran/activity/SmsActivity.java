@@ -15,7 +15,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.monkporter.zafran.Interfece.RequestSms;
+import com.monkporter.zafran.Interface.RequestSms;
 import com.monkporter.zafran.R;
 import com.monkporter.zafran.Service.HttpService;
 import com.monkporter.zafran.helper.PrefManager;

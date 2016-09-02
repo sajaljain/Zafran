@@ -1,4 +1,4 @@
-package com.monkporter.zafran.Interfece;
+package com.monkporter.zafran.Interface;
 
 import com.monkporter.zafran.model.TemporaryUser;
 import com.monkporter.zafran.model.TemporaryUserResponse;
@@ -10,13 +10,12 @@ import retrofit2.http.Body;
 import retrofit2.http.POST;
 
 /**
- * Created by Vaibhav on 7/21/2016.
+ * Created by Sajal on 30-Aug-16.
  */
-public interface TempUserRequest {
+public interface ApiInterface {
     @POST("zafran/create/tempuser.php")
-    Call<TemporaryUserResponse> getResponse(@Body TemporaryUser temporaryUser);
-}
-interface Update {
+    Call<TemporaryUserResponse> createTemporaryUser(@Body TemporaryUser temporaryUser);
+
     @POST("zafran/update/fcmid.php")
-    Call<UpdateFcmResponse> getResponse(@Body UpdateFcm updateFcm);
+    Call<UpdateFcmResponse> updateFCM(@Body UpdateFcm updateFcm);
 }
