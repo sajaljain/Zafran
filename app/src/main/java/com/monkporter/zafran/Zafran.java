@@ -24,12 +24,12 @@ public class Zafran extends Application {
 
 
     public static synchronized Zafran getInstance() {
-        Log.i(TAG, "getInstance =" + mInstance);
+
         if (mInstance == null) {
             // Create the instance
             mInstance = new Zafran();
         }
-        Log.i(TAG, "getInstance =" + mInstance);
+
         return mInstance;
     }
 }

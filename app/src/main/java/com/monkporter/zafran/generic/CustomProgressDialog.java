@@ -59,7 +59,7 @@ public class CustomProgressDialog
 			try {
 				mDialog.show();
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
+
 				e.printStackTrace();
 
 			}
@@ -102,7 +102,7 @@ public class CustomProgressDialog
 			try {
 				mDialog.show();
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
+
 				e.printStackTrace();
 
 			}

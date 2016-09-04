@@ -85,9 +85,6 @@
         <activity
             android:name=".activity.Refresh"
             android:theme="@style/AppTheme" />
-        <activity
-            android:name=".activity.FetchLocationActivity"
-            android:theme="@style/AppTheme" />
         <activity android:name=".activity.PlacesAutoCompleteActivity" >
 
         </activity>

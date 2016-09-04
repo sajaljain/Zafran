@@ -51,6 +51,7 @@
 
 
         <Button
+            android:id="@+id/refresh_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
@@ -61,7 +62,7 @@
             android:textSize="24dp"
             android:padding="8dp"
             android:textAllCaps="false"
-            android:onClick="checkConnection"/>
+            />
 
 
 

@@ -25,7 +25,7 @@ public class ShowLoader {
 	}
 
 	public void run(boolean isLocked) {
-		// TODO Auto-generated method stub
+
 		if(isLocked) Component.lockScreenOrientation(iActivity);
 		CustomProgressDialog.showProgressDialog(iActivity, progressValue, false);
 	}

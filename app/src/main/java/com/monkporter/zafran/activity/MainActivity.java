@@ -52,8 +52,6 @@ import retrofit2.Response;
 
 /*
 * Initially user is not logged in
-*
-*
 * */
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
