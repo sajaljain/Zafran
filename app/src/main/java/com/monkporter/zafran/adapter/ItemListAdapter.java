@@ -27,10 +27,10 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.MyView
     public TextView cartQuantity;
     public TextView cartPrice;
     View cartBar;
-    int count = 0;
+    int count;
     MyViewHolder myViewHolder = null;
     //View layoutScrollView;
-    int pos,poss = -1;
+    int pos = -1;
     int p;
     int product_set;
     Context context;
@@ -40,13 +40,14 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.MyView
         this.cartPrice = cartPrice;
         this.cartBar = cartBar;
         this.itemList = itemList;
+        count = itemList.get(itemList.size()-1).price;
         context = contexti;
         inflator = LayoutInflater.from(context);
 
         // layoutScrollView = inflator.inflate(R.id.scroll_view, LinearLayout,false);
-        sharedPreferences = context.getSharedPreferences(context.getString(R.string.PREF_FILE),context.MODE_PRIVATE);
-        pos = sharedPreferences.getInt(context.getString(R.string.SET_POSITION),-1);
-        product_set = sharedPreferences.getInt(context.getString(R.string.PRODUCT_SET),0);
+        //  sharedPreferences = context.getSharedPreferences(context.getString(R.string.PREF_FILE),context.MODE_PRIVATE);
+        //pos = sharedPreferences.getInt(context.getString(R.string.SET_POSITION),-1);
+        //product_set = sharedPreferences.getInt(context.getString(R.string.PRODUCT_SET),0);
     }
 
     @Override
@@ -60,11 +61,10 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.MyView
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
         final OrderItem current = itemList.get(position);
-        OrderItem cur;
         holder.listTitle.setText("Rs "+current.price);
         holder.listDetail.setText("Set of "+current.set);
         holder.listImage.setImageResource(current.photo);
-        if(pos != -1 && pos == position){
+      /*  if(pos != -1 && pos == position){
             current.set = product_set;
             holder.listButton.setText("ADD");
             holder.listButton.setOnClickListener(new View.OnClickListener() {
@@ -119,64 +119,67 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.MyView
             cartQuantity.setText(""+product_set);
             cartBar.setVisibility(View.VISIBLE);
             myViewHolder = holder;
+        }*/
+        //  else{
+        if(pos == -1) {
+            myViewHolder = holder;
+            pos = 1;
         }
-        else{
-            if(pos == -1)
+        holder.listButton.setText("ADD");
+        holder.listButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                myViewHolder.listButton.setText("ADD");
+                myViewHolder.listButton.setVisibility(View.VISIBLE);
+                myViewHolder.incre.setText("+");
+                myViewHolder.incre.setVisibility(View.GONE);
+                myViewHolder.decre.setText("-");
+                myViewHolder.decre.setVisibility(View.GONE);
+                myViewHolder.quantity.setText("" + itemList.get(myViewHolder.getAdapterPosition()).set);
+                myViewHolder.quantity.setVisibility(View.GONE);
+
+
                 myViewHolder = holder;
-            holder.listButton.setText("ADD");
-            holder.listButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+                //     p = position;
+                //count = 1;
+                //product_set = current.set;
+                //   SharedPreferences.Editor editor = sharedPreferences.edit();
+                // editor.putInt(context.getString(R.string.PRODUCT_SET),product_set);
+                // pos = position;
+                // editor.putInt(context.getString(R.string.SET_POSITION),pos);
+                // editor.commit();
+                //notifyItem(position);
+                //new ItemListAdapter(context,itemList,cartPrice,cartQuantity,cartBar);
 
-                    myViewHolder.listButton.setText("ADD");
-                    myViewHolder.listButton.setVisibility(View.VISIBLE);
-                    myViewHolder.incre.setText("+");
-                    myViewHolder.incre.setVisibility(View.GONE);
-                    myViewHolder.decre.setText("-");
-                    myViewHolder.decre.setVisibility(View.GONE);
-                    myViewHolder.quantity.setText("" + product_set);
-                    myViewHolder.quantity.setVisibility(View.GONE);
+                holder.listButton.setVisibility(View.GONE);
+                holder.incre.setText("+");
+                holder.incre.setVisibility(View.VISIBLE);
+                holder.decre.setText("-");
+                holder.decre.setVisibility(View.VISIBLE);
+                holder.quantity.setText(""+current.set);
+                holder.quantity.setVisibility(View.VISIBLE);
 
-                    myViewHolder = holder;
-                    p = position;
-                    count = 1;
-                    product_set = current.set;
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putInt(context.getString(R.string.PRODUCT_SET),product_set);
-                    pos = position;
-                    editor.putInt(context.getString(R.string.SET_POSITION),pos);
-                    editor.commit();
-                    //notifyItem(position);
-                    //new ItemListAdapter(context,itemList,cartPrice,cartQuantity,cartBar);
-
-                    holder.listButton.setVisibility(View.GONE);
-                    holder.incre.setText("+");
-                    holder.incre.setVisibility(View.VISIBLE);
-                    holder.decre.setText("-");
-                    holder.decre.setVisibility(View.VISIBLE);
-                    holder.quantity.setText(""+current.set);
-                    holder.quantity.setVisibility(View.VISIBLE);
-
-                    cartPrice.setText("Rs."+current.price);
-                    cartQuantity.setText(""+current.set);
-                    cartBar.setVisibility(View.VISIBLE);
+                cartPrice.setText("Rs."+current.price);
+                cartQuantity.setText(""+current.set);
+                cartBar.setVisibility(View.VISIBLE);
 
 
-                }
-            });}
+            }
+        });//}
         holder.incre.setOnClickListener(new View.OnClickListener(){
 
             @Override
             public void onClick(View v) {
-                current.set += 1;
+                current.set+=1;
 
-                product_set = current.set;
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putInt(context.getString(R.string.PRODUCT_SET),product_set);
-                pos = position;
-                editor.putInt(context.getString(R.string.SET_POSITION),pos);
-                editor.commit();
-                current.price = 10*current.set;
+                //  product_set = current.set;
+                //SharedPreferences.Editor editor = sharedPreferences.edit();
+                //editor.putInt(context.getString(R.string.PRODUCT_SET),product_set);
+                //pos = position;
+                //editor.putInt(context.getString(R.string.SET_POSITION),pos);
+                //editor.commit();
+                current.price = current.price+count;
                 holder.quantity.setText(""+current.set);
                 cartPrice.setText("Rs."+current.price);
                 cartQuantity.setText(""+current.set);
@@ -195,13 +198,13 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.MyView
             public void onClick(View v) {
                 if(current.set > 0) {
                     current.set -= 1;
-                    product_set = current.set;
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putInt(context.getString(R.string.PRODUCT_SET),product_set);
-                    pos = position;
-                    editor.putInt(context.getString(R.string.SET_POSITION),pos);
-                    editor.commit();
-                    current.price = 10*current.set;
+                    //  product_set = current.set;
+                    //SharedPreferences.Editor editor = sharedPreferences.edit();
+                    //editor.putInt(context.getString(R.string.PRODUCT_SET),product_set);
+                    // pos = position;
+                    //editor.putInt(context.getString(R.string.SET_POSITION),pos);
+                    //editor.commit();
+                    current.price -= count ;
                     cartBar.setVisibility(View.VISIBLE);
                 }
                 if(current.set == 0){

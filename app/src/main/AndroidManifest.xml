@@ -17,6 +17,7 @@
     <application
         android:name=".Zafran"
         android:allowBackup="true"
+
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
@@ -25,7 +26,9 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyACau6bKSGStVsPrN8rKggXVVFI3ySAKIs" />
 
-        <activity android:name=".activity.Splash">
+        <activity
+            android:name=".activity.Splash"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -33,13 +36,12 @@
             </intent-filter>
 
 
-
         </activity>
         <activity
             android:name=".activity.MainActivity"
             android:label="@string/title_activity_main"
-            android:theme="@style/AppTheme" >
-
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme">
 
 
         </activity>
@@ -48,7 +50,7 @@
             android:label="@string/title_order_history_activity"
             android:theme="@style/AppTheme" />
         <activity android:name=".activity.NotificationCenter" />
-        <activity android:name=".activity.OrderItemListMainActivity"></activity>
+        <activity android:name=".activity.SingleProduct"></activity>
         <activity android:name=".activity.Test" />
         <!-- Services -->
         <service android:name=".pushnotification.MyFirebaseMessagingService">
@@ -58,10 +60,11 @@
         </service>
 
 
-
-        <service android:name=".pushnotification.MyFirebaseInstanceIDService" android:exported="true">
+        <service
+            android:name=".pushnotification.MyFirebaseInstanceIDService"
+            android:exported="true">
             <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
 
@@ -76,16 +79,14 @@
         <activity
             android:name=".activity.ThankYouScreen"
             android:label="Thank you"
-            android:theme="@style/AppTheme" >
+            android:theme="@style/AppTheme">
 
 
-
-
-            </activity>
+        </activity>
         <activity
             android:name=".activity.Refresh"
             android:theme="@style/AppTheme" />
-        <activity android:name=".activity.PlacesAutoCompleteActivity" >
+        <activity android:name=".activity.PlacesAutoCompleteActivity">
 
         </activity>
         <activity
@@ -110,10 +111,10 @@
             android:name=".activity.SmsActivity"
             android:label="SmsActivity"
             android:theme="@style/AppTheme"></activity>
-        <activity android:name=".activity.CheckoutScreen"
-            android:theme="@style/AppTheme"
-            android:label="Checkout">
-
+        <activity
+            android:name=".activity.CheckoutScreen"
+            android:label="Checkout"
+            android:theme="@style/AppTheme">
 
 
         </activity>

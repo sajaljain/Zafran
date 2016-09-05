@@ -146,10 +146,6 @@ public class Splash extends AppCompatActivity {
 
         emailID = FetchUserEmail.getEmail(this);
 
-
-
-        Log.d(TAG, "Email Id is " + emailID);
-        Log.d(TAG, "Device Registration ID is " + deviceRegId);
         if (emailID == null && deviceRegId == null) {
             //Tell user to restart the app, as both email and device id are missing
             return 400;

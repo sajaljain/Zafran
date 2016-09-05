@@ -1,22 +1,15 @@
 package com.monkporter.zafran.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.monkporter.zafran.R;
-import com.monkporter.zafran.activity.MainActivity;
-import com.monkporter.zafran.activity.OrderItemListMainActivity;
-import com.monkporter.zafran.activity.PlacesAutoCompleteActivity;
 import com.monkporter.zafran.model.Product;
-import com.monkporter.zafran.model.Products;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;

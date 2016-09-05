@@ -5,15 +5,15 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 /**
- * Created by vabs on 7/8/16.
+ * Created by vabs on 6/8/16.
  */
-public class GetProducts {
+public class Banners {
     @SerializedName("error")
-    private boolean error;
+   private boolean error;
     @SerializedName("message")
     private String message;
-    @SerializedName("products")
-    private List<Product> products;
+    @SerializedName("banners")
+    private List<Banner> banners;
 
     public boolean isError() {
         return error;
@@ -31,11 +31,11 @@ public class GetProducts {
         this.message = message;
     }
 
-    public List<Product> getProducts() {
-        return products;
+    public List<Banner> getBanners() {
+        return banners;
     }
 
-    public void setProducts(List<Product> products) {
-        this.products = products;
+    public void setBanners(List<Banner> banners) {
+        this.banners = banners;
     }
 }

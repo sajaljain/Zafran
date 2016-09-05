@@ -8,6 +8,7 @@ import java.util.List;
 /**
  * This is just a demo class
  * Will be removed before commit
+ * //ToDo to be deleted
  */
 public class Movie {
     @SerializedName("poster_path")

@@ -6,18 +6,13 @@ package com.monkporter.zafran.activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
-import android.text.SpannableStringBuilder;
-import android.text.style.ImageSpan;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -33,7 +28,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OrderItemListMainActivity extends AppCompatActivity {
+public class SingleProduct extends AppCompatActivity {
     private RecyclerView recyclerView;
     private ItemListAdapter adapter;
     int product_set;
@@ -56,7 +51,7 @@ public class OrderItemListMainActivity extends AppCompatActivity {
         teaImageId = extras.getString("TEA_IMAGE_ID");
         toolbar.setTitle(teaName);
         ImageView toolbarImage = (ImageView) findViewById(R.id.backdrop);
-        Picasso.with(OrderItemListMainActivity.this).load(teaImageId).into(toolbarImage);
+        Picasso.with(SingleProduct.this).load(teaImageId).into(toolbarImage);
         //toolbarImage.setImageResource(teaImageId);
        final CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
         collapsingToolbarLayout.setTitle(teaName);
@@ -65,7 +60,7 @@ public class OrderItemListMainActivity extends AppCompatActivity {
         cartQuantity = (TextView) findViewById(R.id.cart_quantity);
         //if q =0
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        SharedPreferences sharedPreferences = OrderItemListMainActivity.this.getSharedPreferences(getString(R.string.PREF_FILE),MODE_PRIVATE);
+        SharedPreferences sharedPreferences = SingleProduct.this.getSharedPreferences(getString(R.string.PREF_FILE),MODE_PRIVATE);
         product_set = sharedPreferences.getInt(getString(R.string.PRODUCT_SET),0);
         cartPrice.setText("Rs."+product_set*10);
         cartQuantity.setText(""+product_set);
@@ -73,14 +68,14 @@ public class OrderItemListMainActivity extends AppCompatActivity {
         cartBar = findViewById(R.id.cart_bar);
 
         recyclerView.setNestedScrollingEnabled(false);
-        adapter = new ItemListAdapter(OrderItemListMainActivity.this,getData(),cartPrice,cartQuantity,cartBar);
+        adapter = new ItemListAdapter(SingleProduct.this,getData(),cartPrice,cartQuantity,cartBar);
         recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(OrderItemListMainActivity.this));
+        recyclerView.setLayoutManager(new LinearLayoutManager(SingleProduct.this));
         checkout = (LinearLayout) findViewById(R.id.cart_bar);
         checkout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(OrderItemListMainActivity.this,SmsActivity.class));
+                startActivity(new Intent(SingleProduct.this,SmsActivity.class));
             }
         });
     }

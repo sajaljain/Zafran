@@ -64,7 +64,7 @@ public class Refresh extends AppCompatActivity implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.refresh_btn:
-                if (CommonMethod.isNetworkAvailable(this)) {
+                if (CommonMethod.isNetworkAvailable(Refresh.this)) {
                     if (previousScreen.equalsIgnoreCase("splash")) {
                         setResult(RESULT_OK);
                         finish();

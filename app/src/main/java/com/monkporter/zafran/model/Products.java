@@ -1,46 +1,41 @@
 package com.monkporter.zafran.model;
 
-import com.monkporter.zafran.R;
+import com.google.gson.annotations.SerializedName;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Sajal on 26-May-16.
+ * Created by vabs on 7/8/16.
  */
 public class Products {
-    private String name;
-    private String desc;
-    private int thumbnail;
+    @SerializedName("error")
+    private boolean error;
+    @SerializedName("message")
+    private String message;
+    @SerializedName("products")
+    private List<Product> products;
 
-
-    public Products(String name, String desc, int id) {
-    this.name = name;
-        this.desc = desc;
-        this.thumbnail = id;
+    public boolean isError() {
+        return error;
     }
 
-    public String getName() {
-        return name;
+    public void setError(boolean error) {
+        this.error = error;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public String getMessage() {
+        return message;
     }
 
-    public String getDesc() {
-        return desc;
+    public void setMessage(String message) {
+        this.message = message;
     }
 
-    public void setDesc(String desc) {
-        this.desc = desc;
+    public List<Product> getProducts() {
+        return products;
     }
 
-    public int getThumbnail() {
-        return thumbnail;
-    }
-
-    public void setThumbnail(int thumbnail) {
-        this.thumbnail = thumbnail;
+    public void setProducts(List<Product> products) {
+        this.products = products;
     }
 }

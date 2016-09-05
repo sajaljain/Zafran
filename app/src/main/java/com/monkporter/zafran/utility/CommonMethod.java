@@ -70,4 +70,7 @@ public class CommonMethod {
         }
     }
 
+    public static void cleanDeviceData() {
+        //TODO sajal clear temporary device data
+    }
 }

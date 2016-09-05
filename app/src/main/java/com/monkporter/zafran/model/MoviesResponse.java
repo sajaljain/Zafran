@@ -6,6 +6,8 @@ import java.util.List;
 
 /**
  * Created by Sajal on 12-May-16.
+ *
+ * TODO To be deleted
  */
 public class MoviesResponse {
     @SerializedName("page")
