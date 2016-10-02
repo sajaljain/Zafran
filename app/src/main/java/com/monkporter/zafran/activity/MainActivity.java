@@ -1,6 +1,7 @@
 package com.monkporter.zafran.activity;
 
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 
@@ -68,8 +69,7 @@ public class MainActivity extends AppCompatActivity
     HashMap<String, String> url_maps;
     private StaggeredGridLayoutManager staggeredGridLayoutManager;
     private RecyclerView recyclerView;
-    View v;
-    String flag = null;
+
 
     TextView toolbarAddress;
     String address = null;
@@ -85,6 +85,7 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         toolbarAddress = (TextView) findViewById(R.id.toolbar_address_id);
 
         PrefManager prefManager = new PrefManager(MainActivity.this);
@@ -302,7 +303,6 @@ public class MainActivity extends AppCompatActivity
         }
         if (id == R.id.nav_share) {
 
-
             Intent shareIntent = new Intent(Intent.ACTION_SEND);
             shareIntent.setAction(Intent.ACTION_SEND);
             shareIntent.setType("text/plain");
@@ -380,6 +380,7 @@ public class MainActivity extends AppCompatActivity
         Intent refreshIntent = new Intent(MainActivity.this, Refresh.class);
         refreshIntent.putExtra("previousScreen", "splash");
         startActivityForResult(refreshIntent, 1001);
+        overridePendingTransition(R.anim.start_activity_slide_in_left, R.anim.start_activity_slide_out_right);
     }
 
     @Override
@@ -394,16 +395,19 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+
+        ShowLoader.getInstance(MainActivity.this, "Loading...").run(true);
+    }
+
+    /*@Override
     protected void onStart() {
         super.onStart();
         Toast.makeText(this, "onStart", Toast.LENGTH_SHORT).show();
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Toast.makeText(this, "onResume", Toast.LENGTH_SHORT).show();
-    }
+
 
     @Override
     protected void onRestart() {
@@ -428,7 +432,7 @@ public class MainActivity extends AppCompatActivity
         Toast.makeText(this, "onDestroy", Toast.LENGTH_SHORT).show();
         super.onDestroy();
     }
-
+*/
     public void getBanner() {
         //here we making asynchronous calls so we need to check for both the loader messages
         if (ShowLoader.getInstance(MainActivity.this, "Loading Tea's...").isShowing()) {
@@ -438,8 +442,6 @@ public class MainActivity extends AppCompatActivity
 
         }
         ShowLoader.getInstance(MainActivity.this, "Loading Banners...").run(true);
-
-
         final HashMap<String, String> sliderBanner = new HashMap<>();
         ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
         Call<Banners> call = apiService.getBanners();
