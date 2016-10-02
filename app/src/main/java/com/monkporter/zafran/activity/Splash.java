@@ -37,7 +37,8 @@ import retrofit2.Response;
 
 public class Splash extends AppCompatActivity {
     private final String TAG = this.getClass().getSimpleName();
-    private static int SPLASH_TIME_OUT = 3000;
+    private static int SPLASH_TIME_OUT = 1000;
+    private Handler handler;
 
     //TempUserRequest tempUserRequest;
 
@@ -72,6 +73,7 @@ public class Splash extends AppCompatActivity {
 
     private void init() {
         prefManager = PrefManager.getInstance(Splash.this);
+        handler = new Handler();
     }
 
 
@@ -88,7 +90,7 @@ public class Splash extends AppCompatActivity {
             Toast.makeText(Splash.this, "Requesting Permission", Toast.LENGTH_SHORT).show();
             ActivityCompat.requestPermissions(this, MY_PERMISSIONS, PERMISSIONS_REQUEST);
         } else {
-            Toast.makeText(Splash.this, "Permission alredy granted", Toast.LENGTH_SHORT).show();
+            Toast.makeText(Splash.this, "Permission already granted", Toast.LENGTH_SHORT).show();
 
             isFCMIdPresent();
 
@@ -139,7 +141,7 @@ public class Splash extends AppCompatActivity {
     private int requestCreateTemporaryUser() {
 
 
-        PrefManager prefManager = PrefManager.getInstance(Splash.this);
+        PrefManager prefManager = PrefManager.getInstance(Zafran.getInstance());
         //Here Sending post request for user
         ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
         deviceRegId = prefManager.getDeviceRegId();
@@ -260,28 +262,65 @@ public class Splash extends AppCompatActivity {
 
     private void isFCMIdPresent() {
 
-        new Handler().postDelayed(new Runnable() {
-            /*
+   /*     new Handler().postDelayed(new Runnable() {
+            *//*
              * Showing splash screen with a timer. This will be useful when you
              * want to show case your app logo / company
-             */
+             *//*
             @Override
             public void run() {
-                String registrationId = prefManager.getDeviceRegId();
-                if (registrationId != null && !registrationId.equalsIgnoreCase("")) {
+                String registrationId;
+                while(true){
+                    registrationId = prefManager.getDeviceRegId();
+                    if (registrationId != null && !registrationId.equalsIgnoreCase("")) {
+                        new NetworkCalls().execute();
+                    }
+                }
 
-                    new NetworkCalls().execute();
+
+
+            }
+        }, SPLASH_TIME_OUT);*/
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String registrationId;
+                int count = 0;
+                while(true){
+                    registrationId = prefManager.getDeviceRegId();
+                    if (registrationId != null && !registrationId.equalsIgnoreCase("")) {
+                        if(count == 0)
+                        {
+                            Log.i(TAG,"I am here because i am revisiting");
+                            try {
+                                Thread.sleep(SPLASH_TIME_OUT);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+
+                        }
+                        Log.i(TAG,"I am issuing");
+                        handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    new NetworkCalls().execute();
+                                }
+                            });
+
+                    break;
+                    }
+                    count++;
                 }
             }
-        }, SPLASH_TIME_OUT);
 
-
+        }).start();
     }
 
     private void startMainActivity() {
         Intent refreshIntent = new Intent(Splash.this, MainActivity.class);
         refreshIntent.putExtra("previousScreen", "splashScreen");
         startActivity(refreshIntent);
+        overridePendingTransition(R.anim.start_activity_slide_in_left, R.anim.start_activity_slide_out_right);
         Splash.this.finish();
     }
 
@@ -328,6 +367,7 @@ public class Splash extends AppCompatActivity {
         Intent refreshIntent = new Intent(Splash.this, Refresh.class);
         refreshIntent.putExtra("previousScreen", "splash");
         startActivityForResult(refreshIntent, 1001);
+        overridePendingTransition(R.anim.start_activity_slide_in_left, R.anim.start_activity_slide_out_right);
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
