@@ -70,7 +70,8 @@ public class MainActivity extends AppCompatActivity
     private StaggeredGridLayoutManager staggeredGridLayoutManager;
     private RecyclerView recyclerView;
 
-
+    boolean banner = false;
+    boolean products = false;
     TextView toolbarAddress;
     String address = null;
     private boolean login;
@@ -117,7 +118,9 @@ public class MainActivity extends AppCompatActivity
                 startActivity(intent);
             }
         });
-        ShowLoader.getInstance(MainActivity.this, "Loading...").run(true);
+        if(banner==false || products==false) {
+            ShowLoader.getInstance(MainActivity.this, "Loading...").run(true);
+        }
         getBanner();
 
         getProductsList();
@@ -394,14 +397,14 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    @Override
+    /*@Override
     protected void onResume() {
         super.onResume();
+        Toast.makeText(this, "onResume", Toast.LENGTH_SHORT).show();
 
-        ShowLoader.getInstance(MainActivity.this, "Loading...").run(true);
     }
 
-    /*@Override
+    @Override
     protected void onStart() {
         super.onStart();
         Toast.makeText(this, "onStart", Toast.LENGTH_SHORT).show();
@@ -431,17 +434,18 @@ public class MainActivity extends AppCompatActivity
     protected void onDestroy() {
         Toast.makeText(this, "onDestroy", Toast.LENGTH_SHORT).show();
         super.onDestroy();
-    }
-*/
+    }*/
+
     public void getBanner() {
         //here we making asynchronous calls so we need to check for both the loader messages
-        if (ShowLoader.getInstance(MainActivity.this, "Loading Tea's...").isShowing()) {
+        /*if (ShowLoader.getInstance(MainActivity.this, "Loading Tea's...").isShowing()) {
 
 
             ShowLoader.getInstance(MainActivity.this, "Loading Tea's...").dismis(true);
 
         }
         ShowLoader.getInstance(MainActivity.this, "Loading Banners...").run(true);
+        */
         final HashMap<String, String> sliderBanner = new HashMap<>();
         ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
         Call<Banners> call = apiService.getBanners();
@@ -450,9 +454,15 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onResponse(Call<Banners> call, Response<Banners> response) {
                 try {
+                    banner = true;
+                    if(banner==true && products==true)
+                    {
+                        ShowLoader.getInstance(MainActivity.this, "Loading...").dismis(true);
+                    }
                     FirebaseCrash.logcat(Log.INFO, TAG, "Response for Banner ");
                     banners = response.body();
                     if (banners != null) {
+
                         boolean error = banners.isError();
                         String message = banners.getMessage();
 
@@ -495,10 +505,9 @@ public class MainActivity extends AppCompatActivity
                     startRefreshActivity();
                 } finally {
                     //remove the show loader
-                    if (ShowLoader.getInstance(MainActivity.this, "Loading Banner...").isShowing()) {
-                        ShowLoader.getInstance(MainActivity.this, "Loading Banner...").dismis(true);
+                    if (ShowLoader.getInstance(MainActivity.this, "Loading ...").isShowing() ) {
+                        ShowLoader.getInstance(MainActivity.this, "Loading ...").dismis(true);
                     }
-
                 }
 
             }
@@ -516,12 +525,12 @@ public class MainActivity extends AppCompatActivity
     }
 
     public List<Product> getProductsList() {
-        //Show Loader
+        /*//Show Loader
         if (ShowLoader.getInstance(MainActivity.this, "Loading Banners...").isShowing()) {
             ShowLoader.getInstance(MainActivity.this, "Loading Banners...").dismis(true);
 
         }
-        ShowLoader.getInstance(MainActivity.this, "Loading Tea's...").run(true);
+        ShowLoader.getInstance(MainActivity.this, "Loading Tea's...").run(true);*/
 
         ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
         Call<Products> call = apiService.getProducts();
@@ -531,7 +540,11 @@ public class MainActivity extends AppCompatActivity
             call.enqueue(new Callback<Products>() {
                 @Override
                 public void onResponse(Call<Products> call, Response<Products> response) {
-
+                    banner = true;
+                    if(banner==true && products==true)
+                    {
+                        ShowLoader.getInstance(MainActivity.this, "Loading...").dismis(true);
+                    }
                     Products products = response.body();
                     if (products != null) {
                         FirebaseCrash.logcat(Log.INFO, TAG, "error = " + products.isError());
@@ -567,8 +580,8 @@ public class MainActivity extends AppCompatActivity
             startRefreshActivity();
         } finally {
             //remove the show loader
-            if (ShowLoader.getInstance(MainActivity.this, "Loading Tea's...").isShowing()) {
-                ShowLoader.getInstance(MainActivity.this, "Loading Tea's...").dismis(true);
+            if (ShowLoader.getInstance(MainActivity.this, "Loading ...").isShowing() ) {
+                ShowLoader.getInstance(MainActivity.this, "Loading ...").dismis(true);
             }
 
         }
