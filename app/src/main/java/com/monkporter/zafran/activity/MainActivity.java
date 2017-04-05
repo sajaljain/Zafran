@@ -574,7 +574,7 @@ public class MainActivity extends AppCompatActivity
             });
 
         } catch (Exception e) {
-            FirebaseCrash.logcat(Log.INFO, TAG, e.getMessage());
+            FirebaseCrash.logcat(Log.ERROR, TAG, e.getMessage());
             FirebaseCrash.report(new Exception("Some exception occurred"));
             Toast.makeText(MainActivity.this, "Oops!!! error in fetching products", Toast.LENGTH_LONG).show();
             startRefreshActivity();

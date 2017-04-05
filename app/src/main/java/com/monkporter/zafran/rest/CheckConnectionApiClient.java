@@ -7,7 +7,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * Created by vabs on 9/8/16.
  */
 public class CheckConnectionApiClient {
-    private static final String BASE_URL = "http://instashout.in/";
+    private static final String BASE_URL = "http://curtkart.com/";
     public static Retrofit retrofit = null;
     public static Retrofit getClient(){
        if(retrofit == null){

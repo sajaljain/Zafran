@@ -7,7 +7,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * Created by Vaibhav on 7/21/2016.
  */
 public class TempUserApiClient {
-    public static final String BASE_URL = "http://instashout.in/";
+    public static final String BASE_URL = "http://curtkart.com/";
     private static Retrofit retrofit = null;
     public static Retrofit getClient(){
         if(retrofit == null){

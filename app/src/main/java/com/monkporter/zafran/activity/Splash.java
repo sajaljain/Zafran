@@ -180,40 +180,40 @@ public class Splash extends AppCompatActivity {
 
 
             //Logging the Request Input
-            FirebaseCrash.logcat(Log.INFO, TAG, "Request for Creating a temporary user");
-            FirebaseCrash.logcat(Log.INFO, TAG, "Cell " + temporaryUser.getCell());
-            FirebaseCrash.logcat(Log.INFO, TAG, "FirstName " + temporaryUser.getFirstName());
-            FirebaseCrash.logcat(Log.INFO, TAG, "Last Name " + temporaryUser.getLastName());
-            FirebaseCrash.logcat(Log.INFO, TAG, "Reg type id " + temporaryUser.getRegistrationChannelTypeID());
-            FirebaseCrash.logcat(Log.INFO, TAG, "User Name " + temporaryUser.getUserName());
-            FirebaseCrash.logcat(Log.INFO, TAG, "Social Media Id " + temporaryUser.getSocialMediaUserId());
-            FirebaseCrash.logcat(Log.INFO, TAG, "Sex " + temporaryUser.getSex());
-            FirebaseCrash.logcat(Log.INFO, TAG, "Email Id " + temporaryUser.getEmailId());
-            FirebaseCrash.logcat(Log.INFO, TAG, "FCM Id " + temporaryUser.getDeviceRegistrationID());
+            FirebaseCrash.logcat(Log.DEBUG, TAG, "Request for Creating a temporary user");
+            FirebaseCrash.logcat(Log.DEBUG, TAG, "Cell " + temporaryUser.getCell());
+            FirebaseCrash.logcat(Log.DEBUG, TAG, "FirstName " + temporaryUser.getFirstName());
+            FirebaseCrash.logcat(Log.DEBUG, TAG, "Last Name " + temporaryUser.getLastName());
+            FirebaseCrash.logcat(Log.DEBUG, TAG, "Reg type id " + temporaryUser.getRegistrationChannelTypeID());
+            FirebaseCrash.logcat(Log.DEBUG, TAG, "User Name " + temporaryUser.getUserName());
+            FirebaseCrash.logcat(Log.DEBUG, TAG, "Social Media Id " + temporaryUser.getSocialMediaUserId());
+            FirebaseCrash.logcat(Log.DEBUG, TAG, "Sex " + temporaryUser.getSex());
+            FirebaseCrash.logcat(Log.DEBUG, TAG, "Email Id " + temporaryUser.getEmailId());
+            FirebaseCrash.logcat(Log.DEBUG, TAG, "FCM Id " + temporaryUser.getDeviceRegistrationID());
 
             Call<TemporaryUserResponse> call = apiService.createTemporaryUser(temporaryUser);
 
             try {
                 TemporaryUserResponse temporaryUserResponse = call.execute().body();
-                FirebaseCrash.logcat(Log.INFO, TAG, "Response of Creating a temporary user");
-                FirebaseCrash.logcat(Log.INFO, TAG, "Temporary user error = " + temporaryUserResponse.isError());
-                FirebaseCrash.logcat(Log.INFO, TAG, "Temporary user message = " + temporaryUserResponse.getMessage());
-                FirebaseCrash.logcat(Log.INFO, TAG, "Temporary user userID = " + temporaryUserResponse.getUserId());
+                FirebaseCrash.logcat(Log.DEBUG, TAG, "Response of Creating a temporary user");
+                FirebaseCrash.logcat(Log.DEBUG, TAG, "Temporary user error = " + temporaryUserResponse.isError());
+                FirebaseCrash.logcat(Log.DEBUG, TAG, "Temporary user message = " + temporaryUserResponse.getMessage());
+                FirebaseCrash.logcat(Log.DEBUG, TAG, "Temporary user userID = " + temporaryUserResponse.getUserId());
 
                 if (temporaryUserResponse.isError()) {
-                    FirebaseCrash.logcat(Log.INFO, TAG, "Temporary user creation failed");
+                    FirebaseCrash.logcat(Log.DEBUG, TAG, "Temporary user creation failed");
                     FirebaseCrash.report(new Exception("Temporary user creation failed"));
                     //Error occurred from server side, incapable of creating a user on server
                     return 201;
                 } else {
-                    FirebaseCrash.logcat(Log.INFO, TAG, "Temporary user creation Success");
+                    FirebaseCrash.logcat(Log.DEBUG, TAG, "Temporary user creation Success");
                     userId = temporaryUserResponse.getUserId();
                     prefManager.setUserId(userId);
                     // here we cannot return true because now we will make the next call to update the FCM id
                 }
 
             } catch (IOException e) {
-                FirebaseCrash.logcat(Log.INFO, TAG, "Some n/w error in device " + e.getMessage());
+                FirebaseCrash.logcat(Log.DEBUG, TAG, "Some n/w error in device " + e.getMessage());
                 FirebaseCrash.report(new Exception("Some n/w error in device"));
                 //some network error occurred
                 return 500;
@@ -235,26 +235,26 @@ public class Splash extends AppCompatActivity {
         UpdateFcm updateFcm = new UpdateFcm();
         updateFcm.setDeviceRegistrationId(deviceRegId);
         updateFcm.setUserId(userId);
-        FirebaseCrash.logcat(Log.INFO, TAG, "Request for updating device registration id");
-        FirebaseCrash.logcat(Log.INFO, TAG, "Device Registration Id " + updateFcm.getDeviceRegistrationId());
-        FirebaseCrash.logcat(Log.INFO, TAG, "User Id " + updateFcm.getUserId());
+        FirebaseCrash.logcat(Log.DEBUG, TAG, "Request for updating device registration id");
+        FirebaseCrash.logcat(Log.DEBUG, TAG, "Device Registration Id " + updateFcm.getDeviceRegistrationId());
+        FirebaseCrash.logcat(Log.DEBUG, TAG, "User Id " + updateFcm.getUserId());
 
 
         Call<UpdateFcmResponse> call = apiService.updateFCM(updateFcm);
         try {
             UpdateFcmResponse updateFcmResponse = call.execute().body();
-            FirebaseCrash.logcat(Log.INFO, TAG, "Response for updating device registration id");
-            FirebaseCrash.logcat(Log.INFO, TAG, "UpdateFcm message =" + updateFcmResponse.getMessage());
+            FirebaseCrash.logcat(Log.DEBUG, TAG, "Response for updating device registration id");
+            FirebaseCrash.logcat(Log.DEBUG, TAG, "UpdateFcm message =" + updateFcmResponse.getMessage());
 
             if (updateFcmResponse.isError()) {
-                FirebaseCrash.logcat(Log.INFO, TAG, "FCM cannot be updated");
+                FirebaseCrash.logcat(Log.DEBUG, TAG, "FCM cannot be updated");
                 FirebaseCrash.report(new Exception("FCM cannot be updated"));
                 //fcm id cannot be updated
             } else {
-                FirebaseCrash.logcat(Log.INFO, TAG, "FCM ID updated success-fully on server");
+                FirebaseCrash.logcat(Log.DEBUG, TAG, "FCM ID updated success-fully on server");
             }
         } catch (IOException e) {
-            FirebaseCrash.logcat(Log.INFO, TAG, "Some n/w error in device " + e.getMessage());
+            FirebaseCrash.logcat(Log.DEBUG, TAG, "Some n/w error in device " + e.getMessage());
             FirebaseCrash.report(new Exception("Some n/w error in device"));
         }
     }
