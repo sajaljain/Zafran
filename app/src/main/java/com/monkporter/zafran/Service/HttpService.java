@@ -22,6 +22,7 @@ import retrofit2.Response;
  * Created by Vaibhav on 7/14/2016.
  */
 public class HttpService extends IntentService{
+
     private static String TAG = HttpService.class.getSimpleName();
     OtpPostRequest otpPostRequest;
     public HttpService() {

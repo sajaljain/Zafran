@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     tools:context="com.monkporter.zafran.activity.SmsActivity">
 
-    <com.monkporter.zafran.helper.MyViewPager
+    <android.support.v4.view.ViewPager
         android:id="@+id/viewPagerVertical"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
@@ -165,7 +165,7 @@
 
         </LinearLayout>
 
-    </com.monkporter.zafran.helper.MyViewPager>
+    </android.support.v4.view.ViewPager>
 
 
     <ProgressBar

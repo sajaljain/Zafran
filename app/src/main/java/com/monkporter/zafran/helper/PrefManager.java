@@ -5,16 +5,10 @@ import android.content.SharedPreferences;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.monkporter.zafran.activity.PlacesAutoCompleteActivity;
-import com.monkporter.zafran.adapter.PlacesAutoCompleteAdapter;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
-
-import retrofit2.Retrofit;
 
 /**
  * Created by Vaibhav on 7/14/2016.
@@ -47,7 +41,7 @@ public class PrefManager {
     private static final String USERNAME = "userName";
     private static final String FIRST_TIME = "firstTimeUser";
     private static final String IS_TEMP_USER = "isTempUser";
-    private static final String DEVICE_REG_ID = "deviceRegId";
+    private static final String FIREBASE_ID = "firebaseID";
     private static final String USER_LATITUDE = "mLatitude";
     private static final String USER_LONGITUDE = "mLongitude";
     private static final String USER_PLACEID = "mPlaceID";
@@ -63,9 +57,9 @@ public class PrefManager {
         editor = pref.edit();
     }
 
-    public static PrefManager getInstance(Context context){
+    public static PrefManager getInstance(Context context) {
 
-        if(pm==null){
+        if (pm == null) {
             pm = new PrefManager(context);
         }
         return pm;
@@ -273,12 +267,12 @@ public class PrefManager {
         return pref.getBoolean(IS_TEMP_USER, false);
     }
 
-    public void setDeviceRegId(String deviceRegId) {
-        editor.putString(DEVICE_REG_ID, deviceRegId);
+    public void setFireBaseId(String fireBaseId) {
+        editor.putString(FIREBASE_ID, fireBaseId);
         editor.commit();
     }
 
-    public String getDeviceRegId() {
-        return pref.getString(DEVICE_REG_ID, null);
+    public String getFireBaseId() {
+        return pref.getString(FIREBASE_ID, null);
     }
 }

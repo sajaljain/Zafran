@@ -58,6 +58,6 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
      */
     private void sendRegistrationToPrefManager(String token) {
         PrefManager manager = new PrefManager(MyFirebaseInstanceIDService.this);
-        manager.setDeviceRegId(token);
+        manager.setFireBaseId(token);
     }
 }

@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.monkporter.zafran.Interface.RequestSms;
 import com.monkporter.zafran.R;
 import com.monkporter.zafran.Service.HttpService;
+import com.monkporter.zafran.Zafran;
 import com.monkporter.zafran.helper.PrefManager;
 import com.monkporter.zafran.model.UserDetail;
 import com.monkporter.zafran.model.UserDetailResponse;
@@ -169,9 +170,14 @@ public class SmsActivity extends AppCompatActivity implements View.OnClickListen
 
     private void requestForSMS(final String name,final String email,final String mobile) {
         final UserDetail userDetail = new UserDetail();
+
         userDetail.setName(name);
-        userDetail.setEmail(email);
-        userDetail.setMobile(mobile);
+        userDetail.setEmailId(email);
+        userDetail.setCell(mobile);
+        userDetail.setUserId(PrefManager.getInstance(Zafran.getInstance()).getUserId());
+        userDetail.setDeviceRegistrationID(PrefManager.getInstance(Zafran.getInstance()).getFireBaseId());
+
+        Log.d(TAG, "requestForSMS: "+userDetail.toString());
         requestSms = OtpApiClient.getClient().create(RequestSms.class);
         Call<UserDetailResponse> call = requestSms.getResponse(userDetail);
         call.enqueue(new Callback<UserDetailResponse>() {
@@ -211,6 +217,7 @@ public class SmsActivity extends AppCompatActivity implements View.OnClickListen
 
             @Override
             public void onFailure(Call<UserDetailResponse> call, Throwable t) {
+                t.printStackTrace();
                 Log.d("RequestSmsResponse","onFailure ="+t.getMessage());
                 startActivity(new Intent(SmsActivity.this,Refresh.class));
             }

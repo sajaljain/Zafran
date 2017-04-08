@@ -397,45 +397,6 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    /*@Override
-    protected void onResume() {
-        super.onResume();
-        Toast.makeText(this, "onResume", Toast.LENGTH_SHORT).show();
-
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Toast.makeText(this, "onStart", Toast.LENGTH_SHORT).show();
-    }
-
-
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        Toast.makeText(this, "onRestart", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    protected void onPause() {
-        Toast.makeText(this, "onPause", Toast.LENGTH_SHORT).show();
-        super.onPause();
-    }
-
-    @Override
-    protected void onStop() {
-        Toast.makeText(this, "onStop", Toast.LENGTH_SHORT).show();
-        super.onStop();
-    }
-
-    @Override
-    protected void onDestroy() {
-        Toast.makeText(this, "onDestroy", Toast.LENGTH_SHORT).show();
-        super.onDestroy();
-    }*/
-
     public void getBanner() {
         //here we making asynchronous calls so we need to check for both the loader messages
         /*if (ShowLoader.getInstance(MainActivity.this, "Loading Tea's...").isShowing()) {
@@ -566,7 +527,7 @@ public class MainActivity extends AppCompatActivity
 
                 @Override
                 public void onFailure(Call<Products> call, Throwable t) {
-                    FirebaseCrash.logcat(Log.INFO, TAG, "Some n/w error in device ");
+                    FirebaseCrash.logcat(Log.INFO, TAG, "Some n/w error in device "+ t.getMessage());
                     FirebaseCrash.report(new Exception("Some n/w error in device"));
                     Toast.makeText(MainActivity.this, "Oops!!! error in fetching products", Toast.LENGTH_LONG).show();
                     startRefreshActivity();

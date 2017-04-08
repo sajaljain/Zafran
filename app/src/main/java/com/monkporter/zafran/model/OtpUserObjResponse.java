@@ -4,20 +4,39 @@ import com.google.gson.annotations.SerializedName;
 
 /**
  * Created by Vaibhav on 7/14/2016.
+ * <p>
+ * profile": {
+ * "userId": "49",
+ * "name": "Sajal",
+ * "email": "sajaljain98@gmail.com",
+ * "mobile": "7292061935",
+ * "fcmId": "eLBULBCJu0Y:APA91bGdpXN-jV455P1fNZ0_fFglxaYsmUYNeoKRY_MfqgpJOYn7UYhOFy_xFTkX1Z55awWrBmQYM5X1P92NOtHEE-3aump6Kij6XX1k-w4le5Fi8VhA6PEeyg3aoGtn2oUkGsvWAA8a",
+ * "created_at": "2016-08-26 07:11:56"
+ * }
  */
 public class OtpUserObjResponse {
+
+    @SerializedName("userId")
+    private String userId;
     @SerializedName("name")
     private String name;
     @SerializedName("email")
     private String email;
     @SerializedName("mobile")
     private String mobile;
-    @SerializedName("apikey")
-    private String apikey;
-    @SerializedName("status")
-    private int status;
+    @SerializedName("fcmId")
+    private String fcmId;
     @SerializedName("created_at")
     private String created_at;
+
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 
     public String getName() {
         return name;
@@ -35,20 +54,12 @@ public class OtpUserObjResponse {
         this.email = email;
     }
 
-    public String getApikey() {
-        return apikey;
+    public String getFcmId() {
+        return fcmId;
     }
 
-    public void setApikey(String apikey) {
-        this.apikey = apikey;
-    }
-
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
+    public void setFcmId(String fcmId) {
+        this.fcmId = fcmId;
     }
 
     public String getCreated_at() {

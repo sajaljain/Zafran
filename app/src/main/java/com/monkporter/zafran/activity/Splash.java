@@ -32,8 +32,6 @@ import com.monkporter.zafran.utility.CommonMethod;
 import java.io.IOException;
 
 import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class Splash extends AppCompatActivity {
     private final String TAG = this.getClass().getSimpleName();
@@ -144,7 +142,7 @@ public class Splash extends AppCompatActivity {
         PrefManager prefManager = PrefManager.getInstance(Zafran.getInstance());
         //Here Sending post request for user
         ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
-        deviceRegId = prefManager.getDeviceRegId();
+        deviceRegId = prefManager.getFireBaseId();
 
         emailID = FetchUserEmail.getEmail(this);
 
@@ -220,7 +218,7 @@ public class Splash extends AppCompatActivity {
             }
 
         }
-        if (prefManager.getDeviceRegId() != null) {
+        if (prefManager.getFireBaseId() != null) {
 
             requestUpdateFcmId();
 
@@ -268,7 +266,7 @@ public class Splash extends AppCompatActivity {
                 String registrationId;
                 int count = 0;
                 while(true){
-                    registrationId = prefManager.getDeviceRegId();
+                    registrationId = prefManager.getFireBaseId();
                     if (registrationId != null && !registrationId.equalsIgnoreCase("")) {
                         if(count == 0)
                         {
