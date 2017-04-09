@@ -10,6 +10,7 @@ import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 
@@ -22,6 +23,14 @@ import android.widget.Toast;
 
 
 import java.io.File;
+import java.net.InetAddress;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+
+import static android.content.Context.CONNECTIVITY_SERVICE;
 
 
 public class CommonMethod {
@@ -68,6 +77,31 @@ public class CommonMethod {
                 return false;
             }
         }
+    }
+    public static boolean checkInternet() {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        Callable<Boolean> callable = new Callable<Boolean>() {
+            @Override
+            public Boolean call() {
+                try {
+                    InetAddress ipAddr = InetAddress.getByName("www.google.com");
+                    return !ipAddr.equals("");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return false;
+                }
+            }
+        };
+        Future<Boolean> future = executor.submit(callable);
+        try {
+            return future.get(); //returns 2 or raises an exception if the thread dies, so safer
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        executor.shutdown();
+        return false;
     }
 
     public static void cleanDeviceData() {

@@ -95,17 +95,6 @@
             android:theme="@style/AppTheme"></activity>
         <activity android:name=".activity.VerificationActivity" />
 
-        <!-- SMS Receiver -->
-        <receiver android:name=".receiver.SmsReceiver">
-            <intent-filter android:priority="99999">
-                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
-            </intent-filter>
-        </receiver>
-
-        <!-- Intent service -->
-        <service
-            android:name=".Service.HttpService"
-            android:exported="false" />
 
         <activity
             android:name=".activity.SmsActivity"

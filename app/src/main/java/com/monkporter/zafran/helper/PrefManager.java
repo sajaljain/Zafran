@@ -51,7 +51,9 @@ public class PrefManager {
     private static final String REF_SCRN = "pressExit";
     private static PrefManager pm = null;
 
-    public PrefManager(Context context) {
+
+
+    private PrefManager(Context context) {
         this._context = context;
         pref = _context.getSharedPreferences(PREF_NAME, PRIVATE_MODE);
         editor = pref.edit();

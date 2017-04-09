@@ -56,7 +56,7 @@ public class Splash extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
         init();
 
-        if (CommonMethod.isNetworkAvailable(Splash.this)) {
+        if (CommonMethod.checkInternet()) {
 
             if (Build.VERSION.SDK_INT < 23) {
                 isFCMIdPresent();
@@ -66,6 +66,7 @@ public class Splash extends AppCompatActivity {
         } else {
             startRefreshActivity();
         }
+
 
     }
 
@@ -368,4 +369,6 @@ public class Splash extends AppCompatActivity {
 
         Splash.this.finish();
     }
+
+
 }

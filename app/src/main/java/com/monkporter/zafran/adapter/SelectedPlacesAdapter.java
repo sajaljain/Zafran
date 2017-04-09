@@ -56,7 +56,7 @@ public class SelectedPlacesAdapter extends RecyclerView.Adapter<SelectedPlacesAd
         if(!mResultList.contains(address)) {
             mResultList.add(0, address);
             notifyItemInserted(0);
-            PrefManager prefManager = new PrefManager(context);
+            PrefManager prefManager = PrefManager.getInstance(context);
             prefManager.saveLocations(mResultList);
         }
     }

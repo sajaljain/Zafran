@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity
 
         toolbarAddress = (TextView) findViewById(R.id.toolbar_address_id);
 
-        PrefManager prefManager = new PrefManager(MainActivity.this);
+        PrefManager prefManager = PrefManager.getInstance(MainActivity.this);
         address = prefManager.getUserCurrentLocation();
 
 
@@ -475,6 +475,7 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public void onFailure(Call<Banners> call, Throwable t) {
+                t.printStackTrace();
                 FirebaseCrash.logcat(Log.INFO, TAG, "Some n/w error in device ");
                 FirebaseCrash.report(new Exception("Some n/w error in device"));
                 Toast.makeText(MainActivity.this, "Oops!!! error in fetching banners", Toast.LENGTH_LONG).show();
@@ -527,6 +528,7 @@ public class MainActivity extends AppCompatActivity
 
                 @Override
                 public void onFailure(Call<Products> call, Throwable t) {
+                    t.printStackTrace();
                     FirebaseCrash.logcat(Log.INFO, TAG, "Some n/w error in device "+ t.getMessage());
                     FirebaseCrash.report(new Exception("Some n/w error in device"));
                     Toast.makeText(MainActivity.this, "Oops!!! error in fetching products", Toast.LENGTH_LONG).show();

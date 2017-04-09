@@ -1,5 +1,6 @@
 package com.monkporter.zafran.model;
 
+import com.google.android.gms.common.api.BooleanResult;
 import com.google.gson.annotations.SerializedName;
 
 /**
@@ -21,7 +22,7 @@ import com.google.gson.annotations.SerializedName;
  */
 public class VerifyOtpResponse {
     @SerializedName("error")
-    private boolean error;
+    private String error;
 
     @SerializedName("message")
     private String message;
@@ -30,26 +31,26 @@ public class VerifyOtpResponse {
     private OtpUserObjResponse profile;
 
     public boolean isError() {
-        return error;
+        return Boolean.parseBoolean(error);
     }
 
-    public void setError(boolean error) {
-        this.error = error;
-    }
+
 
     public String getMessage() {
         return message;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
-    }
 
     public OtpUserObjResponse getProfile() {
         return profile;
     }
 
-    public void setProfile(OtpUserObjResponse profile) {
-        this.profile = profile;
+    @Override
+    public String toString() {
+        return "VerifyOtpResponse{" +
+                "error='" + error + '\'' +
+                ", message='" + message + '\'' +
+                ", profile=" + profile +
+                '}';
     }
 }

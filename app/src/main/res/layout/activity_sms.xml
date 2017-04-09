@@ -7,8 +7,8 @@
 
     <android.support.v4.view.ViewPager
         android:id="@+id/viewPagerVertical"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:id="@+id/layout_sms"
@@ -178,6 +178,8 @@
         android:layout_marginBottom="60dp"
         android:indeterminateTint="@color/colorAccent"
         android:indeterminateTintMode="src_atop"
+
+
         android:visibility="gone" />
 
     <LinearLayout
@@ -193,16 +195,30 @@
             android:id="@+id/txt_edit_mobile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="9818661935"
             android:textColor="@android:color/white"
             android:textSize="16dp" />
 
-        <ImageButton
+        <ImageView
             android:id="@+id/btn_edit_mobile"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginLeft="10dp"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
             android:background="@null"
-            android:src="@drawable/ic_done" />
+            android:padding="16dp"
+            android:src="@mipmap/ic_edit" />
     </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/timer_progressbar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="-6dp"
+        android:visibility="visible"
+
+
+        />
+
 
 </RelativeLayout>

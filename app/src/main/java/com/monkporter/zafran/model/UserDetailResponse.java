@@ -26,36 +26,37 @@ public class UserDetailResponse {
     private String message;
 
 
-    public String getUserId() {
-        return userId;
-    }
+    public int getUserId() {
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+        return Integer.parseInt(userId);
     }
 
     public String getSmsSend() {
         return smsSend;
     }
 
-    public void setSmsSend(String smsSend) {
-        this.smsSend = smsSend;
+    public String getError() {
+        return error;
     }
+
+
+
 
     public String getMessage() {
         return message;
     }
 
-    public boolean isError() {
 
-        return Boolean.getBoolean(error);
+
+    @Override
+    public String toString() {
+        return "UserDetailResponse{" +
+                "userId='" + userId + '\'' +
+                ", smsSend='" + smsSend + '\'' +
+                ", error='" + error + '\'' +
+                ", message='" + message + '\'' +
+                '}';
     }
 
-    public void setMessage(String s) {
-        this.message = s;
-    }
 
-    public void setError(String error) {
-        this.error = error;
-    }
 }

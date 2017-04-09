@@ -6,6 +6,10 @@ import com.monkporter.zafran.model.TemporaryUser;
 import com.monkporter.zafran.model.TemporaryUserResponse;
 import com.monkporter.zafran.model.UpdateFcm;
 import com.monkporter.zafran.model.UpdateFcmResponse;
+import com.monkporter.zafran.model.UserDetail;
+import com.monkporter.zafran.model.UserDetailResponse;
+import com.monkporter.zafran.model.VerifyOtp;
+import com.monkporter.zafran.model.VerifyOtpResponse;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -27,4 +31,14 @@ public interface ApiInterface {
 
     @GET("zafran/read/products.php")
     Call<Products> getProducts();
+
+
+    @POST("zafran/update/verify_otp.php")
+    Call<VerifyOtpResponse> getResponse_OTP(@Body VerifyOtp verifyOtp);
+
+
+
+    @POST("zafran/create/request_sms.php")
+    Call<UserDetailResponse> getResponse_RequestSms(@Body UserDetail userDetail);
+
 }

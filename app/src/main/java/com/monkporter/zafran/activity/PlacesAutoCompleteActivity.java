@@ -117,7 +117,7 @@ public class PlacesAutoCompleteActivity extends AppCompatActivity implements Goo
                 mGoogleApiClient, BOUNDS_INDIA, null);
         progressDialog = new ProgressDialog(this);
         progressDialog.setCancelable(false);
-        prefManager = new PrefManager(PlacesAutoCompleteActivity.this);
+        prefManager = PrefManager.getInstance(PlacesAutoCompleteActivity.this);
         mResultList = prefManager.getSaveLocations();
         mLatList = prefManager.getSaveLatitude();
         mLongList = prefManager.getSaveLongitude();
@@ -342,13 +342,13 @@ public class PlacesAutoCompleteActivity extends AppCompatActivity implements Goo
             public void onResponse(Call<UserDetailResponse> call, Response<UserDetailResponse> response) {
                 int statuscode = response.code();
                 UserDetailResponse userLocationResponse = response.body();
-                Log.d(TAG, "UserLocation error =" + userLocationResponse.isError());
+
                 if (progressDialog.isShowing())
                     progressDialog.dismiss();
                 //cityId = userLocationResponse.getCityId();
                 //areaId = userLocationResponse.getAreaId();
                 Log.d(TAG, "User Location message =" + userLocationResponse.getMessage());
-                boolean error = userLocationResponse.isError();
+                boolean error = Boolean.parseBoolean(userLocationResponse.getError().toLowerCase());
                 if (!error) {
                     String c = getCityFromAddress(mCompleteAddress);
                     String a = getAreaFromAddress(mCompleteAddress);
@@ -358,7 +358,7 @@ public class PlacesAutoCompleteActivity extends AppCompatActivity implements Goo
                     } else {
                         add = mCompleteAddress;
                     }
-                    PrefManager prefManager = new PrefManager(PlacesAutoCompleteActivity.this);
+                    PrefManager prefManager = PrefManager.getInstance(PlacesAutoCompleteActivity.this);
                     prefManager.setUserCurrentLocation(add);
                     prefManager.setUserCurrentLatitude(mLatitude);
                     prefManager.setUserCurrentLongitude(mLongitude);
@@ -383,6 +383,7 @@ public class PlacesAutoCompleteActivity extends AppCompatActivity implements Goo
 
             @Override
             public void onFailure(Call<UserDetailResponse> call, Throwable t) {
+                t.printStackTrace();
                 if (progressDialog.isShowing())
                     progressDialog.dismiss();
                 Log.d(TAG, "UserLocation onFailure =" + t.getMessage());
@@ -504,7 +505,7 @@ public class PlacesAutoCompleteActivity extends AppCompatActivity implements Goo
                 return;
             }
 
-            if (CommonMethod.isNetworkAvailable(PlacesAutoCompleteActivity.this)) {
+            if (CommonMethod.checkInternet()) {
                 if (!progressDialog.isShowing()) {
                     progressDialog.setMessage("fetching location...");
                     progressDialog.setIndeterminate(true);

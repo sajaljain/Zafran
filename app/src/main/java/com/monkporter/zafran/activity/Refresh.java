@@ -41,7 +41,7 @@ public class Refresh extends AppCompatActivity implements View.OnClickListener {
 
     @Override
     public void onBackPressed() {
-        PrefManager pref = new PrefManager(this);
+        PrefManager pref = PrefManager.getInstance(Refresh.this);
         boolean pressExit = pref.isExit();
         if (!pressExit) {
             //TODO: sajal This code is to be removed

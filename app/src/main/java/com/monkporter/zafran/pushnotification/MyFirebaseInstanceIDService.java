@@ -57,7 +57,7 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
      * @param token The new token.
      */
     private void sendRegistrationToPrefManager(String token) {
-        PrefManager manager = new PrefManager(MyFirebaseInstanceIDService.this);
+        PrefManager manager = PrefManager.getInstance(MyFirebaseInstanceIDService.this);
         manager.setFireBaseId(token);
     }
 }
