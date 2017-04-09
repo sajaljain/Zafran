@@ -1,16 +1,13 @@
 package com.monkporter.zafran.activity;
 
-import android.content.Context;
+import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
 import com.monkporter.zafran.R;
@@ -34,25 +31,26 @@ public class AddressDetail extends AppCompatActivity {
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-    /*    actionBar.setDisplayShowCustomEnabled(true);
 
+    /*  actionBar.setDisplayShowCustomEnabled(true);
         LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View v = inflater.inflate(R.layout.actionbar_address_layout,null);
-actionBar.setCustomView(v);*/
+        actionBar.setCustomView(v);
+    */
 
         recyclerView = (RecyclerView) findViewById(R.id.address_detail_recyclerview);
-        adapter = new AddressDetailAdapter(AddressDetail.this,getData());
+        adapter = new AddressDetailAdapter(AddressDetail.this, getData());
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(AddressDetail.this));
     }
 
     private List<AddressDetailAttributes> getData() {
         List<AddressDetailAttributes> data = new ArrayList<>();
-        String usrName[] = {"Ram","Sham","Kam","Num","Bum"};
-        String addLine1[] = {"H.No - 1093","H.No - 1093","H.No - 1093","H.No - 1093","H.No - 1093"};
-        String addLine2[] = {"Sector - 7, Urban Estate","Sector - 7, Urban Estate","Sector - 7, Urban Estate","Sector - 7, Urban Estate","Sector - 7, Urban Estate"};
-        String city[] = {"Karnal","Karnal","Karnal","Karnal","Karnal"};
-        for( int i = 0;i < usrName.length;i++){
+        String usrName[] = {"Ram", "Sham", "Kam", "Num", "Bum"};
+        String addLine1[] = {"H.No - 1093", "H.No - 1093", "H.No - 1093", "H.No - 1093", "H.No - 1093"};
+        String addLine2[] = {"Sector - 7, Urban Estate", "Sector - 7, Urban Estate", "Sector - 7, Urban Estate", "Sector - 7, Urban Estate", "Sector - 7, Urban Estate"};
+        String city[] = {"Karnal", "Karnal", "Karnal", "Karnal", "Karnal"};
+        for (int i = 0; i < usrName.length; i++) {
             AddressDetailAttributes current = new AddressDetailAttributes();
             current.userName = usrName[i];
             current.addressLine1 = addLine1[i];
@@ -68,7 +66,7 @@ actionBar.setCustomView(v);*/
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
 
-        MenuItem menuItem =  menu.findItem(R.id.action_notification);
+        MenuItem menuItem = menu.findItem(R.id.action_notification);
         menuItem.setVisible(false);
         return true;
     }
@@ -84,16 +82,16 @@ actionBar.setCustomView(v);*/
         if (id == R.id.add_button_id) {
             Toast.makeText(AddressDetail.this, "Add Button Clicked", Toast.LENGTH_SHORT).show();
             AddressDetailAttributes current = new AddressDetailAttributes();
-            current.userName="Vaibhav";
-            current.addressLine1="H.No - 1093";
+            current.userName = "Vaibhav";
+            current.addressLine1 = "H.No - 1093";
             current.addressLine2 = "Sector - 7, Urban Estate";
             current.areaAndCity = "Karnal";
             adapter.insert(current);
             return true;
         }
-        if(id == android.R.id.home){
-           this.finish();
-           // Toast.makeText(AddressDetail.this, "Back Button", Toast.LENGTH_SHORT).show();
+        if (id == android.R.id.home) {
+            this.finish();
+            // Toast.makeText(AddressDetail.this, "Back Button", Toast.LENGTH_SHORT).show();
             return true;
         }
         return super.onOptionsItemSelected(item);

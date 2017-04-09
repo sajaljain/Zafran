@@ -1,5 +1,7 @@
 package com.monkporter.zafran.Interface;
 
+import com.monkporter.zafran.model.Address;
+import com.monkporter.zafran.model.AddressResponse;
 import com.monkporter.zafran.model.Banners;
 import com.monkporter.zafran.model.Products;
 import com.monkporter.zafran.model.TemporaryUser;
@@ -40,5 +42,9 @@ public interface ApiInterface {
 
     @POST("zafran/create/request_sms.php")
     Call<UserDetailResponse> getResponse_RequestSms(@Body UserDetail userDetail);
+
+
+    @POST("zafran/create/address.php")
+    Call<AddressResponse> getResponse_CreateAddress(@Body Address userDetail);
 
 }

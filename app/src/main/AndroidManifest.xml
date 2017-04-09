@@ -92,7 +92,10 @@
         <activity
             android:name=".activity.DeliveryAddress"
             android:label="Delivery Address"
-            android:theme="@style/AppTheme"></activity>
+            android:exported="true"
+            android:theme="@style/AppTheme">
+
+        </activity>
         <activity android:name=".activity.VerificationActivity" />
 
 

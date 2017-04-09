@@ -25,10 +25,10 @@
     <string name="use_my_location">Use current location</string>
     <string name="autocomplete_hint">Pick Locality</string>
     <string name="phone_number">Phone Number</string>
-    <string name="company_name">Company Name</string>
-    <string name="address_detail">Floor/Address Details</string>
-    <string name="address_place"><![CDATA[Area & city]]></string>
-    <string name="delivery_address">Delivery Addresss</string>
+    <string name="company_name">e.g. Hindustan Coca-Cola Beverages </string>
+    <string name="address_detail">e.g. 3rd Floor, Orchid Centre</string>
+    <string name="address_place">Sector 53, Gurgaon-122001 Haryana, India.</string>
+    <string name="delivery_address">Save &amp; Deliver Here</string>
 
 
     <string name="hello_world">Hello world!</string>

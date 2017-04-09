@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -143,14 +142,9 @@ public class SmsActivity extends AppCompatActivity implements View.OnClickListen
                             pref.setUserId(profileObj.getUserId());
                             pref.createLogin(name, email, mobile);
 
+                            finish();
+                            startAddressActivity(SmsActivity.this);
 
-                            Toast.makeText(SmsActivity.this, "Great !!! ", Toast.LENGTH_SHORT).show();
-
-//                            Intent intent = new Intent(SmsActivity.this, MainActivity.class);
-//                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                            startActivity(intent);
-
-                            // TODO: sajal 09-04-2017 add gotoAddressActivity
 
                         } else {
                             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
@@ -330,12 +324,14 @@ public class SmsActivity extends AppCompatActivity implements View.OnClickListen
                         // checking for error, if not error SMS is initiated
                         // device should receive it shortly
 
-                        Boolean b = Boolean.parseBoolean(userDetailResponse.getSmsSend().toLowerCase());
+                        Boolean smsSendStatus = Boolean.parseBoolean(userDetailResponse.getSmsSend().toLowerCase());
 
-                        if (!error && b) {
+                        if (!error && smsSendStatus) {
 
                             startTimer();
                             // boolean flag saying device is waiting for sms
+
+                            // TODO: sajal 10-04-2017 remove this shared pref from here
                             pref.setIsWaitingForSms(true);
                             pref.setUserId(userDetailResponse.getUserId());
                             // moving the screen to next pager item i.e otp screen
@@ -343,17 +339,19 @@ public class SmsActivity extends AppCompatActivity implements View.OnClickListen
                             txtEditMobile.setText(pref.getMobileNumber());
                             layoutEditMobile.setVisibility(View.VISIBLE);
 
-                        } else if (!error && !b) {
+                        } else if (!error && !smsSendStatus) {
                             //No SMS is send, user with this number is already verified
-                            //TODO : sajal 9 april  goToAddressActivity();
+                            // TODO: sajal 10-04-2017 check if condn for starting checkout screen or Delivery address screen
+                            finish();
+                            startAddressActivity(SmsActivity.this);
+
                         } else {
 
 
-                            // TODO: sajal 09-04-2017 go back to previous view pager
                             //some error occurred
                             Toast.makeText(getApplicationContext(),
                                     "Error: " + message,
-                                    Toast.LENGTH_LONG).show();
+                                    Toast.LENGTH_SHORT).show();
 
                         }
                     }
@@ -366,7 +364,6 @@ public class SmsActivity extends AppCompatActivity implements View.OnClickListen
             @Override
             public void onFailure(Call<UserDetailResponse> call, Throwable t) {
                 t.printStackTrace();
-                Log.d(TAG, "onFailure =" + t.getMessage());
                 startActivity(new Intent(SmsActivity.this, Refresh.class));
             }
         });
@@ -440,8 +437,8 @@ public class SmsActivity extends AppCompatActivity implements View.OnClickListen
     }
 
     public static void startAddressActivity(Context context) {
+
         Intent starter = new Intent(context, DeliveryAddress.class);
-//        starter.putExtra();
         context.startActivity(starter);
     }
 
@@ -460,7 +457,7 @@ public class SmsActivity extends AppCompatActivity implements View.OnClickListen
             public void onFinish() {
 
 
-                Log.d(TAG, "onFinish: "+prevProgress);
+                Log.d(TAG, "onFinish: " + prevProgress);
 //                finish();
 //                Intent intentResult = new Intent(getApplicationContext() , JunkCleanResultActivity.class);
 //                intentResult.putExtra(EXTRA_NO_OF_IMAGES , mImagePath.size());
