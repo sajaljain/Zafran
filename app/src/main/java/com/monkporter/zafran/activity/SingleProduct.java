@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -23,6 +25,7 @@ import android.widget.TextView;
 import com.monkporter.zafran.R;
 import com.monkporter.zafran.adapter.ItemListAdapter;
 import com.monkporter.zafran.model.OrderItem;
+import com.monkporter.zafran.utility.CommonMethod;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -66,6 +69,7 @@ public class SingleProduct extends AppCompatActivity {
         cartQuantity.setText(""+product_set);
 
         cartBar = findViewById(R.id.cart_bar);
+        cartBar.setVisibility(View.GONE);
 
         recyclerView.setNestedScrollingEnabled(false);
         adapter = new ItemListAdapter(SingleProduct.this,getData(),cartPrice,cartQuantity,cartBar);
@@ -81,9 +85,9 @@ public class SingleProduct extends AppCompatActivity {
     }
     public List<OrderItem> getData() {
         List<OrderItem> data = new ArrayList<>();
-        int[] icons = {R.drawable.n1064,R.drawable.meeting64,R.drawable.n264,R.drawable.n164,R.drawable.n1064,R.drawable.meeting64,R.drawable.n264,R.drawable.n164};
-        int[] titles = {100,50,20,10,100,50,20,10};
-        int[] details = {10,5,2,1,10,5,2,1};
+        int[] icons = {R.drawable.n1064,R.drawable.meeting64,R.drawable.n264,R.drawable.n164};
+        int[] titles = {100,50,20,10};
+        int[] details = {10,5,2,1};
         for( int i = 0;i < titles.length && i< icons.length;i++){
             OrderItem current = new OrderItem();
             current.photo = icons[i];
@@ -108,6 +112,12 @@ public class SingleProduct extends AppCompatActivity {
         mShareActionProvider.setShareIntent(shareIntent);*/
         return true;
     }
+
+    public void onBackPressed(View v) {
+            super.onBackPressed();
+            SingleProduct.this.finish();
+            return;
+        }
 
 
 

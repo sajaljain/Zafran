@@ -44,6 +44,7 @@ import com.monkporter.zafran.model.Products;
 import com.monkporter.zafran.model.Product;
 
 import com.monkporter.zafran.model.RecyclerItemClickListener;
+import com.monkporter.zafran.pushnotification.MyFirebaseMessagingService;
 import com.monkporter.zafran.rest.ApiClient;
 import com.monkporter.zafran.utility.CommonMethod;
 
@@ -362,6 +363,7 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_notification) {
+            new MyFirebaseMessagingService().sendNotification("hello");
             Toast.makeText(this, "No notifications ", Toast.LENGTH_SHORT).show();
         }
 
