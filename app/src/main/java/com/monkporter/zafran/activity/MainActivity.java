@@ -363,7 +363,6 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_notification) {
-            new MyFirebaseMessagingService().sendNotification("hello");
             Toast.makeText(this, "No notifications ", Toast.LENGTH_SHORT).show();
         }
 
