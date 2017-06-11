@@ -27,7 +27,8 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.MyView
     public TextView cartQuantity;
     public TextView cartPrice;
     View cartBar;
-    int count;
+    int totalPrice,totalQuantity;
+    int incre;
     MyViewHolder myViewHolder = null;
     //View layoutScrollView;
     int pos = -1;
@@ -40,7 +41,7 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.MyView
         this.cartPrice = cartPrice;
         this.cartBar = cartBar;
         this.itemList = itemList;
-        count = itemList.get(itemList.size()-1).price;
+        incre = itemList.get(itemList.size()-1).price;
         context = contexti;
         inflator = LayoutInflater.from(context);
 
@@ -121,16 +122,16 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.MyView
             myViewHolder = holder;
         }*/
         //  else{
-        if(pos == -1) {
+     /*   if(pos == -1) {
             myViewHolder = holder;
             pos = 1;
-        }
+        }*/
         holder.listButton.setText("ADD");
         holder.listButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                myViewHolder.listButton.setText("ADD");
+              /*  myViewHolder.listButton.setText("ADD");
                 myViewHolder.listButton.setVisibility(View.VISIBLE);
                 myViewHolder.incre.setText("+");
                 myViewHolder.incre.setVisibility(View.GONE);
@@ -140,7 +141,7 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.MyView
                 myViewHolder.quantity.setVisibility(View.GONE);
 
 
-                myViewHolder = holder;
+                myViewHolder = holder;*/
                 //     p = position;
                 //count = 1;
                 //product_set = current.set;
@@ -159,9 +160,10 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.MyView
                 holder.decre.setVisibility(View.VISIBLE);
                 holder.quantity.setText(""+current.set);
                 holder.quantity.setVisibility(View.VISIBLE);
-
-                cartPrice.setText("Rs."+current.price);
-                cartQuantity.setText(""+current.set);
+                totalQuantity += current.set;
+                totalPrice += current.price;
+                cartPrice.setText("Rs."+totalPrice);
+                cartQuantity.setText(""+totalQuantity);
                 cartBar.setVisibility(View.VISIBLE);
 
 
@@ -179,10 +181,12 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.MyView
                 //pos = position;
                 //editor.putInt(context.getString(R.string.SET_POSITION),pos);
                 //editor.commit();
-                current.price = current.price+count;
+                current.price = current.price+incre;
+                totalPrice += incre;
+                totalQuantity++;
                 holder.quantity.setText(""+current.set);
-                cartPrice.setText("Rs."+current.price);
-                cartQuantity.setText(""+current.set);
+                cartPrice.setText("Rs."+totalPrice);
+                cartQuantity.setText(""+totalQuantity);
                 if(current.set > 0){
                     cartBar.setVisibility(View.VISIBLE);
                 }
@@ -198,22 +202,24 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.MyView
             public void onClick(View v) {
                 if(current.set > 0) {
                     current.set -= 1;
+                    totalQuantity -= 1;
                     //  product_set = current.set;
                     //SharedPreferences.Editor editor = sharedPreferences.edit();
                     //editor.putInt(context.getString(R.string.PRODUCT_SET),product_set);
                     // pos = position;
                     //editor.putInt(context.getString(R.string.SET_POSITION),pos);
                     //editor.commit();
-                    current.price -= count ;
+                    current.price -= incre ;
+                    totalPrice -= incre;
                     cartBar.setVisibility(View.VISIBLE);
                 }
-                if(current.set == 0){
+                if(totalQuantity == 0){
                     cartBar.setVisibility(View.GONE);
                 }
 
                 holder.quantity.setText(""+current.set);
-                cartPrice.setText("Rs."+current.price);
-                cartQuantity.setText(""+current.set);
+                cartPrice.setText("Rs."+totalPrice);
+                cartQuantity.setText(""+totalQuantity);
 
 
             }

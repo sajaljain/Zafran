@@ -13,18 +13,17 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:orientation="vertical"
-        >
+        android:orientation="vertical">
 
 
         <android.support.design.widget.CoordinatorLayout
 
-            android:fitsSystemWindows="true"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            android:id="@+id/Cord"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:fitsSystemWindows="true"
 
-            android:id="@+id/Cord">
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
 
             <android.support.design.widget.AppBarLayout
@@ -32,8 +31,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/app_bar_height"
                 android:fitsSystemWindows="true"
-                android:theme="@style/AppTheme.AppBarOverlay"
-                >
+                android:theme="@style/AppTheme.AppBarOverlay">
 
 
                 <android.support.design.widget.CollapsingToolbarLayout
@@ -43,18 +41,17 @@
                     android:fitsSystemWindows="true"
                     app:contentScrim="?attr/colorPrimary"
                     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-                    app:layout_scrollFlags="scroll|exitUntilCollapsed"
-                    >
+                    app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
 
                     <ImageView
                         android:id="@+id/backdrop"
                         android:layout_width="match_parent"
                         android:layout_height="300dp"
-                        android:scaleType="centerCrop"
                         android:fitsSystemWindows="true"
-                        app:layout_collapseMode="parallax"
-                        android:src="@drawable/three" />
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/three"
+                        app:layout_collapseMode="parallax" />
 
 
                     <android.support.v7.widget.Toolbar
@@ -62,7 +59,21 @@
                         android:layout_width="match_parent"
                         android:layout_height="?attr/actionBarSize"
                         app:layout_collapseMode="pin"
-                        app:popupTheme="@style/AppTheme.PopupOverlay" />
+                        app:popupTheme="@style/AppTheme.PopupOverlay">
+
+
+
+
+                    <ImageView
+                        android:id="@+id/imageView"
+                        android:layout_width="37dp"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="16dp"
+
+                        android:paddingTop="16dp"
+                        android:src="@drawable/ic_arrow_back_white_48dp"
+                        android:onClick="onBackPressed"/>
+                    </android.support.v7.widget.Toolbar>
 
                 </android.support.design.widget.CollapsingToolbarLayout>
             </android.support.design.widget.AppBarLayout>
@@ -85,6 +96,7 @@
             </android.support.v4.widget.NestedScrollView>
         </android.support.design.widget.CoordinatorLayout>
     </LinearLayout>
+
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="60dp"
