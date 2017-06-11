@@ -1,90 +1,110 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/card_view"
-    android:layout_margin="5dp"
+    android:layout_width="match_parent"
+    android:layout_height="64dp"
+    android:layout_marginLeft="8dp"
+    android:layout_marginRight="8dp"
     card_view:cardBackgroundColor="#FFFFFF"
-    card_view:cardCornerRadius="12dp"
-    card_view:cardElevation="3dp"
-    card_view:contentPadding="4dp" >
+    card_view:cardCornerRadius="4dp"
+    card_view:cardElevation="0dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="10dp" >
+        android:layout_height="match_parent">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:id="@+id/item_image"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="false"
-            android:layout_marginRight="16dp"
-            android:src="@drawable/n264"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_centerVertical="true"
+            android:paddingBottom="10dp"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
+            android:paddingTop="10dp"
+            android:src="@drawable/n264" />
 
-            />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/item_image"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/item_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="sajal"
+                android:textColor="#1f4070"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/item_detail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="hello"
+                android:textColor="#661f4070"
+                android:textSize="12sp" />
+
+        </LinearLayout>
+
+
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/item_title"
-            android:text="sajal"
-            android:textSize="30sp"
-            android:layout_alignParentTop="true"
-            android:layout_toRightOf="@+id/item_image"
-            android:layout_toEndOf="@+id/item_image" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:text="hello"
-            android:layout_height="wrap_content"
-            android:id="@+id/item_detail"
-            android:layout_below="@+id/item_title"
-            android:layout_toRightOf="@+id/item_image"
-            android:layout_toEndOf="@+id/item_image"
-            />
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:id="@+id/item_button"
+            android:gravity="center"
+            android:background="@color/colorAccent"
+            android:layout_width="62dp"
+            android:textSize="14sp"
+            android:layout_marginRight="38dp"
+            android:layout_height="34dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
+            tools:visibility="invisible"
+            android:text="ADD"
+            />
 
-            />
-        <Button
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:id="@+id/item_inc"
-            android:text="+"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:visibility="gone"
-            />
-        <TextView
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:text="hello"
-            android:textSize="30dp"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:id="@+id/item_quantity"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_height="64dp">
+            <TextView
+                android:id="@+id/item_inc"
+                android:layout_width="64dp"
+                android:background="@drawable/circle"
+                android:layout_height="match_parent"
+                android:text="+"
+                android:textColor="#fff"
+                android:textSize="14sp"
+                android:gravity="center"
+                android:visibility="gone"
+                tools:visibility="visible" />
 
-            android:layout_alignBaseline="@+id/item_title"
-            android:layout_alignBottom="@+id/item_title"
-            android:layout_toLeftOf="@+id/item_inc"
-            android:layout_toStartOf="@+id/item_inc"
-            android:visibility="gone"/>
-        <Button
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:id="@+id/item_dec"
-            android:text="-"
-            android:layout_alignParentTop="true"
-            android:layout_toLeftOf="@+id/item_quantity"
-            android:layout_toStartOf="@+id/item_quantity"
-            android:visibility="gone"/>
+            <TextView
+                android:id="@+id/item_quantity"
+                android:layout_width="16dp"
+                android:layout_height="match_parent"
+                android:text="11"
+                android:gravity="center"
+                android:textSize="14sp"
+                android:visibility="gone"
+                tools:visibility="visible" />
+            <TextView
+                android:id="@+id/item_dec"
+                android:layout_width="64dp"
+                android:layout_height="match_parent"
+                android:background="@drawable/circle"
+                android:gravity="center"
+                android:textColor="#fff"
+                android:textSize="14sp"
+                android:text="-"
+                android:visibility="gone"
+                tools:visibility="visible" />
+        </LinearLayout>
 
     </RelativeLayout>
 </android.support.v7.widget.CardView>
