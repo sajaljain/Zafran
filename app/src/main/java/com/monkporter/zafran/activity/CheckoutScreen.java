@@ -26,7 +26,6 @@ public class CheckoutScreen extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.CheckOut_Toolbar);
         setSupportActionBar(toolbar);
 
-
         timePick = (TextView)findViewById(R.id.pick_time_id);
       /*  final Calendar c = Calendar.getInstance();
         int hour = c.get(Calendar.HOUR_OF_DAY);

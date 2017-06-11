@@ -1,8 +1,11 @@
 package com.monkporter.zafran.activity;
 
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -14,10 +17,12 @@ import android.widget.Toast;
 
 import com.monkporter.zafran.Interface.ApiInterface;
 import com.monkporter.zafran.R;
+import com.monkporter.zafran.database.AppDBHelper;
 import com.monkporter.zafran.helper.PrefManager;
 import com.monkporter.zafran.model.Address;
 import com.monkporter.zafran.model.AddressResponse;
 import com.monkporter.zafran.rest.ApiClient;
+import com.monkporter.zafran.utility.CommonMethod;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -28,6 +33,9 @@ public class DeliveryAddress extends AppCompatActivity implements View.OnClickLi
     private EditText company_name, company_address, instructions;
     private TextView delivery_area;
     private Button save_and_deliver;
+    private ProgressDialog networkProgress;
+    private AlertDialog.Builder builder;
+
 
     private String mLocation, mLatitude, mLongitude;
 
@@ -63,7 +71,10 @@ public class DeliveryAddress extends AppCompatActivity implements View.OnClickLi
 
         save_and_deliver = (Button) findViewById(R.id.save_and_deliver);
         save_and_deliver.setOnClickListener(this);
-
+        networkProgress = new ProgressDialog(this);
+        networkProgress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        networkProgress.setMessage("Saving Address...");
+        builder = new AlertDialog.Builder(DeliveryAddress.this);
 
     }
 
@@ -78,7 +89,51 @@ public class DeliveryAddress extends AppCompatActivity implements View.OnClickLi
                 startPlacesActivity(DeliveryAddress.this);
                 break;
             case R.id.save_and_deliver:
-                sendAddressToServer();
+
+                if (!networkProgress.isShowing()) {
+
+                    Address oldAddress = AppDBHelper.getInstance(DeliveryAddress.this).
+                            addressExists(Float.parseFloat(PrefManager.getInstance(DeliveryAddress.this).getUserCurrentLatitude()),
+                                    Float.parseFloat(PrefManager.getInstance(DeliveryAddress.this).getUserCurrentLongitude()));
+
+                    if (null == oldAddress) {
+                        networkProgress.show();
+                        if (CommonMethod.checkInternet()) {
+                            sendAddressToServer();
+                        } else {
+                            Toast.makeText(this, "Please turn on internet", Toast.LENGTH_SHORT).show();
+                            networkProgress.cancel();
+                        }
+                    } else {
+                        builder.setMessage("same address already exists do you still want to add this address");
+                        String positiveText = getString(android.R.string.ok);
+                        builder.setPositiveButton(positiveText,
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        networkProgress.show();
+                                        if (CommonMethod.checkInternet()) {
+                                            sendAddressToServer();
+                                        } else {
+                                            Toast.makeText(DeliveryAddress.this, "Please turn on internet", Toast.LENGTH_SHORT).show();
+                                            networkProgress.cancel();
+                                        }
+                                    }
+                                });
+
+                        String negativeText = getString(android.R.string.cancel);
+                        builder.setNegativeButton(negativeText,
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        startAddressSelectionActivity(DeliveryAddress.this);
+                                    }
+                                });
+                    }
+                    AlertDialog dialog = builder.create();
+                    // display dialog
+                    dialog.show();
+                }
                 break;
         }
     }
@@ -94,20 +149,30 @@ public class DeliveryAddress extends AppCompatActivity implements View.OnClickLi
         context.startActivity(starter);
     }
 
+    private void startCheckOutActivity(Context context) {
+        Intent starter = new Intent(context, CheckoutScreen.class);
+        context.startActivity(starter);
+    }
+
+    private void startAddressSelectionActivity(Context context) {
+        Intent starter = new Intent(context, AddressDetail.class);
+        context.startActivity(starter);
+    }
 
     private void sendAddressToServer() {
-        /*{
+/*
+        {
          * "UserID" : 61,
-         * "AreaName":"nehru nagar",
-         * "CityName":"ghaziabad",
+         * "AreaName":"nehru nagar",  --------> COMPANY ADDRESS
+         * "CityName":"ghaziabad",    --------> INSTRUCTIONS and PLACE ID
          * "CompanyName":"Hours",
-         * "AddressStreet":"arjun nagar",
+         * "AddressStreet":"arjun nagar",  -----> Area and Locality
          * "Latitude":28.628937,
          * "Longitude":77.371140
-         * }
+         }
  */
         PrefManager prefManager = PrefManager.getInstance(DeliveryAddress.this);
-        Address params = new Address();
+        final Address params = new Address();
         params.setUserID(prefManager.getUserId());
 
         //Any precise address give by user
@@ -117,8 +182,10 @@ public class DeliveryAddress extends AppCompatActivity implements View.OnClickLi
 
         //set the instructions and Place-Id provided by google maps api
         mInstructions = instructions.getText().toString();
+        params.setPlaceID(prefManager.getUserCurrentPlaceId());
+
         if (null != mInstructions)
-            params.setCityName(mInstructions + ":" + prefManager.getUserCurrentPlaceId());
+            params.setCityName(mInstructions + ":" + params.getPlaceID());
 
         mCompanyName = company_name.getText().toString();
         if (null != mCompanyName)
@@ -147,18 +214,30 @@ public class DeliveryAddress extends AppCompatActivity implements View.OnClickLi
                     if (null != responseObj) {
                         Log.d(TAG, "response from address creation " + responseObj.toString());
                         if (!responseObj.isError()) {
-                            responseObj.getAddressId();
-                            // TODO: sajal 10-04-2017 add entry in database
-                            // TODO: sajal 10-04-2017 add gotoCheckOut Activity
+                            params.setAddressId(responseObj.getAddressId());
+                            //reset
+                            if (null != mInstructions)
+                                params.setCityName(mInstructions);
+
+                            //enter values in db for future use
+                            AppDBHelper.getInstance(DeliveryAddress.this).addAddress(params);
+
+                            startCheckOutActivity(DeliveryAddress.this);
+
+                            AppDBHelper.getInstance(DeliveryAddress.this).getAddress();
+
                         } else {
+                            // TODO: sajal 12-04-2017 make check for entries in edit text
                             Toast.makeText(DeliveryAddress.this, "Please recheck entries", Toast.LENGTH_SHORT).show();
                         }
                     }
                 }
+                networkProgress.cancel();
             }
 
             @Override
             public void onFailure(Call<AddressResponse> call, Throwable t) {
+                networkProgress.cancel();
                 t.printStackTrace();
             }
         });

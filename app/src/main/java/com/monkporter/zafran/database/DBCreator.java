@@ -3,6 +3,7 @@ package com.monkporter.zafran.database;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.Environment;
 import android.util.Log;
 
 
@@ -19,15 +20,16 @@ public class DBCreator extends SQLiteOpenHelper {
 
 
     // Contacts table name
-    private static final String TABLE_APP_DETAILS = "Address";
-    private static final String ADDRESS_ID = "AddressId";
-    private static final String USER_ID = "UserId";
-    private static final String AREA_NAME = "AreaName";
-    private static final String CITY_NAME = "CityName";
-    private static final String COMPANY_NAME = "CompanyName";
-    private static final String ADDRESS_STREET = "AddressStreet";
-    private static final String LATITUDE = "Latitude";
-    private static final String LONGITUDE = "Longitude";
+    public static final String TABLE_ADDRESS = "Address";
+    public static final String ADDRESS_ID = "AddressId";
+    public static final String USER_ID = "UserId";
+    public static final String AREA_NAME = "AreaName";
+    public static final String CITY_NAME = "CityName";
+    public static final String COMPANY_NAME = "CompanyName";
+    public static final String ADDRESS_STREET = "AddressStreet";
+    public static final String LATITUDE = "Latitude";
+    public static final String LONGITUDE = "Longitude";
+    public static final String PLACE_ID = "PlaceId";
 
     private static String DB_NAME = "monkporter.sqlite";
 
@@ -38,7 +40,8 @@ public class DBCreator extends SQLiteOpenHelper {
 
     // constructor
     public DBCreator(Context context) {
-        super(context, DB_NAME, null, DATABASE_VERSION);
+        super(context, Environment.getExternalStorageDirectory().getPath()+"/"+DB_NAME, null, DATABASE_VERSION);
+
         mContext = context;
 
     }
@@ -54,12 +57,12 @@ public class DBCreator extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
 
-        Log.d(TAG, "onCreate: of database ");
+        Log.d(TAG, "onCreate: of database "+Environment.getExternalStorageDirectory().getPath()+DB_NAME);
 
         //SELECT * FROM `address``CreationTime``AddressId`, `UserId`, `AreaName`, `CityName`, `CompanyName`, `AddressStreet`, `Latitude`, `Longitude`
 
 
-        String CREATE_APP_TABLE = "CREATE TABLE " + TABLE_APP_DETAILS + "("
+        String CREATE_APP_TABLE = "CREATE TABLE " + TABLE_ADDRESS + "("
                 + ADDRESS_ID + " TEXT PRIMARY KEY," +
                 USER_ID + " TEXT," +
                 AREA_NAME + " TEXT," +
@@ -68,6 +71,7 @@ public class DBCreator extends SQLiteOpenHelper {
                 ADDRESS_STREET + " TEXT," +
                 LATITUDE + " TEXT," +
                 LONGITUDE + " TEXT," +
+                PLACE_ID + " TEXT UNIQUE" +
                 ")";
         db.execSQL(CREATE_APP_TABLE);
 

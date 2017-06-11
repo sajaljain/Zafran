@@ -40,6 +40,11 @@ public class Address {
     private float Longitude;
 
 
+    private String placeID;
+    private int addressId;
+
+
+
     public void setUserID(int userID) {
         UserID = userID;
     }
@@ -68,6 +73,52 @@ public class Address {
         Longitude = longitude;
     }
 
+
+    public void setPlaceID(String placeID) {
+        this.placeID = placeID;
+    }
+
+    public String getPlaceID() {
+        return placeID;
+    }
+
+    public int getUserID() {
+        return UserID;
+    }
+
+    public String getAreaName() {
+        return AreaName;
+    }
+
+    public String getCityName() {
+        return CityName;
+    }
+
+    public String getCompanyName() {
+        return CompanyName;
+    }
+
+    public String getAddressStreet() {
+        return AddressStreet;
+    }
+
+    public float getLatitude() {
+        return Latitude;
+    }
+
+    public float getLongitude() {
+        return Longitude;
+    }
+
+
+    public int getAddressId() {
+        return addressId;
+    }
+
+    public void setAddressId(int addressId) {
+        this.addressId = addressId;
+    }
+
     @Override
     public String toString() {
         return "Address{" +
@@ -78,6 +129,8 @@ public class Address {
                 ", AddressStreet='" + AddressStreet + '\'' +
                 ", Latitude=" + Latitude +
                 ", Longitude=" + Longitude +
+                ", placeID='" + placeID + '\'' +
+                ", addressId=" + addressId +
                 '}';
     }
 }

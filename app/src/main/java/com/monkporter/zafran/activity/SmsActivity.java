@@ -138,9 +138,9 @@ public class SmsActivity extends AppCompatActivity implements View.OnClickListen
                             String name = profileObj.getName();
                             String email = profileObj.getEmail();
                             String mobile = profileObj.getMobile();
-                            PrefManager pref = PrefManager.getInstance(SmsActivity.this);
-                            pref.setUserId(profileObj.getUserId());
-                            pref.createLogin(name, email, mobile);
+//                            PrefManager pref = PrefManager.getInstance(SmsActivity.this);
+//                            pref.setUserId(profileObj.getUserId());
+//                            pref.createLogin(name, email, mobile);
 
                             finish();
                             startAddressActivity(SmsActivity.this);
